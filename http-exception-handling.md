@@ -101,7 +101,7 @@ use Aphiria\Exceptions\{ExceptionResponseFactory, ExceptionResponseFactoryRegist
 $exceptionResponseFactories = new ExceptionResponseFactoryRegistry();
 $exceptionResponseFactories->registerFactory(
     EntityNotFound::class,
-    fn (EntityNotFound $ex, ?IHttpRequestMessage $request, INegotiatedResponseFactory $responseFactory) =>
+    fn (EntityNotFound $ex, IHttpRequestMessage $request, INegotiatedResponseFactory $responseFactory) =>
         $responseFactory->createResponse($request, 404, null, null)
 );
 
@@ -118,7 +118,7 @@ That's it.  Now, whenever an unhandled `EntityNotFound` exception is thrown, you
 
 ```php
 $exceptionResponseFactories->registerManyFactories([
-    EntityNotFound::class => fn (EntityNotFound $ex, ?IHttpRequestMessage $request, INegotiatedResponseFactory $responseFactory)
+    EntityNotFound::class => fn (EntityNotFound $ex, IHttpRequestMessage $request, IResponseFactory $responseFactory)
         $responseFactory->createResponse($request, 404, null, null),
     // ...
 ]);
@@ -132,7 +132,7 @@ Mapping every single one of your application's exceptions to a response factory 
 use Aphiria\Api\Errors\ProblemDetails;
 
 $exceptionResponseFactories->registerDefaultFactory(
-    function (Exception $ex, ?IHttpRequestMessage $request, INegotiatedResponseFactory $responseFactory) {
+    function (Exception $ex, IHttpRequestMessage $request, IResponseFactory $responseFactory) {
         $problemDetails = new ProblemDetails(
             'https://tools.ietf.org/html/rfc7231#section-6.6.1',
             'An error occurred',
@@ -156,7 +156,7 @@ Sometimes, the logic inside your exception response factory might get a little t
 ```php
 final class WhoopsResponseFactory
 {
-    public function createResponse(Exception $ex, ?IHttpRequestMessage $request): IHttpResponseMessage
+    public function createResponse(Exception $ex, IHttpRequestMessage $request): IHttpResponseMessage
     {
         $response = new Response();
         // Finish creating your response...
@@ -167,7 +167,7 @@ final class WhoopsResponseFactory
 
 $exceptionResponseFactories->registerFactory(
     Exception::class,
-    fn (Exception $ex, ?IHttpRequestMessage $request, INegotiatedResponseFactory $responseFactory) 
+    fn (Exception $ex, IHttpRequestMessage $request, INegotiatedResponseFactory IResponseFactory) 
         => (new WhoopsResponseFactory)->createResponse($ex, $request)
 );
 ```
