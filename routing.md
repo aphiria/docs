@@ -52,7 +52,7 @@ Routing is the process of mapping HTTP requests to actions.  There are so many r
 * Its [fluent syntax](#route-builders) keeps you from having to memorize how to set up config arrays
 * It supports [annotations](#route-annotations) for defining your routes
 * It supports [creating URIs from routes](#creating-route-uris)
-* It is built to support the latest PHP 7.4 features
+* It is built to support the latest PHP 8.0 features
 
 Let's look at a fully-functional example:
 

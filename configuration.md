@@ -263,7 +263,7 @@ final class UserModule implements IModule
         $this->withProblemDetails(
             $appBuilder,
             UserNotFoundException::class,
-            status: HttpStatusCodes::HTTP_NOT_FOUND
+            status: HttpStatusCodes::NOT_FOUND
         );
 
         // Add a completely custom problem details mapping for an exception
@@ -273,7 +273,7 @@ final class UserModule implements IModule
             'https://example.com/errors/overdrawn', // Type
             'This account is overdrawn', // Title
             fn ($ex) => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}", // Detail
-            HttpStatusCodes::HTTP_BAD_REQUEST, // Status
+            HttpStatusCodes::BAD_REQUEST, // Status
             fn ($ex) => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}", // Instance
             fn ($ex) => ['overdrawnAmount' => $ex->overdrawnAmount] // Extensions
         );
