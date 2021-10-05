@@ -395,7 +395,7 @@ There are a few useful functions for customizing the padding formatter:
 
 ```php
 // Set the end-of-line character
-$paddingFormatter->setEolChar("\n");
+$paddingFormatter->eolChar = "\n";
 
 // Set whether or not to pad after strings
 $paddingFormatter->setPadAfter(true);
@@ -453,7 +453,7 @@ There are a few useful functions for customizing the look of tables:
 $table->setCellPaddingString(' ');
 
 // Set the end-of-line character (defaults to LF)
-$table->setEolChar("\n");
+$table->eolChar = "\n";
 
 // Set the horizontal border character
 $table->setHorizontalBorderChar('-');

@@ -91,10 +91,10 @@ use App\Users\User;
 $result = $contentNegotiator->negotiateRequestContent(User::class, $request);
 
 // The properties of a content negotiation result:
-$mediaTypeFormatter = $result->getFormatter(); // An instance of JsonMediaTypeFormatter
-$mediaType = $result->getMediaType(); // "application/json"
-$encoding = $result->getEncoding(); // "utf-8"
-$language = $result->getLanguage(); // "en-us"
+$mediaTypeFormatter = $result->formatter; // An instance of JsonMediaTypeFormatter
+$mediaType = $result->mediaType; // "application/json"
+$encoding = $result->encoding; // "utf-8"
+$language = $result->language; // "en-us"
 ```
 
 > **Note:** Any of these properties could be null if they could not be negotiated.
@@ -103,8 +103,8 @@ With these results, we know everything we need to try to deserialize the request
 
 ```php
 $user = $mediaTypeFormatter->readFromStream($request->getBody()->readAsStream(), User::class);
-echo $user->getId(); // 123
-echo $user->getEmail(); // "foo@example.com"
+echo $user->id; // 123
+echo $user->email; // "foo@example.com"
 ```
 
 <h2 id="negotiating-responses">Negotiating Responses</h2>
@@ -176,7 +176,7 @@ $contentNegotiator = new ContentNegotiator(
 Media type formatters can read and write a particular data format to a stream.  You can get the media type formatter from `ContentNegotiationResult`, and use it to deserialize a request body to a particular type (`User` in this example):
 
 ```php
-$mediaTypeFormatter = $result->getFormatter();
+$mediaTypeFormatter = $result->formatter;
 $mediaTypeFormatter->readFromStream($request->getBody(), User::class);
 ```
 
