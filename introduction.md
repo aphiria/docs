@@ -66,7 +66,7 @@ final class UserModule implements IModule
             ->withProblemDetails(
                 $appBuilder,
                 UserNotFoundException::class,
-                status: HttpStatusCodes::NOT_FOUND
+                status: HttpStatusCode::NotFound
             );
     }
 }
