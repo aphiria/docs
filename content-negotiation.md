@@ -115,10 +115,11 @@ Constructing a response with all the appropriate headers is a little involved wh
 
 ```php
 use Aphiria\ContentNegotiation\NegotiatedResponseFactory;
+use Aphiria\Net\Http\HttpStatusCode;
 
 $responseFactory = new NegotiatedResponseFactory($contentNegotiator);
 // Assume $user is a POPO User object
-$response = $responseFactory->createResponse($request, 200, rawBody: $user);
+$response = $responseFactory->createResponse($request, HttpStatusCode::Ok, rawBody: $user);
 ```
 
 Our response will look something like the following:

@@ -143,9 +143,9 @@ $request = (new RequestBuilder())->withProperty('routeVars', ['id' => 123])
 If you'd like to use a different request target type besides origin form, you may:
 
 ```php
-use Aphiria\Net\Http\RequestTargetTypes;
+use Aphiria\Net\Http\RequestTargetType;
 
-$request = (new RequestBuilder())->withRequestTargetType(RequestTargetTypes::ABSOLUTE_FORM)
+$request = (new RequestBuilder())->withRequestTargetType(RequestTargetType::AbsoluteForm)
     ->build();
 ```
 
@@ -330,21 +330,21 @@ echo (string)$request;
 By default, this will use <a href="https://tools.ietf.org/html/rfc7230#section-5.3.1" target="_blank">origin-form</a> for the request target, but you can override the request type via the constructor:
 
 ```php
-use Aphiria\Net\Http\RequestTargetTypes;
+use Aphiria\Net\Http\RequestTargetType;
 
 $request = new Request(
     'GET',
     new Uri('https://example.com/foo?bar'),
-    requestTargetType: RequestTargetTypes::AUTHORITY_FORM
+    requestTargetType: RequestTargetType::AuthorityForm
 );
 ```
 
 The following request target types may be used:
 
-* <a href="https://tools.ietf.org/html/rfc7230#section-5.3.2" target="_blank">`RequestTargetTypes::ABSOLUTE_FORM`</a>
-* <a href="https://tools.ietf.org/html/rfc7230#section-5.3.4" target="_blank">`RequestTargetTypes::ASTERISK_FORM`</a>
-* <a href="https://tools.ietf.org/html/rfc7230#section-5.3.3" target="_blank">`RequestTargetTypes::AUTHORITY_FORM`</a>
-* <a href="https://tools.ietf.org/html/rfc7230#section-5.3.1" target="_blank">`RequestTargetTypes::ORIGIN_FORM`</a>
+* <a href="https://tools.ietf.org/html/rfc7230#section-5.3.2" target="_blank">`RequestTargetType::AbsoluteForm`</a>
+* <a href="https://tools.ietf.org/html/rfc7230#section-5.3.4" target="_blank">`RequestTargetType::AsteriskForm`</a>
+* <a href="https://tools.ietf.org/html/rfc7230#section-5.3.3" target="_blank">`RequestTargetType::AuthorityForm`</a>
+* <a href="https://tools.ietf.org/html/rfc7230#section-5.3.1" target="_blank">`RequestTargetType::OriginForm`</a>
 
 <h2 id="multipart-requests">Multipart Requests</h2>
 
