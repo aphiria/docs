@@ -50,6 +50,7 @@ If you're already using the <a href="https://github.com/aphiria/app" target="_bl
 
 use Aphiria\Console\Application;
 use Aphiria\Console\Commands\CommandRegistry;
+use Aphiria\Console\StatusCode;
 use Aphiria\DependencyInjection\Container;
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -59,7 +60,8 @@ $commands = new CommandRegistry();
 // Register your commands here...
 
 global $argv;
-exit((new Application($commands, new Container()))->handle($argv));
+$statusCode = (new Application($commands, new Container()))->handle($argv);
+exit($statusCode instanceof StatusCode ? $statusCode->value : $statusCode);
 ```
 
 Now, you're set to start [running commands](#running-commands).
@@ -82,7 +84,7 @@ php aphiria help COMMAND_NAME
 
 <h2 id="creating-commands">Creating Commands</h2>
 
-In Aphiria, a command defines the name, [arguments](#arguments), and [options](#options) that make up a command.  Each command has a command handler with method `handle()`, which is what actually processes a command.
+In Aphiria, a command defines the name, [arguments](#arguments), and [options](#options) that make up a command.  Each command has a command handler with method `handle()`, which is what actually processes a command. Command handlers can return a `StatusCode` enum, an integer (useful for custom status codes), or nothing, which implies a successful status code.
 
 Let's take a look at an example:
 
@@ -583,7 +585,8 @@ $output = new ConsoleOutput($outputCompiler);
 
 // Now, pass it into the app (assume it's already set up)
 global $argv;
-exit($app->handle($argv, $output));
+$statusCode = (new Application($commands, new Container()))->handle($argv);
+exit($statusCode instanceof StatusCode ? $statusCode->value : $statusCode);
 ```
 
 <h3 id="overriding-built-in-elements">Overriding Built-In Elements</h3>
