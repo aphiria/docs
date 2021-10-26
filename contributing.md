@@ -26,6 +26,7 @@
    7. [Abstract Classes](#abstract-classes)
    8. [Interfaces](#interfaces)
    9. [Traits](#traits)
+   10. [Enums](#enums)
 7. [Financial Support](#financial-support)
 
 </div>
@@ -239,6 +240,13 @@ All trait names:
 
 * Must be Pascal case, eg `ListValidator`
 * Must be not use `T`, `Trait`, or any other word in the name that implies it is a trait
+
+<h3 id="enums">Enums</h3>
+
+All enums:
+
+* Must use singular names, eg `StatusCode` instead of `StatusCodes`
+* Must be Pascal case, eg `StatusCode::NotFound` instead of `StatusCode::NOT_FOUND`
 
 <h2 id="financial-support">Financial Support</h2>
 
