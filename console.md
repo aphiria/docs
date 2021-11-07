@@ -92,13 +92,13 @@ Let's take a look at an example:
 
 use Aphiria\Console\Commands\Attributes\{Argument, Command, Option};
 use Aphiria\Console\Commands\ICommandHandler;
-use Aphiria\Console\Input\{ArgumentTypes, Input, OptionTypes};
+use Aphiria\Console\Input\{ArgumentType, Input, OptionType};
 use Aphiria\Console\Output\IOutput;
 
 #[
     Command('greet', description: 'Greets a person'),
-    Argument('name', type: ArgumentTypes::REQUIRED, description: 'The name to greet'),
-    Option('yell', type: OptionTypes::OPTIONAL_VALUE, shortName: 'y', description: 'Yell the greeting?', defaultValue: 'yes')
+    Argument('name', type: ArgumentType::Required, description: 'The name to greet'),
+    Option('yell', type: OptionType::OptionalValue, shortName: 'y', description: 'Yell the greeting?', defaultValue: 'yes')
 ]
 final class GreetingCommandHandler implements ICommandHandler
 {
@@ -131,14 +131,14 @@ If you're checking to see if an option that does not have a value is set, use `a
 
 <h3 id="arguments">Arguments</h3>
 
-Console commands can accept arguments from the user.  Arguments can be required, optional, and/or arrays.  Array arguments allow a variable number of arguments to be passed in, like `php aphiria foo arg1 arg2 arg3 ...`.  The only catch is that array arguments must be the last argument defined for the command.  You specify the type by bitwise OR-ing the different arguments types.
+Console commands can accept arguments from the user.  Arguments can be required, optional, and/or arrays.  Array arguments allow a variable number of arguments to be passed in, like `php aphiria foo arg1 arg2 arg3 ...`.  The only catch is that array arguments must be the last argument defined for the command.  If you need to specify that an argument can be multiple types, eg required and an array, just pass in an array of types.
 
 ```php
 use Aphiria\Console\Input\Argument;
-use Aphiria\Console\Input\ArgumentTypes;
+use Aphiria\Console\Input\ArgumentType;
 
 // The argument will be required and an array
-$type = ArgumentTypes::REQUIRED | ArgumentTypes::IS_ARRAY;
+$type = [ArgumentType::Required, ArgumentType::IsArray];
 // The description argument is used by the help command
 $argument = new Argument('foo', $type, 'The foo argument');
 ```
@@ -164,13 +164,13 @@ Long option names can specify values in two ways:  `--foo=bar` or `--foo bar`.  
 
 Options can be arrays, eg `--foo=bar --foo=baz` will set the "foo" option to `["bar", "baz"]`.
 
-Like arguments, option types can be specified by bitwise OR-ing types together.
+Like arguments, multiple option types can be specified with an array of types.
 
 ```php
 use Aphiria\Console\Input\Option;
-use Aphiria\Console\Input\OptionTypes;
+use Aphiria\Console\Input\OptionType;
 
-$type = OptionTypes::IS_ARRAY | OptionTypes::REQUIRED_VALUE;
+$type = [OptionType::IsArray, OptionType::RequiredValue];
 $option = new Option('foo', $type, 'f', 'The foo option');
 ```
 
@@ -268,12 +268,12 @@ Let's look at an example that duplicates the [greeting example from above](#regi
 
 ```php
 use Aphiria\Console\Commands\Attributes\{Argument, Command, Option};
-use Aphiria\Console\Input\{ArgumentTypes, OptionTypes};
+use Aphiria\Console\Input\{ArgumentType, OptionType};
 
  #[
     Command('greet', 'Greets a person'),
-    Argument('name', ArgumentTypes::REQUIRED, 'The name to greet'),
-    Option('yell', OptionTypes::OPTIONAL_VALUE, 'y', 'Yell the greeting', 'yes')
+    Argument('name', ArgumentType::Required, 'The name to greet'),
+    Option('yell', OptionType::OptionalValue, 'y', 'Yell the greeting', 'yes')
  ]
 final class GreetingCommandHandler implements ICommandHandler
 {
