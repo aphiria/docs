@@ -44,23 +44,23 @@ Any kind of serializable data can be written to sessions:
 use Aphiria\Sessions\Session;
 
 $session = new Session();
-$session->set('someString', 'foo');
-$session->set('someArray', ['bar', 'baz']);
+$session->setVariable('someString', 'foo');
+$session->setVariable('someArray', ['bar', 'baz']);
 ```
 
 <h4 id="getting-data">Getting Data</h4>
 
 ```php
-$session->set('someKey', 'myValue');
-echo $session->get('someKey'); // "myValue"
+$session->setVariable('someKey', 'myValue');
+echo $session->setVariable('someKey'); // "myValue"
 ```
 
 <h4 id="getting-all-data">Getting All Data</h4>
 
 ```php
-$session->set('foo', 'bar');
-$session->set('baz', 'blah');
-$data = $session->getAll();
+$session->setVariable('foo', 'bar');
+$session->setVariable('baz', 'blah');
+$data = $session->variables;
 echo $data['foo']; // "bar"
 echo $data['baz']; // "blah"
 ```
@@ -68,15 +68,15 @@ echo $data['baz']; // "blah"
 <h4 id="checking-if-session-has-key">Checking if a Session Has a Key</h4>
 
 ```php
-echo $session->containsKey('foo'); // 0
-$session->set('foo', 'bar');
-echo $session->containsKey('foo'); // 1
+echo $session->containsVariable('foo'); // 0
+$session->setVariable('foo', 'bar');
+echo $session->containsVariable('foo'); // 1
 ```
 
 <h4 id="deleting-data">Deleting Data</h4>
 
 ```php
-$session->delete('someKey');
+$session->deleteVariable('someKey');
 ```
 
 <h4 id="flushing-all-data">Flushing All Data</h4>
@@ -130,7 +130,7 @@ final class AuthController extends Controller
     {
         // Do the login...
 
-        $this->session->set('user', (string)$user);
+        $this->session->setVariable('user', (string)$user);
  
         // Create the response...
     }

@@ -107,24 +107,31 @@ Use PHPDoc to document **all** class properties, methods, and functions.  Constr
 ```php
 final class User
 {
+    /** @var string The user's full name */
+    public string $fullName {
+        get => "$this->firstName $this->lastName";
+    }
+
     /**
      * @param string $firstName The user's first name
      * @param string $lastName The user's last name
+     * @param list<string> $roles The list of roles this user has
      */
     public function __construct(
         public readonly string $firstName,
-        public readonly string $lastName
+        public readonly string $lastName,
+        public array $roles
     ) {
     }
     
     /**
-     * Gets the user's full name
+     * Adds a role to the user
      *
-     * @return string The user's full name
+     * @param string $role The role to add
      */
-    public function getFullName(): string
+    public function addRole(string $role): void
     {
-        return "{$this->firstName} {$this->lastName}";
+        $this->roles[] = $role;
     }
 }
 ```
@@ -142,7 +149,7 @@ All variable names:
 
 <h3 id="properties">Properties</h3>
 
-We should favor using class properties over `getXxx()` and `setXxx()` whenever accessing and setting the value is straight forward.  If a class property should only be read, it should be declared as `readonly` rather than using a `getXxx()` method.  For example, here is what **not** to do:
+We should favor using class properties over `getXxx()` and `setXxx()` whenever accessing and setting the value.  If a class property should only be read, it should be declared as `readonly` rather than using a `getXxx()` method.  For example, here is what **not** to do:
 
 ```php
 final class Book
@@ -196,8 +203,6 @@ All function/method names:
   * "Id" is an abbreviation (not an acronym) for "Identifier", so it should be capitalized `Id`
 * Must answer a question if returning a boolean variable, eg `hasAccess()` or `userIsValid()`
   * Always think about how your function/method will be read aloud in an `if` statement.  `if (userIsValid())` reads better than `if (isUserValid())`.
-* Must use `getXXX()` and `setXXX()` for functions/methods that get and set properties, respectively
-  * Don't name a method that returns a username `username()`.  Name it `getUsername()` so that its purpose is unambiguous.
 
 <h3 id="constants">Constants</h3>
 
