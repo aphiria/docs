@@ -145,11 +145,11 @@ Inspired by <a href="http://www.amazon.com/Code-Complete-Practical-Handbook-Cons
 All variable names:
 
 * Must be lower camel case, eg `$emailAddress`
-* Must not use Hungarian Notation, eg `$arrUsers`
+* Must **not** use Hungarian Notation, eg `$arrUsers`
 
 <h3 id="properties">Properties</h3>
 
-We should favor using class properties over `getXxx()` and `setXxx()` whenever accessing and setting the value.  If a class property should only be read, it should be declared as `readonly` rather than using a `getXxx()` method.  For example, here is what **not** to do:
+We should favor using class properties over `getXxx()` and `setXxx()` whenever accessing and setting the value.  If get- or set-logic is complicated, use property hooks over getter- or setter-methods.  If a class property should only be read, it should be declared as `readonly` rather than using a `getXxx()` method.  For example, here is what **not** to do:
 
 ```php
 final class Book
@@ -187,9 +187,7 @@ final class Book
 }
 ```
 
-The exception to this rule is when an interface needs to expose accessors to a property, but only because PHP interfaces do not support properties.
-
-We should also favor marking properties as `readonly`, even when `private`, if their values should not be set/changed outside of the constructor.
+We should also favor marking properties as `readonly`, even when `private`, if their values should not be set/changed outside the constructor.
 
 <h3 id="functions-methods">Functions/Methods</h3>
 
@@ -235,7 +233,7 @@ Whenever possible, <a href="https://wiki.php.net/rfc/constructor_promotion" targ
 All abstract class names:
 
 * Must be Pascal case, eg `ConnectionPool`
-* Must not use `Abstract`, `Base`, or any other word in the name that implies it is an abstract class
+* Must **not** use `Abstract`, `Base`, or any other word in the name that implies it is an abstract class
   
 <h3 id="interfaces">Interfaces</h3>
 

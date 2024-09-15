@@ -11,7 +11,7 @@
    1. [Setting Data](#setting-data)
    2. [Getting Data](#getting-data)
    3. [Getting All Data](#getting-all-data)
-   4. [Checking if a Session Has a Key](#checking-if-session-has-key)
+   4. [Checking if a Session Has a Variable](#checking-if-session-has-variable)
    5. [Deleting Data](#deleting-data)
    6. [Flushing All Data](#flushing-all-data)
    7. [Flashing Data](#flashing-data)
@@ -51,8 +51,8 @@ $session->setVariable('someArray', ['bar', 'baz']);
 <h4 id="getting-data">Getting Data</h4>
 
 ```php
-$session->setVariable('someKey', 'myValue');
-echo $session->setVariable('someKey'); // "myValue"
+$session->setVariable('theName', 'theValue');
+echo $session->setVariable('theName'); // "theValue"
 ```
 
 <h4 id="getting-all-data">Getting All Data</h4>
@@ -65,7 +65,7 @@ echo $data['foo']; // "bar"
 echo $data['baz']; // "blah"
 ```
 
-<h4 id="checking-if-session-has-key">Checking if a Session Has a Key</h4>
+<h4 id="checking-if-session-has-variable">Checking if a Session Has a Variable</h4>
 
 ```php
 echo $session->containsVariable('foo'); // 0
@@ -76,7 +76,7 @@ echo $session->containsVariable('foo'); // 1
 <h4 id="deleting-data">Deleting Data</h4>
 
 ```php
-$session->deleteVariable('someKey');
+$session->deleteVariable('foo');
 ```
 
 <h4 id="flushing-all-data">Flushing All Data</h4>
