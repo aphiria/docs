@@ -7,7 +7,9 @@
 <h2 id="table-of-contents">Table of Contents</h2>
 
 <ol>
-<li><a href="#basics">Basics</a></li>
+<li><a href="#basics">Basics</a></li><ol>
+<li><a href="#developing-in-the-framework">Developing in the Framework</a></li>
+</ol>
 <li><a href="#bugs">Bugs</a><ol>
 <li><a href="#reporting-bug">Reporting a Bug</a></li>
 <li><a href="#fixing-bug">Fixing a Bug</a></li>
@@ -41,7 +43,7 @@
 
 </nav>
 
-<h1 id="basics">Basics</h1>
+<h2 id="basics">Basics</h2>
 
 First, thank you for taking the time to contribute to Aphiria!  We use GitHub pull requests for all code contributions.  To get started on a [bug fix](#bugs) or [feature](#features), fork <a href="https://github.com/aphiria/aphiria" target="_blank">Aphiria</a>, and create a branch off of `1.x`.  Be sure to run `composer test` locally before opening the pull request to run the unit tests, [static analyzer](#static-analysis), and [linter](#linter).  Once your bug fix/feature is complete, open a pull request against `1.x`.
 
@@ -51,6 +53,10 @@ All pull requests **must**:
 * Abide by our [naming conventions](#naming-conventions)
 * Have no [static analysis](#static-analysis) errors
 * Have no [linter](#linter) errors
+
+<h3 id="developing-in-the-framework">Developing in the Framework</h3>
+
+If you have PHP installed locally with the `intl` extension, you're already set.  If you prefer to develop in Docker, Aphiria comes with a <a href="https://docs.docker.com/compose/" target="_blank">Docker Compose</a> file to get you up and running quickly.  Simply run `docker-compose build`, then configure your IDE to map your checked out Aphiria code to the _/aphiria_ directory within the `php` service created by Docker Compose.
 
 <h2 id="bugs">Bugs</h2>
 
