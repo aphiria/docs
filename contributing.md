@@ -56,7 +56,7 @@ All pull requests **must**:
 
 <h3 id="developing-in-the-framework">Developing in the Framework</h3>
 
-If you have PHP installed locally with the `intl` extension, you're already set.  If you prefer to develop in Docker, Aphiria comes with a <a href="https://docs.docker.com/compose/" target="_blank">Docker Compose</a> file to get you up and running quickly.  Simply run `docker-compose build`, then configure your IDE to map your checked out Aphiria code to the _/aphiria_ directory within the `php` service created by Docker Compose.
+If you have PHP installed locally with the `intl` extension, you're already set.  If you prefer to develop in Docker, Aphiria comes with a <a href="https://docs.docker.com/compose/" target="_blank">Docker Compose</a> file to get you up and running quickly.  Simply run `docker compose build`, then configure your IDE to map your checked out Aphiria code to the _/aphiria_ directory within the `php` service created by Docker Compose.
 
 <h2 id="bugs">Bugs</h2>
 

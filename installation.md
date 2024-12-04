@@ -13,7 +13,8 @@
 </ol>
 </li>
 <li><a href="#server-config">Server Config</a><ol>
-<li><a href="#php-built-in-web-server-config">PHP Built-in Web Server Config</a></li>
+<li><a href="#docker-compose">Docker Compose</a></li>
+<li><a href="#built-in-web-server-config">Built-in PHP Web Server Config</a></li>
 <li><a href="#apache-config">Apache Config</a></li>
 <li><a href="#nginx-config">Nginx Config</a></li>
 <li><a href="#caddy-config">Caddy Config</a></li>
@@ -78,20 +79,28 @@ Aphiria is broken into various libraries, each of which can be installed individ
 
 <h2 id="server-config">Server Config</h2>
 
+Regardless of the approach you take below, you can access your Aphiria app via http://localhost:8080.
+
+<h3 id="docker-compose">Docker Compose</h3>
+
+The <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a> provides support for Docker Compose to simplify getting up and running with an nginx web server and Xdebug.  This setup is only meant for local development and is not meant for production.  To get up and running, simply run:
+
+```
+docker compose up -d --build app
+```
+
+<h3 id="built-in-php-web-server-config">Built-in PHP Web Server Config</h3>
+
 * Aphiria's _tmp_ directory needs to be writable from PHP
 * The document root needs to be set to Aphiria's _public_ directory (usually _/var/www/html/public_ or */var/www/html/YOUR_SITE_NAME/public*)
 
 > **Note:** You must set `YOUR_SITE_DOMAIN` and `YOUR_SITE_DIRECTORY` with the appropriate values in the configs below.
 
-<h3 id="php-built-in-web-server-config">PHP Built-in Web Server Config</h3>
+To run Aphiria locally via the built-in PHP web server, run the following in a terminal:
 
-To run Aphiria locally, run the following in a terminal:
-
-```php
+```
 php aphiria app:serve
 ```
-    
-This will run PHP's built-in web server. The site will be accessible at http://localhost:8080.
 
 <h3 id="apache-config">Apache Config</h3>
 
