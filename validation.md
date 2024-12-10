@@ -252,7 +252,7 @@ use Aphiria\Validation\Constraints\IConstraint;
 final class MaxLengthConstraint implements IConstraint
 {
     public string $errorMessageId {
-        get => 'Length cannot exceed {maxLength}'
+        get => 'Length cannot exceed {maxLength}';
     }
 
     public function __construct(private int $maxLength) {}
