@@ -92,11 +92,9 @@ use Aphiria\Validation\Constraints\ObjectConstraintsRegistry;
 use Aphiria\Validation\Validator;
 
 // It's best to cache the results of scanning for attributes in production
-if (\getenv('APP_ENV') === 'production') {  
-    $constraintCache = new FileObjectConstraintsRegistryCache('/tmp/constraints.txt');
-} else {
-    $constraintCache = null;
-}
+$constraintCache = \getenv('APP_ENV') === 'production'
+    ? new FileObjectConstraintsRegistryCache('/tmp/constraints.txt')
+    : null;
 
 $objectConstraints = new ObjectConstraintsRegistry();
 $objectConstraintsRegistrants = new ObjectConstraintsRegistrantCollection($constraintCache);
@@ -148,8 +146,8 @@ $valdiator->validateObject($blogPost);
 $violations = [];
 
 // Will return true if $blogPost is valid, otherwise false
-if ($validator->tryValidateObject($blogPost, $violations)) {
-    // ...
+if (!$validator->tryValidateObject($blogPost, $violations)) {
+    // ... Throw an error
 }
 ```
 
@@ -168,8 +166,8 @@ $valdiator->validateProperty($blogPost, 'title');
 $violations = [];
 
 // Will return true if $blogPost->title is valid, otherwise false
-if ($validator->tryValidateProperty($blogPost, 'title', $violations)) {
-    // ...
+if (!$validator->tryValidateProperty($blogPost, 'title', $violations)) {
+    // ... Throw an error
 }
 ```
 
@@ -190,8 +188,8 @@ $valdiator->validateMethod($blogPost, 'getTitleSlug');
 $violations = [];
 
 // Will return true if $blogPost->getTitleSlug() is valid, otherwise false
-if ($validator->tryValidateMethod($blogPost, 'getTitleSlug', $violations)) {
-    // ...
+if (!$validator->tryValidateMethod($blogPost, 'getTitleSlug', $violations)) {
+    // ... Throw an error
 }
 ```
 
@@ -210,8 +208,8 @@ $valdiator->validateValue($email, [new EmailConstraint()]);
 $violations = [];
 
 // Will return true if $email is valid, otherwise false
-if ($validator->tryValidateValue($email, [new EmailConstraint()], $violations)) {
-    // ...
+if (!$validator->tryValidateValue($email, [new EmailConstraint()], $violations)) {
+    // ... Throw an error
 }
 ```
 
