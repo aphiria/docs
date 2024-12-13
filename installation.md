@@ -16,7 +16,7 @@
 <li><a href="#docker-compose">Docker Compose</a></li>
 <li><a href="#built-in-php-web-server-config">Built-in PHP Web Server Config</a></li>
 <li><a href="#apache-config">Apache Config</a></li>
-<li><a href="#nginx-config">Nginx Config</a></li>
+<li><a href="#nginx-config">nginx Config</a></li>
 <li><a href="#caddy-config">Caddy Config</a></li>
 </ol>
 </li>
@@ -123,9 +123,9 @@ Create a virtual host in your Apache config with the following settings:
 </VirtualHost>
 ```
 
-<h3 id="nginx-config">Nginx Config</h3>
+<h3 id="nginx-config">nginx Config</h3>
 
-Add the following to your Nginx config:
+Add the following to your nginx config:
 
 ```nginx
 server {
