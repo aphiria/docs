@@ -385,7 +385,7 @@ final class SymfonyRouterBinder extends Binder
         $matcher = new UrlMatcher($routes, $requestContext);
 
         $container->bindInstance(RouteCollection::class, $routes);
-        $container->bindInstance(UrlMatcherInterface ::class, $matcher);
+        $container->bindInstance(UrlMatcherInterface::class, $matcher);
     }
 }
 ```
