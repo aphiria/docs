@@ -38,7 +38,9 @@
 <li><a href="#making-your-own-custom-constraints">Making Your Own Custom Constraints</a></li>
 </ol>
 </li>
-<li><a href="#creating-route-uris">Creating Route URIs</a></li>
+<li><a href="#creating-route-uris">Creating Route URIs</a><ol>
+<li><a href="#creating-route-requests">Creating Route Requests</a></li>
+</ol></li>
 <li><a href="#caching">Caching</a><ol>
 <li><a href="#route-caching">Route Caching</a></li>
 <li><a href="#trie-caching">Trie Caching</a></li>
@@ -624,6 +626,21 @@ $booksForDec2019 = $routeUriFactory->createRouteUri(
 ```
 
 If you use <a href="controllers.md#parameter-attributes">parameter attributes</a>, Aphiria will respect them when determining where to apply the route variables (eg by putting them in the route path/host or in the query string).
+
+<h3 id="creating-route-requests">Creating Route Requests</h3>
+
+If your routes include a `#[Header]` variable that you'd like to auto-populate or you want to create an <a href="http-requests.md">HTTP request</a> for your route and not just a URI, you can use `RouteRequestFactory`:
+
+```php
+use Aphiria\Framework\Routing\RouteRequestFactory;
+
+$routeRequestFactory = new RouteRequestFactory($routes);
+$request = $routeRequestFactory->createRouteRequest('GetBooksFromArchive', ['year' => 2019, 'month' => 12]);
+echo $request->method; // "GET"
+echo $request->uri; // "/archives/2019/12"
+```
+
+> **Note:** If your route supports multiple HTTP methods, you must specify the HTTP method to use as a third parameter in `createRouteRequest()`.  If your route supports GET requests, it will automatically also support HEAD requests.  In this case, the factory will default to creating a GET request unless you specify 'HEAD' as the method.
 
 <h2 id="caching">Caching</h2>
 
