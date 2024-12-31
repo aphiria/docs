@@ -136,7 +136,7 @@ This works for any media type (eg JSON) that you've registered to your [content 
 
 <h3 id="request-parameters">Request Parameters</h3>
 
-Aphiria also supports resolving scalar parameters in your controller methods.  It will scan route variables, and then, if no matches are found, the query string for scalar parameters.  For example, this method will grab `includeDeletedUsers` from the query string and cast it to a `bool`:
+Aphiria also supports resolving scalar parameters in your controller methods.  It will scan route variables, and then, if no matches are found, the query string for scalar parameters.  For example, this method will grab the user ID from the route path and `includeAvatar` from the query string and cast it to a `bool`:
 
 ```php
 final class UserController extends Controller
