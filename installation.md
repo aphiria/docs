@@ -89,7 +89,7 @@ The <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a> pr
 docker compose up -d --build app
 ```
 
-To start debugging with Xdebug, configure your IDE to map your checked out Aphiria code to the _/app_ directory within the php service created by Docker Compose.  Ensure that your IDE is configured to listen to port 9004 for Xdebug connections.
+To start debugging with Xdebug, configure your IDE to map your checked out Aphiria code to the _/app_ directory within the php service created by Docker Compose.  Ensure that your IDE is configured to listen to port 9003 for Xdebug connections.
 
 <h3 id="built-in-php-web-server-config">Built-in PHP Web Server Config</h3>
 
