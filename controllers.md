@@ -10,7 +10,7 @@
 <li><a href="#basics">Basics</a></li>
 <li><a href="#parameter-resolution">Parameter Resolution</a><ol>
 <li><a href="#request-body-parameters">Request Bodies</a></li>
-<li><a href="#uri-parameters">URI Parameters</a></li>
+<li><a href="#request-parameters">Request Parameters</a></li>
 <li><a href="#arrays-in-request-bodies">Arrays in Request Bodies</a></li>
 <li><a href="#validating-request-bodies">Validating Request Bodies</a></li>
 </ol>
@@ -134,7 +134,7 @@ final class UserController extends Controller
 
 This works for any media type (eg JSON) that you've registered to your [content negotiator](content-negotiation.md).
 
-<h3 id="uri-parameters">URI Parameters</h3>
+<h3 id="request-parameters">Request Parameters</h3>
 
 Aphiria also supports resolving scalar parameters in your controller methods.  It will scan route variables, and then, if no matches are found, the query string for scalar parameters.  For example, this method will grab `includeDeletedUsers` from the query string and cast it to a `bool`:
 
@@ -143,16 +143,52 @@ final class UserController extends Controller
 {
     // ...
     
-    // Assume the query string is "?includeDeletedUsers=1"
-    #[Get('users')]
-    public function getAllUsers(bool $includeDeletedUsers): array
+    // Assume the query string is "?includeAvatar=1"
+    #[Get('users/:userId')]
+    public function getUser(int $userId, bool $includeAvatar): User
     {
-        return $this->users->getAllUsers($includeDeletedUsers);
+        return $this->users->getUserById($userId, $includeAvatar);
     }
 }
 ```
 
 Nullable parameters and parameters with default values are also supported.  If a query string parameter is optional, it _must_ be either nullable or have a default value.
+
+<h4 id="parameter-attributes">Parameter Attributes</h4>
+
+You may find yourself wanting to be more explicit about where to resolve request parameters from in your controller.  For this, Aphiria provides `#[Header]`, `#[QueryString]`, and `#[RouteVariable]` attributes.  Not specifying an attribute will default to the resolution rules <a href="#request-parameters">above</a>.  Here's an example that's functionally identical to the above:
+
+```php
+final class UserController extends Controller
+{
+    // ...
+    
+    // Assume the query string is "?includeAvatar=1"
+    #[Get('users/:userId')]
+    public function getUser(#[RouteVariable] int $userId, #[QueryString] bool $includeAvatar): User
+    {
+        return $this->users->getUserById($userId, $includeAvatar);
+    }
+}
+```
+
+Each attribute also allows you to map the controller method parameter to the name of a route variable, query string parameter, or header.  This allows you to decouple the parameter names from the URI.  The following is identical to the previous example:
+
+```php
+final class UserController extends Controller
+{
+    // ...
+    
+    // Assume the query string is "?includeAvatar=1"
+    #[Get('users/:userId')]
+    public function getUser(#[RouteVariable('userId')] int $id, #[QueryString('includeAvatar')] bool $showAvatar): User
+    {
+        // $id will map to the "userId" route variable
+        // $showAvatar will map to the "includeAvatar" query string parameter
+        return $this->users->getUserById($id, $showAvatar);
+    }
+}
+```
 
 <h3 id="arrays-in-request-bodies">Arrays in Request Bodies</h3>
 

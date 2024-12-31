@@ -174,7 +174,7 @@ use App\Books\Book;
 
 final class BookController extends Controller
 {
-    #[Get('/books/:bookId'), Authenticate()]
+    #[Get('/books/:bookId'), Authenticate]
     public function getBookById(int $bookId): Book
     {
         // ...
@@ -209,6 +209,8 @@ use Aphiria\Routing\Attributes\Get;
     parameters: ['role' => 'admin']
 )]
 ```
+
+You can read more about how request parameters are resolved in your controller methods <a href="controllers.md#request-parameters">here</a>.
 
 <h3 id="route-attributes-groups">Route Groups</h3>
 
@@ -620,6 +622,8 @@ $booksForDec2019 = $routeUriFactory->createRouteUri(
     ['year' => 2019, 'month' => 12]
 );
 ```
+
+If you use <a href="controllers.md#parameter-attributes">parameter attributes</a>, Aphiria will respect them when determining where to apply the route variables (eg by putting them in the route path/host or in the query string).
 
 <h2 id="caching">Caching</h2>
 
