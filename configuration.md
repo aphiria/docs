@@ -58,9 +58,11 @@ final class UserModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
     {
-        $this->withBinders($appBuilder, new UserServiceBinder())
+        $this
+            ->withBinders($appBuilder, new UserServiceBinder())
             ->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
-                $routes->get('users/:id')
+                $routes
+                    ->get('users/:id')
                     ->mapsToMethod(UserController::class, 'getUserById');
             })
             ->withCommands($appBuilder, function (CommandRegistry $commands) {
@@ -138,7 +140,8 @@ final class UserModule extends AphiriaModule
     {
         // Manually add some routes
         $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
-            $routes->get('users/:id')
+            $routes
+                ->get('users/:id')
                 ->mapsToMethod(UserController::class, 'getUserById');
         });
 
@@ -287,7 +290,8 @@ final class UserModule extends AphiriaModule
     {
         // Manually add constraints to a class
         $this->withObjectConstraints($appBuilder, function (ObjectConstraintsRegistryBuilder $objectConstraintsBuilder) {
-            $objectConstraintsBuilder->class(User::class)
+            $objectConstraintsBuilder
+                ->class(User::class)
                 ->hasPropertyConstraints('email', new EmailConstraint());
         });
 
@@ -326,10 +330,10 @@ final class UserModule extends AphiriaModule
             OverdrawnException::class,
             type: 'https://example.com/errors/overdrawn',
             title: 'This account is overdrawn',
-            detail: fn ($ex) => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
+            detail: fn($ex) => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
             status: HttpStatusCode::BadRequest,
-            instance: fn ($ex) => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
-            extensions: fn ($ex) => ['overdrawnAmount' => $ex->overdrawnAmount]
+            instance: fn($ex) => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
+            extensions: fn($ex) => ['overdrawnAmount' => $ex->overdrawnAmount]
         );
 
         // Add a custom console output writer for an exception
@@ -347,7 +351,7 @@ final class UserModule extends AphiriaModule
         $this->withLogLevelFactory(
             $appBuilder,
             UserCorruptedException::class,
-            fn (UserCorruptedException $ex) => LogLevel::CRITICAL
+            fn(UserCorruptedException $ex) => LogLevel::CRITICAL
         );
     }
 }
@@ -444,7 +448,8 @@ final class GlobalModule extends AphiriaModule
 
     public function configure(IApplicationBuilder $appBuilder): void
     {
-        $this->withComponent($appBuilder, new SymfonyRouterComponent($this->container))
+        $this
+            ->withComponent($appBuilder, new SymfonyRouterComponent($this->container))
             ->withBinders($appBuilder, new SymfonyRouterBinder());
     }
 }
@@ -461,7 +466,8 @@ final class MyModule implements IModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
     {
-        $appBuilder->getComponent(SymfonyRouterComponent::class)
+        $appBuilder
+            ->getComponent(SymfonyRouterComponent::class)
             ->withRoute('GetUserById', new Route('users/{id}'));
     }
 }
@@ -483,7 +489,8 @@ trait SymfonyComponents
             $appBuilder->withComponent(new SymfonyRouterComponent(Container::$globalInstance));
         }
         
-        $appBuilder->getComponent(SymfonyRouterComponent::class)
+        $appBuilder
+            ->getComponent(SymfonyRouterComponent::class)
             ->withRoute($name, $route);
             
         return $this;
@@ -527,7 +534,7 @@ $config->getFloat('foo');
 $config->getInt('foo');
 
 // Get the value as an object
-$config->getObject('foo', fn (mixed $options): MyObject => new MyObject($options));
+$config->getObject('foo', fn(mixed $options): MyObject => new MyObject($options));
 
 // Get the value as a string
 $config->getString('foo');
@@ -548,7 +555,7 @@ $config->tryGetFloat('foo', $value);
 $config->tryGetInt('foo', $value);
 
 // Try to get the value as an object
-$config->tryGetObject('foo', fn (mixed $options): MyObject => new MyObject($options), $value);
+$config->tryGetObject('foo', fn(mixed $options): MyObject => new MyObject($options), $value);
 
 // Try to get the value as a string
 $config->tryGetString('foo', $value);
@@ -629,7 +636,7 @@ GlobalConfiguration::getFloat('foo');
 GlobalConfiguration::getInt('foo');
 
 // Get the value as an object
-GlobalConfiguration::getObject('foo', fn (mixed $options): MyObject => new MyObject($options));
+GlobalConfiguration::getObject('foo', fn(mixed $options): MyObject => new MyObject($options));
 
 // Get the value as a string
 GlobalConfiguration::getString('foo');
@@ -650,7 +657,7 @@ GlobalConfiguration::tryGetFloat('foo', $value);
 GlobalConfiguration::tryGetInt('foo', $value);
 
 // Try to get the value as an object
-GlobalConfiguration::tryGetObject('foo', fn (mixed $options): MyObject => new MyObject($options), $value);
+GlobalConfiguration::tryGetObject('foo', fn(mixed $options): MyObject => new MyObject($options), $value);
 
 // Try to get the value as a string
 GlobalConfiguration::tryGetString('foo', $value);
@@ -669,7 +676,8 @@ These methods mimic the `IConfiguration` interface, but are static.  Like `IConf
 use Aphiria\Application\Configuration\GlobalConfigurationBuilder;
 
 $globalConfigurationBuilder = new GlobalConfigurationBuilder();
-$globalConfigurationBuilder->withPhpFileConfigurationSource('config.php')
+$globalConfigurationBuilder
+    ->withPhpFileConfigurationSource('config.php')
     ->withJsonFileConfigurationSource('config.json')
     ->withEnvironmentVariables()
     ->build();

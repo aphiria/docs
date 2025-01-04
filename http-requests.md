@@ -115,7 +115,8 @@ Aphiria comes with a fluent syntax for building your requests, which is somewhat
 ```php
 use Aphiria\Net\Http\RequestBuilder;
 
-$request = new RequestBuilder()->withMethod('GET')
+$request = new RequestBuilder()
+    ->withMethod('GET')
     ->withUri('http://example.com')
     ->withHeader('Cookie', 'foo=bar')
     ->build();
@@ -126,7 +127,8 @@ You can specify a body of a request:
 ```php
 use Aphiria\Net\Http\StringBody;
 
-$request = new RequestBuilder()->withMethod('POST')
+$request = new RequestBuilder()
+    ->withMethod('POST')
     ->withUri('http://example.com/users')
     ->withBody(new StringBody('{"name":"Dave"}'))
     ->withHeader('Content-Type', 'application/json')
@@ -138,14 +140,16 @@ $request = new RequestBuilder()->withMethod('POST')
 You can specify multiple headers in one call:
 
 ```php
-$request = new RequestBuilder()->withManyHeaders(['Foo' => 'bar', 'Baz' => 'buzz'])
+$request = new RequestBuilder()
+    ->withManyHeaders(['Foo' => 'bar', 'Baz' => 'buzz'])
     ->build();
 ```
 
 You can also set any request properties:
 
 ```php
-$request = new RequestBuilder()->withProperty('routeVars', ['id' => 123])
+$request = new RequestBuilder()
+    ->withProperty('routeVars', ['id' => 123])
     ->build();
 ```
 
@@ -154,7 +158,8 @@ If you'd like to use a different request target type besides origin form, you ma
 ```php
 use Aphiria\Net\Http\RequestTargetType;
 
-$request = new RequestBuilder()->withRequestTargetType(RequestTargetType::AbsoluteForm)
+$request = new RequestBuilder()
+    ->withRequestTargetType(RequestTargetType::AbsoluteForm)
     ->build();
 ```
 
@@ -165,7 +170,8 @@ Aphiria also has a [negotiated](content-negotiation.md) request builder that can
 ```php
 use Aphiria\ContentNegotiation\NegotiatedRequestBuilder;
 
-$request = new NegotiatedRequestBuilder()->withMethod('POST')
+$request = new NegotiatedRequestBuilder()
+    ->withMethod('POST')
     ->withUri('http://example.com/users')
     ->withBody(new User('Dave'))
     ->build();

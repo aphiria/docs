@@ -171,7 +171,7 @@ By default, this is the first identity added to the user, but it can be customiz
 
 ```php
 // This will make the last added identity the primary one
-$primaryIdentitySelector = fn (array $identities): ?IIdentity => $identities[\count($identities) - 1] ?? null;
+$primaryIdentitySelector = fn(array $identities): ?IIdentity => $identities[\count($identities) - 1] ?? null;
 $user = new User($claims, $primaryIdentitySelector);
 $userId = $user->primaryIdentity?->nameIdentifier;
 ```
@@ -185,7 +185,8 @@ Aphiria provides a fluent builder syntax for principals and identities.  For exa
 ```php
 use Aphiria\Security\PrincipalBuilder;
 
-$user = new PrincipalBuilder('example.com')->withNameIdentifier(123)
+$user = new PrincipalBuilder('example.com')
+    ->withNameIdentifier(123)
     ->withName('Dave')
     ->withRoles('admin')
     ->build();

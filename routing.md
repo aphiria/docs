@@ -68,7 +68,8 @@ use App\Books\Api\{Authorization, BookController};
 
 // Register the routes
 $routes = new RouteCollectionBuilder();
-$routes->get('/books/:bookId')
+$routes
+    ->get('/books/:bookId')
     ->mapsToMethod(BookController::class, 'getBookById')
     ->withMiddleware(Authorization::class);
 
@@ -338,7 +339,8 @@ $routes->put('/foo');
 Each method accepts the following parameters:
 
 ```php
-$routes->get(path: '/user', host: 'api.example.com', isHttpsOnly: true)
+$routes
+    ->get(path: '/user', host: 'api.example.com', isHttpsOnly: true)
     ->mapsToMethod(UserController::class, 'getUserById');
 ```
 
@@ -370,11 +372,13 @@ $routes->group(
     ),
     function (RouteCollectionBuilder $routes) {
         // This route's path will be "courses/:courseId"
-        $routes->get('')
+        $routes
+            ->get('')
             ->mapsToMethod(CourseController::class, 'getCourseById');
 
         // This route's path will be "courses/:courseId/professors"
-        $routes->get('/professors')
+        $routes
+            ->get('/professors')
             ->mapsToMethod(CourseController::class, 'getCourseProfessors');
     }
 );
@@ -385,7 +389,8 @@ $routes->group(
 To bind a single middleware class to your route, call:
 
 ```php
-$routes->get('foo')
+$routes
+    ->get('foo')
     ->mapsToMethod(MyController::class, 'myMethod')
     ->withMiddleware(FooMiddleware::class);
 ```
@@ -393,7 +398,8 @@ $routes->get('foo')
 To bind many middleware classes, call:
 
 ```php
-$routes->get('foo')
+$routes
+    ->get('foo')
     ->mapsToMethod(MyController::class, 'myMethod')
     ->withManyMiddleware([
         FooMiddleware::class,
@@ -406,13 +412,15 @@ Under the hood, these class names get converted to instances of `MiddlewareBindi
 You can also add [parameters to your middleware](#middleware-parameters):
 
 ```php
-$routes->get('foo')
+$routes
+    ->get('foo')
     ->mapsToMethod(MyController::class, 'myMethod')
     ->withMiddleware(Authorization::class, ['role' => 'admin']);
 
 // Or
 
-$routes->get('foo')
+$routes
+    ->get('foo')
     ->mapsToMethod(MyController::class, 'myMethod')
     ->withManyMiddleware([
         new MiddlewareBinding(Authorization::class, ['role' => 'admin']),
@@ -425,7 +433,8 @@ $routes->get('foo')
 To add a single route constraint to a route, call:
 
 ```php
-$routes->get('posts')
+$routes
+    ->get('posts')
     ->mapsToMethod(PostController::class, 'getAllPosts')
     ->withConstraint(new FooConstraint());
 ```
@@ -433,7 +442,8 @@ $routes->get('posts')
 To add many route constraints, call:
 
 ```php
-$routes->get('posts')
+$routes
+    ->get('posts')
     ->mapsToMethod(PostController::class, 'getAllPosts')
     ->withManyConstraints([new FooConstraint(), new BarConstraint()]);
 ```
@@ -564,7 +574,7 @@ $constraintFactory = new RouteVariableConstraintFactoryRegistrant()
 // Register our custom constraint
 $constraintFactory->registerConstraintFactory(
     MinLengthConstraint::getSlug(),
-    fn (int $minLength) => new MinLengthConstraint($minLength)
+    fn(int $minLength) => new MinLengthConstraint($minLength)
 );
 ```
 
@@ -576,7 +586,8 @@ use Aphiria\Routing\RouteCollectionBuilder;
 use Aphiria\Routing\UriTemplates\Compilers\Tries\{TrieCompiler, TrieFactory};
 
 $routes = new RouteCollectionBuilder();
-$routes->get('parts/:serialNumber(minLength(6))')
+$routes
+    ->get('parts/:serialNumber(minLength(6))')
     ->mapsToMethod(PartController::class, 'getPartBySerialNumber');
 
 $trieCompiler = new TrieCompiler($constraintFactory);

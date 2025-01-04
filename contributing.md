@@ -82,7 +82,7 @@ Aphiria takes security seriously.  If you find a security vulnerability, please 
 
 <h2 id="coding-style">Coding Style</h2>
 
-Aphiria follows <a href="http://www.php-fig.org/psr/psr-12/" title="PSR-12 spec" target="_blank">PSR-12</a> coding standards and uses <a href="http://www.php-fig.org/psr/psr-4/" title="PSR-4 spec" target="_blank">PSR-4</a> autoloading.  All PHP files should specify `declare(strict_types=1);`.  Additionally, unless a class is specifically meant to be extended, declare them as `final` to encourage composition over inheritance.
+Aphiria follows <a href="https://www.php-fig.org/per/coding-style/" title="PER Coding Style 2.0" target="_blank">PER Coding Style 2.0</a> coding standards and uses <a href="http://www.php-fig.org/psr/psr-4/" title="PSR-4 spec" target="_blank">PSR-4</a> autoloading.  All PHP files should specify `declare(strict_types=1);`.  Additionally, unless a class is specifically meant to be extended, declare them as `final` to encourage composition over inheritance.
 
 <h3 id="linter">Linter</h3>
 
@@ -135,8 +135,7 @@ final class User
         public readonly string $firstName,
         public readonly string $lastName,
         public private(set) array $roles = []
-    ) {
-    }
+    ) {}
     
     /**
      * Adds a role to the user
@@ -171,9 +170,7 @@ final class Book
     /**
      * @param string $title The book title
      */
-    public function __construct(private string $title)
-    {
-    }
+    public function __construct(private string $title) {}
     
     /**
      * Gets the book title
@@ -195,9 +192,7 @@ final class Book
     /**
      * @param string $title The book title
      */
-    public function __construct(public readonly string $title)
-    {
-    }
+    public function __construct(public readonly string $title) {}
 }
 ```
 

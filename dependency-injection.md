@@ -52,10 +52,10 @@ A binding is a way of telling the container what instance to use when resolving 
 $container->bindInstance(IUserService::class, new UserService());
 
 // Whenever you need IUserService, run the factory to get a new instance
-$container->bindFactory(IUserService::class, fn () => new UserService());
+$container->bindFactory(IUserService::class, fn() => new UserService());
 
 // Whenever you need IUserService, run the factory and use that instance every time after
-$container->bindFactory(IUserService::class, fn () => new UserService(), true);
+$container->bindFactory(IUserService::class, fn() => new UserService(), true);
 
 // Whenever you need IUserService, use auto-wiring to return a new instance of UserService
 $container->bindClass(IUserService::class, UserService::class);
@@ -123,7 +123,7 @@ You can tell the container to use a specific instance of `IUserRepository` when 
 ```php
 $container->for(
     UserService::class,
-    fn ($container) => $container->bindInstance(IUserRepository::class, new UserRepository())
+    fn($container) => $container->bindInstance(IUserRepository::class, new UserRepository())
 );
 ```
 

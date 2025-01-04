@@ -114,7 +114,8 @@ use Aphiria\Validation\Validator;
 
 // Set up our validator
 $constraintsBuilder = new ObjectConstraintsRegistryBuilder();
-$constraintsBuilder->class(User::class)
+$constraintsBuilder
+    ->class(User::class)
     ->hasPropertyConstraints('email', new EmailConstraint())
     ->hasPropertyConstraints('name', new RequiredConstraint());
 $validator = new Validator($constraintsBuilder->build());

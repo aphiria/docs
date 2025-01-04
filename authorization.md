@@ -332,8 +332,7 @@ final class CommentController extends Controller
     public function __construct(
         private ICommentRepository $comments,
         private IAuthority $authority
-    ) {
-    }
+    ) {}
 
     #[Delete('/comments/:id')]
     public function deleteComment(int $id): IResponse

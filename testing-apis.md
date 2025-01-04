@@ -120,7 +120,7 @@ class UserIntegrationTest extends IntegrationTestCase
         // For the scoped call in actingAs(), we'll authenticate as the input user
         $user = new User([new Identity([])]);
         $body = new StringBody('foo@bar.com');
-        $response = $this->actingAs($user, fn () => $this->put('/email', body: $body));
+        $response = $this->actingAs($user, fn() => $this->put('/email', body: $body));
         $this->assertStatusCodeEquals(HttpStatusCode::Ok, $response);
     }
 }
@@ -188,7 +188,7 @@ $this->assertParsedBodyEquals(new User('Dave'), $response);
 
 ```php
 // Assert that the response body, after content negotiation, passes a callback
-$this->assertParsedBodyPassesCallback($response, User::class, fn ($user) => $user->name === 'Dave');
+$this->assertParsedBodyPassesCallback($response, User::class, fn($user) => $user->name === 'Dave');
 ```
 
 <h3 id="assert-status-code-equals">assertStatusCodeEquals</h3>

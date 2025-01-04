@@ -77,10 +77,10 @@ $exceptionRenderer->mapExceptionToProblemDetails(
     OverdrawnException::class,
     type: 'https://example.com/errors/overdrawn',
     title: 'This account is overdrawn',
-    detail: fn ($ex) => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
+    detail: fn($ex) => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
     status: HttpStatusCode::BadRequest,
-    instance: fn ($ex) => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
-    extensions: fn ($ex) => ['overdrawnAmount' => $ex->overdrawnAmount]
+    instance: fn($ex) => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
+    extensions: fn($ex) => ['overdrawnAmount' => $ex->overdrawnAmount]
 );
 ```
 
@@ -163,12 +163,12 @@ use Psr\Log\LogLevel;
 $globalExceptionHandler = new GlobalExceptionHandler(new ApiExceptionRenderer());
 $globalExceptionHandler->registerLogLevelFactory(
     DatabaseNotFoundException::class,
-    fn (DatabaseNotFoundException $ex) => LogLevel::EMERGENCY
+    fn(DatabaseNotFoundException $ex) => LogLevel::EMERGENCY
 );
 
 // You can also register multiple exceptions-to-log-level factories
 $globalExceptionHandler->registerManyLogLevelFactories([
-    DatabaseNotFoundException::class => fn (DatabaseNotFoundException $ex) => LogLevel::EMERGENCY,
+    DatabaseNotFoundException::class => fn(DatabaseNotFoundException $ex) => LogLevel::EMERGENCY,
     // ...
 ]);
 ```

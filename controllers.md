@@ -164,7 +164,7 @@ final class CustomControllerBinder extends ControllerBinder
         $deserializer = new RequestParameterDeserializer();
         $deserializer->registerDeserializer(
             YourType::class,
-            fn (mixed $value): YourType => /* ... */
+            fn(mixed $value): YourType => /* ... */
         );
         
         return $deserializer;
