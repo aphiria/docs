@@ -157,7 +157,7 @@ Nullable parameters and parameters with default values are also supported.  If a
 Aphiria uses `RequestParameterDeserializer` to deserialize raw request parameters to values.  By default, booleans, `DateTime`s, `DateTimeImmutable`s, floats, integers, and strings are configured for you.  You can configure the format to deserialize `DateTime` or `DateTimeImmutable`s to via the `aphiria.serialization.dateFormat` config value in _config.php_.  If you'd like to register your own deserializers, extend `Aphiria\Framework\Api\Binders\ControllerBinder` and implement your own `getRequestParameterDeserializer()` method and [register that binder](dependency-injection.md#binders).  Adding a custom deserializer is easy:
 
 ```php
-class CustomControllerBinder extends ControllerBinder
+final class CustomControllerBinder extends ControllerBinder
 {
     protected function getRequestParameterDeserializer(IContainer $container): IRequestParameterDeserializer
     {
