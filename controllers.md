@@ -154,7 +154,7 @@ final class UserController extends Controller
 
 Nullable parameters and parameters with default values are also supported.  If a query string parameter is optional, it _must_ be either nullable or have a default value.
 
-Aphiria uses `RequestParameterDeserializer` to deserialize raw request parameters to values.  By default, booleans, `DateTime`s, `DateTimeImmutable`s, floats, integers, and strings are configured for you.  You can configure the format to deserialize `DateTime` or `DateTimeImmutable`s to via the `aphiria.serialization.dateFormat` config value in _config.php_.  If you'd like to register your own deserializers, extend `Aphiria\Framework\Api\Binders\ControllerBinder` and implement your own `getRequestParameterDeserializer()` method and [register that binder](dependency-injection.md#binders).  Adding a custom deserializer is easy:
+Aphiria uses `RequestParameterDeserializer` to deserialize raw request parameters to values.  By default, booleans, `DateTime`s, `DateTimeImmutable`s, floats, integers, and strings are configured for you.  By default, Aphiria attempts to deserialize `DateTime` and `DateTimeImmutable` values using the `aphiria.serialization.dateTimeFormat`, then the `aphiria.serialization.dateFormat` config value in _config.php_ if the former fails.  If you'd like to register your own deserializers, extend `Aphiria\Framework\Api\Binders\ControllerBinder` and implement your own `getRequestParameterDeserializer()` method and [register that binder](dependency-injection.md#binders).  Adding a custom deserializer is easy:
 
 ```php
 final class CustomControllerBinder extends ControllerBinder
