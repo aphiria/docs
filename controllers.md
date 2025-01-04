@@ -136,7 +136,7 @@ This works for any media type (eg JSON) that you've registered to your [content 
 
 <h3 id="request-parameters">Request Parameters</h3>
 
-Aphiria also supports resolving scalar parameters in your controller methods.  It will scan route variables, and then, if no matches are found, the query string for scalar parameters.  For example, this method will grab the user ID from the route path and `includeAvatar` from the query string and cast it to a `bool`:
+Aphiria also supports resolving request parameters (eg values from the request URI or headers) in your controller methods.  It will scan route variables, and then, if no matches are found, the query string for scalar parameters.  For example, this method will grab the user ID from the route path and `includeAvatar` from the query string and cast it to a `bool`:
 
 ```php
 final class UserController extends Controller
@@ -153,6 +153,24 @@ final class UserController extends Controller
 ```
 
 Nullable parameters and parameters with default values are also supported.  If a query string parameter is optional, it _must_ be either nullable or have a default value.
+
+Aphiria uses `RequestParameterDeserializer` to deserialize raw request parameters to values.  By default, booleans, `DateTime`s, `DateTimeImmutable`s, floats, integers, and strings are configured for you.  You can configure the format to deserialize `DateTime` or `DateTimeImmutable`s to via the `aphiria.serialization.dateFormat` config value in _config.php_.  If you'd like to register your own deserializers, extend `Aphiria\Framework\Api\Binders\ControllerBinder` and implement your own `getRequestParameterDeserializer()` method and [register that binder](dependency-injection.md#binders).  Adding a custom deserializer is easy:
+
+```php
+class CustomControllerBinder extends ControllerBinder
+{
+    protected function getRequestParameterDeserializer(IContainer $container): IRequestParameterDeserializer
+    {
+        $deserializer = new RequestParameterDeserializer();
+        $deserializer->registerDeserializer(
+            YourType::class,
+            fn (mixed $value): YourType => /* ... */
+        );
+        
+        return $deserializer;
+    }
+}
+```
 
 <h4 id="parameter-attributes">Parameter Attributes</h4>
 
