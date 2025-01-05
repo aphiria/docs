@@ -191,21 +191,17 @@ final class UserModule extends AphiriaModule
     public function configure(IApplicationBuilder $appBuilder): void
     {
         // Manually add console commands
-        $this->withCommands($appBuilder, function (CommandRegistry $commands) {
-            $commands->registerCommand(
-                new Command('report:generate'),
-                GenerateUserReportCommandHandler::class
-            );
-        });
-
-        // Enable command attributes
-        $this->withCommandAttributes($appBuilder);
-
-        // Register built-in framework commands
-        $this->withFrameworkCommands($appBuilder);
-
-        // Register built-in framework commands, but exclude certain ones
-        $this->withFrameworkCommands($appBuilder, ['app:serve']);
+        $this
+            ->withCommands($appBuilder, function (CommandRegistry $commands) {
+                $commands->registerCommand(
+                    new Command('report:generate'),
+                    GenerateUserReportCommandHandler::class
+                );
+            })
+            ->withCommandAttributes($appBuilder)
+            ->withFrameworkCommands($appBuilder)
+            // Or, if you wish to exclude certain built-in commands:
+            ->withFrameworkCommands($appBuilder, ['app:serve']);
     }
 }
 ```
@@ -225,19 +221,17 @@ final class GlobalModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
     {
-        // Register an authentication scheme
-        $this->withAuthenticationScheme($appBuilder, new AuthenticationScheme(
-            'basic',
-            BasicAuthenticationHandler::class,
-            new BasicAuthenticationOptions(realm: 'example.com', claimsIssuer: 'https://example.com')
-        ));
-        
-        // Register a default authentication scheme
-        $this->withAuthenticationScheme($appBuilder, new AuthenticationScheme(
-            'cookie',
-            CookieAuthenticationHandler::class,
-            new CookieAuthenticationOptions(cookieName: 'authToken', claimsIssuer: 'https://example.com')
-        ), true);
+        $this
+            ->withAuthenticationScheme($appBuilder, new AuthenticationScheme(
+                'basic',
+                BasicAuthenticationHandler::class,
+                new BasicAuthenticationOptions(realm: 'example.com', claimsIssuer: 'https://example.com')
+            ))
+            ->withAuthenticationScheme($appBuilder, new AuthenticationScheme(
+                'cookie',
+                CookieAuthenticationHandler::class,
+                new CookieAuthenticationOptions(cookieName: 'authToken', claimsIssuer: 'https://example.com')
+            ), true);
     }
 }
 ```
@@ -257,19 +251,17 @@ final class GlobalModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
     {
-        // Register an authorization policy
-        $this->withAuthorizationPolicy($appBuilder, new AuthorizationPolicy(
-            'requires-admin',
-            new RolesRequirement('admin'),
-            'cookie'
-        ));
-        
-        // Register an authorization requirement handler
-        $this->withAuthorizationRequirementHandler(
-            $appBuilder,
-            RolesRequirement::class,
-            new RolesRequirementHandler()
-        );
+        $this
+            ->withAuthorizationPolicy($appBuilder, new AuthorizationPolicy(
+                'requires-admin',
+                new RolesRequirement('admin'),
+                'cookie'
+            ))
+            ->withAuthorizationRequirementHandler(
+                $appBuilder,
+                RolesRequirement::class,
+                new RolesRequirementHandler()
+            );
     }
 }
 ```
@@ -288,15 +280,13 @@ final class UserModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
     {
-        // Manually add constraints to a class
-        $this->withObjectConstraints($appBuilder, function (ObjectConstraintsRegistryBuilder $objectConstraintsBuilder) {
-            $objectConstraintsBuilder
-                ->class(User::class)
-                ->hasPropertyConstraints('email', new EmailConstraint());
-        });
-
-        // Enable validator attributes
-        $this->withValidatorAttributes($appBuilder);
+        $this
+            ->withObjectConstraints($appBuilder, function (ObjectConstraintsRegistryBuilder $objectConstraintsBuilder) {
+                $objectConstraintsBuilder
+                    ->class(User::class)
+                    ->hasPropertyConstraints('email', new EmailConstraint());
+            })
+            ->withValidatorAttributes($appBuilder);
     }
 }
 ```
@@ -317,42 +307,36 @@ final class UserModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
     {
-        // Add a custom problem details status code for an exception
-        $this->withProblemDetails(
-            $appBuilder,
-            UserNotFoundException::class,
-            status: HttpStatusCode::NotFound
-        );
-
-        // Add a completely custom problem details mapping for an exception
-        $this->withProblemDetails(
-            $appBuilder,
-            OverdrawnException::class,
-            type: 'https://example.com/errors/overdrawn',
-            title: 'This account is overdrawn',
-            detail: fn($ex) => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
-            status: HttpStatusCode::BadRequest,
-            instance: fn($ex) => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
-            extensions: fn($ex) => ['overdrawnAmount' => $ex->overdrawnAmount]
-        );
-
-        // Add a custom console output writer for an exception
-        $this->withConsoleExceptionOutputWriter(
-            $appBuilder,
-            UserNotFoundException::class,
-            function (UserNotFoundException $ex, IOutput $output) {
-                $output->writeln('Missing user');
-
-                return StatusCodes::FATAL;
-            }
-        );
-
-        // Add a custom PSR-3 log level for an exception
-        $this->withLogLevelFactory(
-            $appBuilder,
-            UserCorruptedException::class,
-            fn(UserCorruptedException $ex) => LogLevel::CRITICAL
-        );
+        $this
+            ->withProblemDetails(
+                $appBuilder,
+                UserNotFoundException::class,
+                status: HttpStatusCode::NotFound
+            )
+            ->withProblemDetails(
+                $appBuilder,
+                OverdrawnException::class,
+                type: 'https://example.com/errors/overdrawn',
+                title: 'This account is overdrawn',
+                detail: fn($ex) => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
+                status: HttpStatusCode::BadRequest,
+                instance: fn($ex) => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
+                extensions: fn($ex) => ['overdrawnAmount' => $ex->overdrawnAmount]
+            )
+            ->withConsoleExceptionOutputWriter(
+                $appBuilder,
+                UserNotFoundException::class,
+                function (UserNotFoundException $ex, IOutput $output) {
+                    $output->writeln('Missing user');
+    
+                    return StatusCodes::FATAL;
+                }
+            )
+            ->withLogLevelFactory(
+                $appBuilder,
+                UserCorruptedException::class,
+                fn(UserCorruptedException $ex) => LogLevel::CRITICAL
+            );
     }
 }
 ```

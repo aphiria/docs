@@ -58,7 +58,28 @@
 
 Routing is the process of mapping HTTP requests to actions.  You can check out what makes Aphiria's routing library different [here](framework-comparisons.md#aphiria-routing) as well as the [server configuration](installation.md#server-config) necessary to use it.
 
-Let's look at a fully-functional example (or view its [attribute-based alternative](#route-attributes-example)):
+If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, let's look at how to register a route in a <a href="configuration.md#modules">module</a> (or view its [attribute-based alternative](#route-attributes-example)).  Routing is performed for you automatically, and there's nothing more to do besides actually defining your [controller](controllers.md):
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Routing\RouteCollectionBuilder;
+
+final class BookModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes): void {
+            $routes
+                ->get('/books/:bookId')
+                ->mapsToMethod(BookController::class, 'getBookById')
+                ->withMiddleware(Authorization::class)
+        });
+    }
+}
+````
+
+If you're using the skeleton app, you can skip to the next section.  Otherwise, you can still use a fluent syntax for configuring your routes without the skeleton app.  Let's look at a complete example that includes actually performing the routing:
 
 ```php
 use Aphiria\Routing\Matchers\TrieRouteMatcher;
@@ -205,7 +226,7 @@ Each attribute takes in the same parameters:
 use Aphiria\Routing\Attributes\Get;
 
 #[Get(
-    path: 'courses/:courseId',
+    path: '/courses/:courseId',
     host: 'api.example.com',
     name: 'getCourse',
     isHttpsOnly: true,
@@ -226,7 +247,7 @@ use Aphiria\Routing\Attributes\{Controller, Get, RouteConstraint};
 use App\Courses\Course;
 
 #[Controller(
-    path: 'courses/:courseId',
+    path: '/courses/:courseId',
     host: 'api.example.com',
     isHttpsOnly: true
 )]
@@ -248,7 +269,7 @@ final class CourseController extends BaseController
 }
 ```
 
-When our routes get compiled, the route group path will be prefixed to the path of any route within the controller.  In the above example, this would create a route with path `courses/:courseId` and another with path `courses/:courseId/professors`.
+When our routes get compiled, the route group path will be prefixed to the path of any route within the controller.  In the above example, this would create a route with path `/courses/:courseId` and another with path `/courses/:courseId/professors`.
   
 <h3 id="route-attributes-middleware">Middleware</h3>
 
@@ -363,7 +384,7 @@ use Aphiria\Routing\RouteGroupOptions;
 
 $routes->group(
     new RouteGroupOptions(
-        path: 'courses/:courseId',
+        path: '/courses/:courseId',
         host: 'api.example.com',
         isHttpsOnly: true,
         constraints: [new MyConstraint()],
@@ -599,10 +620,34 @@ Our route will now enforce a serial number with minimum length 6.
 
 <h2 id="creating-route-uris">Creating Route URIs</h2>
 
-You might find yourself wanting to create a link to a particular route within your app.  Let's say you have a route named `GetUserById` with a URI template of `/users/:userId`.  We can generate a link to get a particular user:
+You might find yourself wanting to create a link to a particular route within your app.  Let's say you have a route named `GetUserById` with a URI template of `/users/:userId`.  We can generate a link to get a particular user.  The best way is to inject an instance of `IRouteUriFactory` into your controller:
 
 ```php
-use Aphiria\Routing\UriTemplates\AstRouteUriFactory;
+use Aphiria\Api\Controllers\Controller;
+use Aphiria\Net\Http\IResponse;
+use Aphiria\Routing\Attributes\{Get, Post};
+use Aphiria\Routing\UriTemplates\IRouteUriFactory;
+
+final class UserController extends Controller
+{
+    public function __construct(private IRouteUriFactory $routeUriFactory) {}
+    
+    #[Post('/users')]
+    public function createUser(User $user): IResponse
+    {
+        // Create the user...
+        
+        $location = $this->routeUriFactory->createRouteUri('GetUserById', ['userId' => $user->id]);
+        
+        return $this->created($location);
+    }
+    
+    #[Get('/users/:userId', name: 'GetUserById')]
+    public function getUserById(int $userId): User
+    {
+        // Get the user...
+    }
+}
 
 // Assume you've already created your routes
 $routeUriFactory = new AstRouteUriFactory($routes);
@@ -611,51 +656,62 @@ $routeUriFactory = new AstRouteUriFactory($routes);
 $uriForUser123 = $routeUriFactory->createRouteUri('GetUserById', ['id' => 123]);
 ```
 
-Generated URIs will be a relative path unless the URI template specified a host.  Let's look at an example for one that does include a host: `:environment.example.com/users/:userId`.
+Generated URIs will be a relative path unless the URI template specified a host.  Absolute URIs are assumed to be HTTPS unless the URI template is specifically set to not be HTTPS-only.
+
+Optional route variables can be specified, too.  Let's assume the URI template for `GetBooksFromArchive` is `/archives/:year[/:month]`:
 
 ```php
-// Will create "https://dev.example.com/users/123"
-$uriForDevUser123 = $routeUriFactory->createRouteUri('GetUserById', ['environment' => 'dev', 'id' => 123]);
-```
-
-> **Note:**  Absolute URIs are assumed to be HTTPS unless the URI template is specifically set to not be HTTPS-only.
-
-Optional route variables can be specified, too.  Let's assume the URI template is `/archives/:year[/:month]`:
-
-```php
-// Will create "/archives/2019"
-$booksFor2019 = $routeUriFactory->createRouteUri(
-    'GetBooksFromArchive',
-    ['year' => 2019]
-);
-
-// Will create "/archives/2019/12"
-$booksForDec2019 = $routeUriFactory->createRouteUri(
-    'GetBooksFromArchive',
-    ['year' => 2019, 'month' => 12]
-);
+class BookController extends Controller
+{
+    public function __construct(private IRouteUriFactory $routeUriFactory) {}
+    
+    #[Get('/books/links')]
+    public function getArchiveLinks(): array
+    {
+        $links = [
+            // Will create "/archives/2019"
+            $this->routeUriFactory->createRouteUri('GetBooksFromArchive', ['year' => 2019]),
+            // Will crate "/archives/2019/12"
+            $this->routeUriFactory->createRouteUri('GetBooksFromArchive', ['year' => 2019, 'month' => 12]),
+        ];
+        
+        return $links;
+    }
+}
 ```
 
 If you use <a href="controllers.md#parameter-attributes">parameter attributes</a>, Aphiria will respect them when determining where to apply the route variables (eg by putting them in the route path/host or in the query string).
 
 <h3 id="creating-route-requests">Creating Route Requests</h3>
 
-If your routes include a `#[Header]` variable that you'd like to auto-populate or you want to create an <a href="http-requests.md">HTTP request</a> for your route and not just a URI, you can use `RouteRequestFactory`:
+If your routes include a `#[Header]` variable that you'd like to auto-populate or you want to create an [HTTP request](http-requests.md) for your route and not just a URI, you can use `RouteRequestFactory`:
 
 ```php
-use Aphiria\Framework\Routing\RouteRequestFactory;
+use Aphiria\Api\Controllers\Controller;
+use Aphiria\Framework\Routing\{IRouteRequestFactory, RouteRequestFactory};
+use Aphiria\Routing\Attributes\Get;
 
-$routeRequestFactory = new RouteRequestFactory($routes);
-$request = $routeRequestFactory->createRouteRequest('GetBooksFromArchive', ['year' => 2019, 'month' => 12]);
-echo $request->method; // "GET"
-echo $request->uri; // "/archives/2019/12"
+class BookController extends Controller
+{
+    public function __construct(private IRouteRequestFactory $routeRequestFactory) {}
+    
+    #[Get('/books/dump-request')]
+    public function dumpRequest(): string
+    {
+        // For demonstration's sake, we'll just dump the raw HTTP request
+        return (string)$this->routeRequestFactory->createRouteRequest(
+            'GetBooksFromArchive',
+            ['year' => 2019]
+        );
+    }
+}
 ```
 
 > **Note:** If your route supports multiple HTTP methods, you must specify the HTTP method to use as a third parameter in `createRouteRequest()`.  If your route supports GET requests, it will automatically also support HEAD requests.  In this case, the factory will default to creating a GET request unless you specify 'HEAD' as the method.
 
 <h2 id="caching">Caching</h2>
 
-The process of building your routes and compiling the trie is a relatively slow process, and isn't necessary in a production environment where route definitions aren't changing.  Aphiria provides both the ability to cache the results of your route builders and the compiled trie.
+The process of building your routes and compiling the trie is a relatively slow process, and isn't necessary in a production environment where route definitions aren't changing.  Aphiria provides both the ability to cache the results of your route builders and the compiled trie.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you're already set - caching happens for you automatically, and you can skip this section.
 
 <h3 id="route-caching">Route Caching</h3>
 
@@ -693,7 +749,7 @@ $trieFactory = new TrieFactory($routes, $trieCache);
 
 <h2 id="using-aphirias-net-library">Using Aphiria's Net Library</h2>
 
-You can use [Aphiria's net library](http-requests.md) to route the request instead of relying on PHP's superglobals:
+If you're not using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>hre, you can use [Aphiria's net library](http-requests.md) to route the request instead of relying on PHP's superglobals:
 
 ```php
 use Aphiria\Net\Http\RequestFactory;

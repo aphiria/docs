@@ -200,22 +200,20 @@ final class GlobalModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
     {
-        // Register a requirement handler
-        $this->withAuthorizationRequirementHandler(
-            $appBuilder,
-            RolesRequirement::class,
-            new RolesRequirementHandler()
-        );
-        
-        // Register a policy
-        $this->withAuthorizationPolicy(
-            $appBuilder,
-            new AuthorizationPolicy(
-                'roles',
-                new RolesRequirement('admin'),
-                'cookie'
+        $this
+            ->withAuthorizationRequirementHandler(
+                $appBuilder,
+                RolesRequirement::class,
+                new RolesRequirementHandler()
             )
-        );
+            ->withAuthorizationPolicy(
+                $appBuilder,
+                new AuthorizationPolicy(
+                    'roles',
+                    new RolesRequirement('admin'),
+                    'cookie'
+                )
+            );
     }
 }
 ```
@@ -305,7 +303,31 @@ final class AuthorizedDeleterRequirementHandler implements IAuthorizationRequire
 }
 ```
 
-Now, let's register this policy:
+Now, let's register this policy.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can do this in a <a href="configuration.md#modules">module</a>:
+
+```php
+final class GlobalModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this
+            ->withAuthorizationRequirementHandler(
+                $appBuilder,
+                AuthorizedDeleterRequirement::class,
+                new AuthorizedDeleterRequirementHandler()
+            )
+            ->withAuthorizationPolicy(
+                $appBuilder,
+                new AuthorizationPolicy(
+                    'authorized-deleter',
+                    new AuthorizedDeleterRequirement(['admin'])
+                )
+            );
+    }
+}
+```
+
+If you're not using the skeleton app, use `AuthorityBuilder`:
 
 ```php
 use Aphiria\Authorization\AuthorityBuilder;

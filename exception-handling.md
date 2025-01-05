@@ -30,7 +30,7 @@
 
 At some point, your application is going to throw an unhandled exception or shut down unexpectedly.  When this happens, it would be nice to log details about the error and present a nicely-formatted response for the user.  Aphiria provides `GlobalExceptionHandler` to do just this.  It can be used to render exceptions for both HTTP and console applications, and is framework-agnostic.  To learn more about how to configure exceptions in modules in the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, read the [configuration documentation](configuration.md#component-exception-handler).
 
-Let's review how to manually configure the exception handler outside the skeleton app.
+If you're not using the skeleton app, let's review how to manually configure the exception handler.
 
 ```php
 use Aphiria\Exceptions\GlobalExceptionHandler;
