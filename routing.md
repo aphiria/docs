@@ -530,6 +530,7 @@ PHP is irritatingly difficult to extract headers from `$_SERVER`.  If you're usi
 use Aphiria\Routing\Requests\RequestHeaderParser;
 
 $headers = new RequestHeaderParser()->parseHeaders($_SERVER);
+echo $headers['Content-Type']; // "application/json"
 ```
 
 <h2 id="route-variable-constraints">Route Variable Constraints</h2>
