@@ -240,7 +240,7 @@ final class CourseController extends BaseController
         // ...
     }
     
-    #[Get('professors')]
+    #[Get('/professors')]
     public function getCourseProfessors(int $courseId): array
     {
         // ...
@@ -274,7 +274,7 @@ use App\Users\User;
 
 final class UserController extends Controller
 {
-    #[Get('users/:userId')]
+    #[Get('/users/:userId')]
     #[RouteConstraint(MyConstraint::class, constructorParameters: ['param1'])]
     public function getUserById(int $userId): User
     {
@@ -457,14 +457,14 @@ use Aphiria\Routing\Attributes\{Get, RouteConstraint};
 
 final class CommentController extends Controller
 {
-    #[Get('comments', parameters: ['API-VERSION' => 'v1.0'])]
+    #[Get('/comments', parameters: ['API-VERSION' => 'v1.0'])]
     #[RouteConstraint(ApiVersionConstraint::class)]
     public function getAllComments1_0(): array
     {
         // This route will require an API-VERSION value of 'v1.0'
     }
     
-    #[Get('comments', parameters: ['API-VERSION' => 'v2.0'])]
+    #[Get('/comments', parameters: ['API-VERSION' => 'v2.0'])]
     #[RouteConstraint(ApiVersionConstraint::class)]
     public function getAllComments2_0(): array
     {

@@ -675,8 +675,7 @@ These methods mimic the `IConfiguration` interface, but are static.  Like `IConf
 ```php
 use Aphiria\Application\Configuration\GlobalConfigurationBuilder;
 
-$globalConfigurationBuilder = new GlobalConfigurationBuilder();
-$globalConfigurationBuilder
+new GlobalConfigurationBuilder()
     ->withPhpFileConfigurationSource('config.php')
     ->withJsonFileConfigurationSource('config.json')
     ->withEnvironmentVariables()

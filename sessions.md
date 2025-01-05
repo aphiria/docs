@@ -129,7 +129,7 @@ final class AuthController extends Controller
 {
     public function __construct(private ISession $session) {}
 
-    #[Post('login')]
+    #[Post('/login')]
     public function logIn(LoginDto $loginDto): IResponse
     {
         // Do the login...

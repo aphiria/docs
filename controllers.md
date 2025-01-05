@@ -38,7 +38,7 @@ final class UserController extends Controller
 {
     public function __construct(private IUserService $users) {}
 
-    #[Get('users/:userId')]
+    #[Get('/users/:userId')]
     public function getUserById(int $userId): User
     {
         return $this->users->getById($userId);
@@ -55,7 +55,7 @@ final class UserController extends Controller
 {
     public function __construct(private IUserService $users) {}
     
-    #[Get('users/:userId')]
+    #[Get('/users/:userId')]
     public function getUserById(int $userId): IResponse
     {
         $user = $this->users->getById($userId);
@@ -97,7 +97,7 @@ final class UserController extends Controller
 {
     public function __construct(private IUserService $users) {}
     
-    #[Get('users/:userId')]
+    #[Get('/users/:userId')]
     public function getUserById(int $userId): IResponse
     {
         $user = $this->users->getById($userId);
@@ -122,7 +122,7 @@ final class UserController extends Controller
 {
     public function __construct(private IUserService $users) {}
     
-    #[Post('users')]
+    #[Post('/users')]
     public function createUser(UserDto $userDto): IResponse
     {
         $user = $this->users->createUser($userDto->email, $userDto->password);
@@ -144,7 +144,7 @@ final class UserController extends Controller
     // ...
     
     // Assume the query string is "?includeAvatar=1"
-    #[Get('users/:userId')]
+    #[Get('/users/:userId')]
     public function getUser(int $userId, bool $includeAvatar): User
     {
         return $this->users->getUserById($userId, $includeAvatar);
@@ -182,7 +182,7 @@ final class UserController extends Controller
     // ...
     
     // Assume the query string is "?includeAvatar=1"
-    #[Get('users/:userId')]
+    #[Get('/users/:userId')]
     public function getUser(#[RouteVariable] int $userId, #[QueryString] bool $includeAvatar): User
     {
         return $this->users->getUserById($userId, $includeAvatar);
@@ -198,7 +198,7 @@ final class UserController extends Controller
     // ...
     
     // Assume the query string is "?includeAvatar=1"
-    #[Get('users/:userId')]
+    #[Get('/users/:userId')]
     public function getUser(#[RouteVariable('userId')] int $id, #[QueryString('includeAvatar')] bool $showAvatar): User
     {
         // $id will map to the "userId" route variable
@@ -217,7 +217,7 @@ final class UserController extends Controller
 {
     // ...
 
-    #[Post('users')]
+    #[Post('/users')]
     public function createManyUsers(): IResponse
     {
         $users = $this->readRequestBodyAs(User::class . '[]');
@@ -241,7 +241,7 @@ final class UserController extends Controller
 {
     public function __construct(private IRequestBodyValidator $validator) {}
 
-    #[Post('users')]
+    #[Post('/users')]
     public function createManyUsers(): IResponse
     {
         $users = $this->readRequestBodyAs(User::class . '[]');
@@ -259,7 +259,7 @@ Your controllers might need to do more advanced reading of [request data](http-r
 ```php
 final class JsonPrettifierController extends Controller
 {
-    #[Post('prettyjson')]
+    #[Post('/prettyjson')]
     public function prettifyJson(): IResponse
     {
         if (!$this->requestParser->isJson($this->request)) {
@@ -286,7 +286,7 @@ final class PreferencesController extends Controller
 {
     public function __construct(private IPreferenceService $preferences) {}
 
-    #[Put('preferences')]
+    #[Put('/preferences')]
     public function savePreferences(Preferences $preferences): IResponse
     {
         // Store the preferences
@@ -309,7 +309,7 @@ If you're using the [authentication library](authentication.md), you can grab th
 ```php
 final class BookController extends Controller
 {
-    #[Get('books/:id')]
+    #[Get('/books/:id')]
     #[Authenticate]
     public function getBook(int $id): Book
     {
