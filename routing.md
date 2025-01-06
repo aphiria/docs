@@ -602,7 +602,7 @@ final class GlobalModule extends AphiriaModule
 }
 ```
 
-If you're not using the skeleton app, you can still register the constraint:
+If you're using the skeleton app, you can skip to the next section.  Otherwise, you can still register the constraint manually:
 
 ```php
 use Aphiria\Routing\UriTemplates\Constraints\RouteVariableConstraintFactory;
