@@ -151,6 +151,26 @@ final class UserModule extends AphiriaModule
 }
 ```
 
+You can also register [custom route variable constraints](routing.md#making-your-own-custom-constraints):
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+
+final class UserModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        // Manually add some routes
+        $this->withRouteVariableConstraint(
+            $appBuilder,
+            MinLengthConstraint::getSlug(),
+            fn(int $minLength) => new MinLengthConstraint($minLength)
+        );
+    }
+}
+```
+
 <h3 id="component-middleware">Middleware</h3>
 
 Some modules might need to add global [middleware](middleware.md) to your application.
@@ -184,13 +204,13 @@ You can manually register [console commands](console.md#creating-commands), and 
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Console\Commands\Command;
 use Aphiria\Console\Commands\CommandRegistry;
+use Aphiria\Console\Output\Compilers\Elements\{Color, Element, Style};
 use Aphiria\Framework\Application\AphiriaModule;
 
 final class UserModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
     {
-        // Manually add console commands
         $this
             ->withCommands($appBuilder, function (CommandRegistry $commands) {
                 $commands->registerCommand(
@@ -199,6 +219,8 @@ final class UserModule extends AphiriaModule
                 );
             })
             ->withCommandAttributes($appBuilder)
+            // Register a custom element to style text, eg <foo>bar</foo>
+            ->withConsoleElement($appBuilder, new Element('foo', new Style(Color::Magenta)))
             ->withFrameworkCommands($appBuilder)
             // Or, if you wish to exclude certain built-in commands:
             ->withFrameworkCommands($appBuilder, ['app:serve']);

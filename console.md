@@ -578,7 +578,26 @@ The following elements come built-into Aphiria:
 
 <h3 id="custom-elements">Custom Elements</h3>
 
-You can create your own style elements.  Elements are registered to `ElementRegistry`.
+You can create your own style elements.  If you are using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can use a [component](configuration.md#components) to register your custom element:
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Console\Output\Compilers\Elements\{Color, Element, Style};
+use Aphiria\Framework\Application\AphiriaModule;
+
+final class GlobalModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withConsoleElement(
+            $appBuilder,
+            new Element('foo', new Style(Colors::BLACK, Colors::YELLOW, [TextStyles::BOLD])
+        );
+    }
+}
+```
+
+Otherwise, if you're not using the skeleton app, you can register them to `ElementRegistry`.
 
 ```php
 use Aphiria\Console\Commands\CommandRegistry;
@@ -611,13 +630,7 @@ exit(\is_int($status) ? $status : $status instance StatusCode ? $status->value :
 
 <h3 id="overriding-built-in-elements">Overriding Built-In Elements</h3>
 
-To override a built-in element, just re-register it:
-
-```php
-$elements->registerElement(
-    new Element('success', new Style(Colors::GREEN, Colors::BLACK))
-);
-```
+To override a built-in element, just re-register it using the same methods as above.
 
 <h2 id="built-in-commands">Built-In Commands</h2>
 

@@ -583,7 +583,26 @@ final class MinLengthConstraint implements IRouteVariableConstraint
 }
 ```
 
-Let's register our constraint with the constraint factory:
+Let's register our constraint with the constraint factory.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can use a [component](configuration.md#components):
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+
+final class GlobalModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withRouteVariableConstraint(
+            $appBuilder,
+            MinLengthConstraint::getSlug(),
+            fn(int $minLength) => new MinLengthConstraint($minLength)
+        );
+    }
+}
+```
+
+If you're not using the skeleton app, you can still register the constraint:
 
 ```php
 use Aphiria\Routing\UriTemplates\Constraints\RouteVariableConstraintFactory;
