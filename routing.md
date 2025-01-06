@@ -691,7 +691,7 @@ class BookController extends Controller
         $links = [
             // Will create "/archives/2019"
             $this->routeUriFactory->createRouteUri('GetBooksFromArchive', ['year' => 2019]),
-            // Will crate "/archives/2019/12"
+            // Will create "/archives/2019/12"
             $this->routeUriFactory->createRouteUri('GetBooksFromArchive', ['year' => 2019, 'month' => 12]),
         ];
         
