@@ -76,7 +76,7 @@ Now you're ready to start [negotiating](#negotiating-requests).
 
 <h2 id="negotiating-requests">Negotiating Requests</h2>
 
-If you're using the <a href="https://github.com/aphiria/app/issues" target="_blank">skeleton app</a>, you don't have to worry about negotiating requests - it's done for you automatically, and you can skip this section.  If you're not using it, then let's build off the [previous example](#basics) and negotiate a request manually.  Let's assume the raw request looked something like this:
+If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you don't have to worry about negotiating requests - it's done for you automatically, and you can skip this section.  If you're not using it, then let's build off the [previous example](#basics) and negotiate a request manually.  Let's assume the raw request looked something like this:
 
 ```http
 POST https://example.com/users HTTP/1.1
@@ -105,7 +105,7 @@ echo $user->email; // "foo@example.com"
 
 <h2 id="negotiating-responses">Negotiating Responses</h2>
 
-If you're using the <a href="https://github.com/aphiria/app/issues" target="_blank">skeleton app</a>, then negotiating a response is done for you automatically, and you can skip this section.  If you're not, though, you can manually negotiate a response by inspecting the `Accept`, `Accept-Charset`, and `Accept-Language` headers.  If those headers are missing, we default to using the first media type formatter that can write the response body.
+If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, then negotiating a response is done for you automatically, and you can skip this section.  If you're not, though, you can manually negotiate a response by inspecting the `Accept`, `Accept-Charset`, and `Accept-Language` headers.  If those headers are missing, we default to using the first media type formatter that can write the response body.
 
 Constructing a response with all the appropriate headers is a little involved when doing it manually, which is why Aphiria provides `NegotiatedResponseFactory` to handle it for you:
 

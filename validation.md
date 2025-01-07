@@ -104,7 +104,30 @@ $objectConstraintsRegistrants->registerConstraints($objectConstraints);
 $validator = new Validator($objectConstraints);
 ```
 
-If you prefer to not use attributes, you can use a fluent syntax to manually register constraints instead:
+If you prefer to not use attributes, you can use a fluent syntax to manually register constraints instead.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can use a [component](configuration.md#components) to register constraints:
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Validation\Constraints\EmailConstraint;
+use Aphiria\Validation\Constraints\RequiredConstraint;
+use Aphiria\Validation\ObjectConstraintsRegistryBuilder;
+
+class UserModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withObjectConstraints($appBuilder, function (ObjectConstraintsRegistryBuilder $constraints) {
+            $constraints
+                ->class(User::class)
+                ->hasPropertyConstraints('email', new EmailConstraint())
+                ->hasPropertyConstraints('name', new RequiredConstraint());
+        });
+    }
+}
+```
+
+Otherwise, if you're not using the skeleton app:
 
 ```php
 use Aphiria\Validation\Constraints\EmailConstraint;
@@ -113,15 +136,13 @@ use Aphiria\Validation\ObjectConstraintsRegistryBuilder;
 use Aphiria\Validation\Validator;
 
 // Set up our validator
-$constraintsBuilder = new ObjectConstraintsRegistryBuilder();
-$constraintsBuilder
+$constraints = new ObjectConstraintsRegistryBuilder();
+$constraints
     ->class(User::class)
     ->hasPropertyConstraints('email', new EmailConstraint())
     ->hasPropertyConstraints('name', new RequiredConstraint());
-$validator = new Validator($constraintsBuilder->build());
+$validator = new Validator($constraints->build());
 ```
-
-> **Note:** The best place to [manually register constraints](configuration.md#component-validator) on your classes is in a [module](configuration.md#modules).
 
 <h2 id="validating-data">Validating Data</h2>
 
@@ -134,7 +155,7 @@ Several types of data can be validated:
 
 <h3 id="validating-objects">Validating Objects</h3>
 
-To validate an object, simply map the properties and methods in that object to constraints.  Aphiria will then recursively validate the object and any properties/methods that contain objects.  Use `ObjectConstraintsRegistryBuilder` to help set up the constraints on your objects' properties/methods [like in the above example](#introduction).  To validate an object, we have two options:
+To validate an object, simply map the properties and methods in that object to constraints.  Aphiria will then recursively validate the object and any properties/methods that contain objects.  To validate an object, we have two options:
 
 ```php
 $blogPost = new BlogPost('How to Reticulate Splines');
@@ -276,7 +297,9 @@ Let's set up an attribute for this constraint.
 
 ```php
 use Aphiria\Validation\Constraints\Attributes\ConstraintAttribute;
+use Attribute;
 
+#[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_PROPERTY)]
 final class MaxLength extends ConstraintAttribute
 {
     public function __construct(public int $maxLength, string $errorMessageId = null)
@@ -305,17 +328,12 @@ final class BlogPost
 
 <h2 id="error-messages">Error Messages</h2>
 
-Error messages provide human-readable explanations of what failed during validation.  `IConstraint` contains error message IDs and placeholders, which can give more specifics on why a constraint failed.  For example, `MaxConstraint` has a default error message ID of `Field must be less than {max}`, and it provides a `max` error message placeholder so that you can display the actual max in the error message.
+Error messages provide human-readable explanations of what failed during validation.  `IConstraint` contains error message IDs and placeholders, which can give more specifics on why a constraint failed.  For example, `MaxConstraint` has a default error message ID of `Length cannot exceed {maxLength}`, and it provides a `maxLength` error message placeholder so that you can display the actual max in the error message.
 
-Depending on how you're validating a value, there are different ways of grabbing the constraint violations.  If you're using `IValidator::validate*()` methods, you can grab the violations from the `ValidationException`:
+If you're using `IValidator::validate*()` methods, you can grab the violations from the `ValidationException`:
 
 ```php
-use Aphiria\Validation\ErrorMessages\StringReplaceErrorMessageInterpolator;
-use Aphiria\Validation\{ValidationException, Validator};
-
-// Assume we already have our object constraints configured
-$errorMessageInterpolator = new StringReplaceErrorMessageInterpolator();
-$validator = new Validator($objectConstraints, $errorMessageInterpolator);
+use Aphiria\Validation\ValidationException;
 
 try {
     $validator->validateObject($blogPost);
@@ -391,7 +409,9 @@ final class ResourceFileErrorMessageTemplateRegistry implements IErrorMessageTem
 }
 ```
 
-To use this registry, just pass it into your interpolator, and pass the interpolator into your validator.
+If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can set `aphiria.validation.errorMessageTemplates.type` in _config.php_ to use your desired error message template registry.
+
+If you're not using the skeleton app, you can pass it into your [interpolator](validation.md#built-in-error-message-interpolators) and pass the interpolator into your validator.
 
 ```php
 use Aphiria\Validation\ErrorMessages\IcuFormatErrorMessageInterpolator;
@@ -423,6 +443,8 @@ final class BlogPost
 Aphiria comes with a couple error message interpolators.  `StringReplaceErrorMessageInterpolator` simply replaces `{placeholder}` in the constraints' error message templates with the constraints' placeholders.  It is the default interpolator, and is most suitable for applications that do not require i18n.
 
 If you do require i18n and are using the <a href="http://userguide.icu-project.org/formatparse/messages" target="_blank">ICU format</a>, `IcuErrorMessageInterpolator` is probably the better choice.
+
+If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can configure the interpolator to use by updating `aphiria.validation.errorMessageInterpolator.type` in _config.php_.
 
 <h2 id="validating-request-bodies">Validating Request Bodies</h2>
 

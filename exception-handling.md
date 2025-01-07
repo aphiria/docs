@@ -133,7 +133,7 @@ $globalExceptionHandler->registerWithPhp();
 
 <h2 id="logging">Logging</h2>
 
-> **Note:** If you're using the <a href="https://github.com/aphiria/app">skeleton app</a>, you can configure the PSR-3 logger used in the global exception handler by editing the `aphiria.logging` values in _config.php_.
+> **Note:** If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can configure the PSR-3 logger used in the global exception handler by editing the `aphiria.logging` values in _config.php_.
 
 If you are not using the skeleton app and need to manually configure the logger, just pass it into the handler:
 
