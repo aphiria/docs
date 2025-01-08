@@ -9,7 +9,6 @@
 <ol>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#policies">Policies</a></li>
-<li><a href="#configuring-an-authority">Configuring an Authority</a></li>
 <li><a href="#resource-authorization">Resource Authorization</a></li>
 <li><a href="#authorization-results">Authorization Results</a></li>
 <li><a href="#customizing-failed-authorization-responses">Customizing Failed Authorization Responses</a></li>
@@ -128,7 +127,32 @@ final class MinimumAgeRequirementHandler implements IAuthorizationRequirementHan
 }
 ```
 
-Finally, let's register this requirement handler and use it in a policy:
+Finally, let's register this requirement handler and use it in a policy.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, use a [component](configuration.md#components):
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Authorization\AuthorizationPolicy;
+use Aphiria\Framework\Application\AphiriaModule;
+
+final class GlobalModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this
+            ->withAuthorizationRequirementHandler(
+                $appBuilder,
+                MinimumAgeRequirement::class,
+                new MinimumAgeRequirementHandler()
+            )
+            ->withAuthorizationPolicy(
+                $appBuilder,
+                new AuthorizationPolicy('age-check', new MinimumAgeRequirement(13))
+            );
+    }
+}
+```
+
+Otherwise, use `AuthorityBuilder`:
 
 ```php
 use Aphiria\Authorization\AuthorityBuilder;
@@ -183,63 +207,6 @@ final class RentalController extends Controller
         // ...
     }
 }
-```
-
-<h2 id="configuring-an-authority">Configuring an Authority</h2>
-
-There are two recommended ways of creating your authority.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, the authority will automatically be created for you in a [binder](dependency-injection.md#binders).  All you have to do is configure it in `GlobalModule`:
-
-```php
-use Aphiria\Application\IApplicationBuilder;
-use Aphiria\Authorization\AuthorizationPolicy;
-use Aphiria\Authorization\RequirementHandlers\RolesRequirement;
-use Aphiria\Authorization\RequirementHandlers\RolesRequirementHandler;
-use Aphiria\Framework\Application\AphiriaModule;
-
-final class GlobalModule extends AphiriaModule
-{
-    public function configure(IApplicationBuilder $appBuilder): void
-    {
-        $this
-            ->withAuthorizationRequirementHandler(
-                $appBuilder,
-                RolesRequirement::class,
-                new RolesRequirementHandler()
-            )
-            ->withAuthorizationPolicy(
-                $appBuilder,
-                new AuthorizationPolicy(
-                    'roles',
-                    new RolesRequirement('admin'),
-                    'cookie'
-                )
-            );
-    }
-}
-```
-
-> **Note:** You can configure the authority to continue checking requirements after a failure by setting the `aphiria.authorization.continueOnFailure` [config setting](configuration.md#global-configuration) in the skeleton app's _config.php_.
-
-Then, any time you use the `#[AuthorizePolicy]` or `#[AuthorizeRoles]` attributes or `IAuthority`, you'll be able to use your policies.
-
-If you are not using the skeleton app, use `AuthorityBuilder` to configure and build your authorities:
-
-```php
-use Aphiria\Authorization\AuthorityBuilder;
-use Aphiria\Authorization\AuthorizationPolicy;
-use Aphiria\Authorization\RequirementHandlers\RolesRequirement;
-use Aphiria\Authorization\RequirementHandlers\RolesRequirementHandler;
-
-$authority = new AuthorityBuilder()
-    ->withRequirementHandler(RolesRequirement::class, new RolesRequirementHandler())
-    ->withPolicy(new AuthorizationPolicy(
-        'roles',
-        new RolesRequirement('admin'),
-        'cookie'
-    ))
-    // Choose whether we want to continue checking requirements after a failure
-    ->withContinueOnFailure(false)
-    ->build();
 ```
 
 <h2 id="resource-authorization">Resource Authorization</h2>
@@ -303,7 +270,7 @@ final class AuthorizedDeleterRequirementHandler implements IAuthorizationRequire
 }
 ```
 
-Now, let's register this policy.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can do this in a <a href="configuration.md#modules">module</a>:
+Now, let's register this policy.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can do this in a [module](configuration.md#modules):
 
 ```php
 final class GlobalModule extends AphiriaModule

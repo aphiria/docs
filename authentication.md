@@ -20,7 +20,6 @@
 <li><a href="#cookie-authentication">Cookie Authentication</a></li>
 </ol>
 </li>
-<li><a href="#configuring-an-authenticator">Configuring an Authenticator</a></li>
 <li><a href="#authentication-results">Authentication Results</a></li>
 <li><a href="#customizing-authentication-failure-responses">Customizing Authentication Failure Responses</a></li>
 <li><a href="#user-accessors">User Accessors</a></li>
@@ -267,7 +266,27 @@ We'll go into more detail on how to register an authentication scheme in the [ex
 
 <h3 id="default-scheme">Default Scheme</h3>
 
-You can register a scheme to be your application's default.  This means that any authentication that does not use a specific scheme will fall back to using the default one.  Registering a default scheme is simple - just pass in `true` as the second parameter to `AuthenticatorBuilder::withScheme()`:
+You can register a scheme to be your application's default.  This means that any authentication that does not use a specific scheme will fall back to using the default one.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can use a [component](configuration.md#components) to register a default scheme:
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Authentication\AuthenticationScheme;
+use Aphiria\Framework\Application\AphiriaModule;
+
+final class GlobalModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withAuthenticationScheme(
+            $appBuilder,
+            new AuthenticationScheme('cookie', MyCookieHandler::class),
+            true
+        );
+    }
+}
+```
+
+Otherwise, pass it into `AuthenticationBuilder::withScheme()`:
 
 ```php
 use Aphiria\Authentication\AuthenticationScheme;
@@ -338,7 +357,30 @@ SQL;
 }
 ```
 
-Let's register this scheme with the authenticator:
+Let's register this scheme with the authenticator.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, use a [component](configuration.md#components):
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Authentication\AuthenticationScheme;
+use Aphiria\Framework\Application\AphiriaModule;
+
+final class GlobalModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withAuthenticationScheme(
+            $appBuilder,
+            new AuthenticationScheme(
+                'basic',
+                SqlBasicAuthenticationHandler::class,
+                new BasicAuthenticationOptions(realm: 'example.com', claimsIssuer: 'https://example.com')
+            )
+        );
+    }
+}
+```
+
+Otherwise, use the `AuthenticationBuilder`:
 
 ```php
 use Aphiria\Authentication\AuthenticationScheme;
@@ -360,6 +402,43 @@ $authenticator = new AuthenticatorBuilder()
 In the case that you are using cookie values to authenticate, you can extend `CookieAuthenticationHandler` and define the methods `createAuthenticationResultFromCookie()` and `createCookieValueForUser()` to create an authentication result from a cookie value and to create the cookie value that will be used to authenticate in subsequent requests, respectively.  This handler uses `CookieAuthenticationOptions` to give you control over your cookies.
 
 We won't go over how extend `CookieAuthenticationHandler` because it is very similar to the [example above](#basic-authentication), but here is how we would register our implementation:
+
+If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, use a [component](configuration.md#components):
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Authentication\AuthenticationScheme;
+use Aphiria\Authentication\Schemes\CookieAuthenticationOptions;
+use Aphiria\Framework\Application\AphiriaModule;
+
+final class GlobalModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withAuthenticationScheme(
+            $appBuilder,
+            new AuthenticationScheme(
+                'basic',
+                SqlBasicAuthenticationHandler::class,
+                new CookieAuthenticationOptions(
+                    cookieName: 'authToken',
+                    cookieMaxAge: 360,
+                    cookiePath: '/',
+                    cookieDomain: 'example.com',
+                    cookieIsSecure: true,
+                    cookieIsHttpOnly: true,
+                    cookieSameSite: SameSiteMode::Strict,
+                    loginPagePath: '/login',
+                    forbiddenPagePath: '/access-denied',
+                    claimsIssuer: 'https://example.com'
+                 )
+            )
+        );
+    }
+}
+```
+
+Otherwise, use `AuthenticationBuilder`:
 
 ```php
 use Aphiria\Authentication\AuthenticationScheme;
@@ -389,51 +468,6 @@ $authenticator = new AuthenticatorBuilder()
 ```
 
 Now, whenever we use our `cookie` scheme, cookies will be set using the above options, and redirects on challenges and forbidden requests will forward to the appropriate paths.
-
-<h2 id="configuring-an-authenticator">Configuring an Authenticator</h2>
-
-There are two recommended ways of creating your authenticator.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, the authenticator will automatically be created for you in a [binder](dependency-injection.md#binders).  All you have to do is configure it in `GlobalModule`:
-
-```php
-use Aphiria\Application\IApplicationBuilder;
-use Aphiria\Authentication\AuthenticationScheme;
-use Aphiria\Authentication\AuthenticationSchemeOptions;
-use Aphiria\Framework\Application\AphiriaModule;
-
-final class GlobalModule extends AphiriaModule
-{
-    public function configure(IApplicationBuilder $appBuilder): void
-    {
-        $this->withAuthenticationScheme($appBuilder, new AuthenticationScheme(
-            'token',
-            MyTokenHandler::class,
-            new AuthenticationSchemeOptions(claimsIssuer: 'https://example.com')
-        ));
-    }
-}
-```
-
-Then, any time you use the `#[Authenticate]` attribute or `IAuthenticator`, you'll be able to use your `token` scheme.
-
-If you are not using the skeleton app, the simplest method is to use `AuthenticatorBuilder` to configure and build your authenticator:
-
-```php
-use Aphiria\Authentication\AuthenticationScheme;
-use Aphiria\Authentication\AuthenticationSchemeOptions;
-use Aphiria\Authentication\AuthenticatorBuilder;
-use Aphiria\Authentication\ContainerAuthenticationSchemeHandlerResolver;
-use Aphiria\DependencyInjection\Container;
-
-$authenticator = new AuthenticatorBuilder()
-    // This will resolve our scheme handler instances
-    ->withHandlerResolver(new ContainerAuthenticationSchemeHandlerResolver(new Container()))
-    ->withScheme(
-        'token', 
-        MyTokenHandler::class,
-        new AuthenticationSchemeOptions(claimsIssuer: 'https://example.com')
-    )
-    ->build();
-```
 
 <h2 id="authentication-results">Authentication Results</h2>
 
