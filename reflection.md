@@ -95,7 +95,7 @@ Or recursively:
 $subTypesOfFoo = $typeFinder->findAllSubtypesOfType(Foo::class, 'PATH_TO_SCAN', true);
 ```
 
-<div class="context-framework">
+<div class="context-framework" markdown="1">
 
 Test framework context
 
@@ -104,7 +104,7 @@ Test framework context
 
 </div>
 
-<div class="context-library">
+<div class="context-library" markdown="1">
 
 Test library context
 
