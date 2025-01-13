@@ -127,7 +127,9 @@ final class MinimumAgeRequirementHandler implements IAuthorizationRequirementHan
 }
 ```
 
-Finally, let's register this requirement handler and use it in a policy.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, use a [component](configuration.md#components):
+Finally, let's register this requirement handler and use it in a policy.
+
+<div class="context-framework" markdown="1">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -152,7 +154,8 @@ final class GlobalModule extends AphiriaModule
 }
 ```
 
-Otherwise, use `AuthorityBuilder`:
+</div>
+<div class="context-library" markdown="1">
 
 ```php
 use Aphiria\Authorization\AuthorityBuilder;
@@ -166,6 +169,8 @@ $authority = new AuthorityBuilder()
 ```
 
 > **Note:** By default, authorization will continue even if there was a failure.  If you want to change it to stop the moment there's a failure, call `AuthorityBuilder::withContinueOnFailure(false)`.
+
+</div>
 
 Now, we can use this policy through an attribute:
 
@@ -270,7 +275,9 @@ final class AuthorizedDeleterRequirementHandler implements IAuthorizationRequire
 }
 ```
 
-Now, let's register this policy.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can do this in a [module](configuration.md#modules):
+Now, let's register this policy.
+
+<div class="context-framework" markdown="1">
 
 ```php
 final class GlobalModule extends AphiriaModule
@@ -294,7 +301,8 @@ final class GlobalModule extends AphiriaModule
 }
 ```
 
-If you're not using the skeleton app, use `AuthorityBuilder`:
+</div>
+<div class="context-library" markdown="1">
 
 ```php
 use Aphiria\Authorization\AuthorityBuilder;
@@ -305,6 +313,8 @@ $authority = new AuthorityBuilder()
     ->withPolicy(new AuthorizationPolicy('authorized-deleter', new AuthorizedDeleterRequirement(['admin'])))
     ->build();
 ```
+
+</div>
 
 Finally, let's use `IAuthority` to do resource authorization in our controller:
 

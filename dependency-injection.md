@@ -147,13 +147,22 @@ final class UserBinder extends Binder
 }
 ```
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can register `UserBinder` to your app with an [application builder](configuration.md#component-binders).
+<div class="context-framework" markdown="1">
+
+You can register `UserBinder` to your app with an [application builder](configuration.md#component-binders).
+
+</div>
 
 <h3 id="dispatching-binders">Dispatching Binders</h3>
 
 Aphiria does something unique - it automatically dispatches a binder only when one or more of its bindings are needed by your application.  It does this by constructing a graph between binders and bound/resolved interfaces, allowing it to dispatch the bare minimum number of binders to handle a request, increasing performance.
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, your binders will automatically be dispatched, and you can skip the rest of this section.  Otherwise, you'll have to manually dispatch your binders.  Rather than having to dispatch _every_ binder on every request, you can use `LazyBinderDispatcher` to lazily dispatch them, ie only when they're actually needed.  Let's build on the `UserBinder` from the [previous example](#binders) and set up our app to lazily dispatch it:
+<div class="context-framework" markdown="1">
+Your binders are automatically dispatched for you.
+</div>
+<div class="context-library" markdown="1">
+
+You'll have to manually dispatch your binders.  Rather than having to dispatch _every_ binder on every request, you can use `LazyBinderDispatcher` to lazily dispatch them, ie only when they're actually needed.  Let's build on the `UserBinder` from the [previous example](#binders) and set up our app to lazily dispatch it:
 
 ```php
 use Aphiria\DependencyInjection\Binders\LazyBinderDispatcher;
@@ -171,3 +180,5 @@ $binderDispatcher->dispatch([new UserBinder()], $container);
 That's it.  The first time we dispatch the binders, the binder metadata will be collected and cached for future requests.  Also, whenever a binder resolves an interface bound in another binder, that other binder will be automatically dispatched, too.
 
 > **Note:** It's recommended that you only use caching for production environments.  Otherwise, changes you make to your binders might not be reflected.
+
+</div>

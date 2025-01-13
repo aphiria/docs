@@ -89,7 +89,7 @@ That's all it takes to build a fully functional API with Aphiria.
 
 <h2 id="getting-started">Getting Started</h2>
 
-To get up and running, follow our [installation guide](installation.md) to create a skeleton app that uses Aphiria.  Then, [learn how to define some routes](routing.md),  [create some controllers](controllers.md), and [configure your dependencies](dependency-injection.md#binders).  From there, you can browse the docs in any order you choose, although the order they're listed in might be the best way to read them.
+To get up and running, follow our [installation guide](installation.md) to create a skeleton app that uses Aphiria.  Then, [learn how to define some routes](routing.md),  [create some controllers](controllers.md), and [configure your dependencies](dependency-injection.md#binders).  From there, you can browse the docs in any order you choose, although the order they're listed in might be the best way to read them.  There is also a "Context" dropdown you can select from that switches the documentation between showing how to use the full framework to configure something and how to use the feature in a standalone library (ie not using the full framework).
 
 Aphiria uses a GitHub project for keeping track of new features, bug fixes, and roadmapping.  To learn more about the direction of the framework, check out the <a href="https://github.com/orgs/aphiria/projects/1" target="_blank">project</a>.
 

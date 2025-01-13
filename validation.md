@@ -65,7 +65,9 @@ If the object was not valid, a `ValidationException` will be thrown.  That's it 
 
 <h3 id="creating-a-validator">Creating A Validator</h3>
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, an instance of `IValidator` will already be [bound](dependency-injection.md#binders) to the DI container, which you can [inject](dependency-injection.md).
+<div class="context-framework" markdown="1">
+
+An instance of `IValidator` will already be [bound](dependency-injection.md#binders) to the DI container, which you can [inject](dependency-injection.md).
 
 You can enable attributes in `GlobalModule`:
 
@@ -82,7 +84,10 @@ final class GlobalModule extends AphiriaModule
 }
 ```
 
-Otherwise, you can manually scan for attributes:
+</div>
+<div class="context-library" markdown="1">
+
+You can manually scan for attributes:
 
 ```php
 use Aphiria\Validation\Constraints\Attributes\AttributeObjectConstraintsRegistrant;
@@ -104,7 +109,13 @@ $objectConstraintsRegistrants->registerConstraints($objectConstraints);
 $validator = new Validator($objectConstraints);
 ```
 
-If you prefer to not use attributes, you can use a fluent syntax to manually register constraints instead.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can use a [component](configuration.md#components) to register constraints:
+</div>
+
+If you prefer to not use attributes, you can use a fluent syntax to manually register constraints instead.  
+
+<div class="context-framework" markdown="1">
+
+You can use a [component](configuration.md#components) to register constraints:
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -127,7 +138,8 @@ class UserModule extends AphiriaModule
 }
 ```
 
-Otherwise, if you're not using the skeleton app:
+</div>
+<div class="context-library" markdown="1">
 
 ```php
 use Aphiria\Validation\Constraints\EmailConstraint;
@@ -143,6 +155,8 @@ $constraints
     ->hasPropertyConstraints('name', new RequiredConstraint());
 $validator = new Validator($constraints->build());
 ```
+
+</div>
 
 <h2 id="validating-data">Validating Data</h2>
 
@@ -409,9 +423,14 @@ final class ResourceFileErrorMessageTemplateRegistry implements IErrorMessageTem
 }
 ```
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can set `aphiria.validation.errorMessageTemplates.type` in _config.php_ to use your desired error message template registry.
+<div class="context-framework" markdown="1">
 
-If you're not using the skeleton app, you can pass it into your [interpolator](validation.md#built-in-error-message-interpolators) and pass the interpolator into your validator.
+You can set `aphiria.validation.errorMessageTemplates.type` in _config.php_ to use your desired error message template registry.
+
+</div>
+<div class="context-library" markdown="1">
+
+You can pass it into your [interpolator](validation.md#built-in-error-message-interpolators) and pass the interpolator into your validator.
 
 ```php
 use Aphiria\Validation\ErrorMessages\IcuFormatErrorMessageInterpolator;
@@ -423,6 +442,8 @@ $errorMessageInterpolator = new IcuFormatErrorMessageInterpolator($errorMessageT
 // Assume we've configured the object constraints
 $validator = new Validator($objectConstraints, $errorMessageInterpolator);
 ```
+
+</div>
 
 You can override the default error message ID of a constraint:
 
@@ -444,7 +465,11 @@ Aphiria comes with a couple error message interpolators.  `StringReplaceErrorMes
 
 If you do require i18n and are using the <a href="http://userguide.icu-project.org/formatparse/messages" target="_blank">ICU format</a>, `IcuErrorMessageInterpolator` is probably the better choice.
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can configure the interpolator to use by updating `aphiria.validation.errorMessageInterpolator.type` in _config.php_.
+<div class="context-framework" markdown="1">
+
+You can configure the interpolator to use by updating `aphiria.validation.errorMessageInterpolator.type` in _config.php_.
+
+</div>
 
 <h2 id="validating-request-bodies">Validating Request Bodies</h2>
 

@@ -42,11 +42,11 @@
 <li><a href="#creating-route-requests">Creating Route Requests</a></li>
 </ol></li>
 <li><a href="#caching">Caching</a><ol>
-<li><a href="#route-caching">Route Caching</a></li>
-<li><a href="#trie-caching">Trie Caching</a></li>
+<li class="context-library"><a href="#route-caching">Route Caching</a></li>
+<li class="context-library"><a href="#trie-caching">Trie Caching</a></li>
 </ol>
 </li>
-<li><a href="#using-aphirias-net-library">Using Aphiria&#39;s Net Library</a></li>
+<li class="context-library"><a href="#using-aphirias-net-library">Using Aphiria&#39;s Net Library</a></li>
 <li><a href="#matching-algorithm">Matching Algorithm</a></li>
 </ol>
 
@@ -58,7 +58,9 @@
 
 Routing is the process of mapping HTTP requests to actions.  You can check out what makes Aphiria's routing library different [here](framework-comparisons.md#aphiria-routing) as well as the [server configuration](installation.md#server-config) necessary to use it.
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, let's look at how to register a route in a <a href="configuration.md#modules">module</a> (or view its [attribute-based alternative](#route-attributes-example)).  Routing is performed for you automatically, and there's nothing more to do besides actually defining your [controller](controllers.md):
+<div class="context-framework" markdown="1">
+
+Let's look at how to register a route in a <a href="configuration.md#modules">module</a> (or view its [attribute-based alternative](#route-attributes-example)).  Routing is performed for you automatically, and there's nothing more to do besides actually defining your [controller](controllers.md):
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -79,7 +81,10 @@ final class BookModule extends AphiriaModule
 }
 ````
 
-If you're using the skeleton app, you can skip to the next section.  Otherwise, you can still use a fluent syntax for configuring your routes without the skeleton app.  Let's look at a complete example that includes actually performing the routing:
+</div>
+<div class="context-library" markdown="1">
+
+You can use a fluent syntax for configuring your routes.  Let's look at a complete example that includes actually performing the routing:
 
 ```php
 use Aphiria\Routing\Matchers\TrieRouteMatcher;
@@ -135,11 +140,13 @@ foreach ($result->route->middlewareBindings as $middlewareBinding) {
 }
 ```
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a> and `$result->methodIsAllowed`, a 405 response will automatically be returned with a list of allowed methods.  If you're not, you can manually do the same thing:
+You can configure your app to return a 405 response using the result's allowed methods:
 
 ```php
 header('Allow', implode(', ', $result->allowedMethods));
 ```
+
+</div>
 
 <h3 id="route-variables">Route Variables</h3>
 
@@ -308,7 +315,9 @@ Similar to [middleware](#route-attributes-middleware), you can add route constra
 
 <h3 id="scanning-for-attributes">Scanning For Attributes</h3>
 
-Before you can use attributes, you'll need to configure Aphiria to scan for them.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can do so in `GlobalModule`:
+Before you can use attributes, you'll need to configure Aphiria to scan for them.  
+
+<div class="context-framework" markdown="1">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -323,7 +332,10 @@ final class GlobalModule extends AphiriaModule
 }
 ```
 
-Otherwise, you can manually configure the router to scan for attributes:
+</div>
+<div class="context-library" markdown="1">
+
+You can manually configure the router to scan for attributes:
 
 ```php
 use Aphiria\Routing\Attributes\AttributeRouteRegistrant;
@@ -343,6 +355,8 @@ $result = $routeMatcher->matchRoute(
     $_SERVER['REQUEST_URI']
 );
 ```
+
+</div>
 
 <h2 id="route-builders">Route Builders</h2>
 
@@ -373,7 +387,11 @@ You can also call `RouteCollectionBuilder::route()` and pass in the HTTP method(
 $routes->route(['GET'], path: '/user', host: 'api.example.com', isHttpsOnly: true);
 ```
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, the best place to define your routes is in modules using [application builders](configuration.md#component-routes).
+<div class="context-framework" markdown="1">
+
+The best place to define your routes is in modules using [application builders](configuration.md#component-routes).
+
+</div>
 
 <h3 id="route-builders-groups">Route Groups</h3>
 
@@ -583,7 +601,11 @@ final class MinLengthConstraint implements IRouteVariableConstraint
 }
 ```
 
-Let's register our constraint with the constraint factory.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can use a [component](configuration.md#components):
+Let's register our constraint with the constraint factory.
+
+<div class="context-framework" markdown="1">
+
+You can use a [component](configuration.md#components):
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -602,7 +624,10 @@ final class GlobalModule extends AphiriaModule
 }
 ```
 
-If you're using the skeleton app, you can skip to the next section.  Otherwise, you can still register the constraint manually:
+</div>
+<div class="context-library" markdown="1">
+
+You can register the constraint manually:
 
 ```php
 use Aphiria\Routing\UriTemplates\Constraints\RouteVariableConstraintFactory;
@@ -637,6 +662,8 @@ $routeMatcher = new TrieRouteMatcher($trieFactory->createTrie());
 ```
 
 Our route will now enforce a serial number with minimum length 6.
+
+</div>
 
 <h2 id="creating-route-uris">Creating Route URIs</h2>
 
@@ -731,7 +758,14 @@ class BookController extends Controller
 
 <h2 id="caching">Caching</h2>
 
-The process of building your routes and compiling the trie is a relatively slow process, and isn't necessary in a production environment where route definitions aren't changing.  Aphiria provides both the ability to cache the results of your route builders and the compiled trie.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you're already set - caching happens for you automatically, and you can skip this section.
+The process of building your routes and compiling the trie is a relatively slow process, and isn't necessary in a production environment where route definitions aren't changing.  Aphiria provides both the ability to cache the results of your route builders and the compiled trie.
+
+<div class="context-framework" markdown="1">
+
+Aphiria will automatically cache important data when `APP_ENV` equals "production".
+
+</div>
+<div class="context-library" markdown="1">
 
 <h3 id="route-caching">Route Caching</h3>
 
@@ -767,9 +801,12 @@ $trieFactory = new TrieFactory($routes, $trieCache);
 // Finish setting up your route matcher...
 ```
 
+
+<div class="context-library" markdown="1">
+
 <h2 id="using-aphirias-net-library">Using Aphiria's Net Library</h2>
 
-If you're not using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>hre, you can use [Aphiria's net library](http-requests.md) to route the request instead of relying on PHP's superglobals:
+You can use [Aphiria's net library](http-requests.md) to route the request instead of relying on PHP's superglobals:
 
 ```php
 use Aphiria\Net\Http\RequestFactory;
@@ -784,6 +821,8 @@ $result = $routeMatcher->matchRoute(
     $request->uri->path
 );
 ```
+
+</div>
 
 <h2 id="matching-algorithm">Matching Algorithm</h2>
 

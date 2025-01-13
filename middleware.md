@@ -140,9 +140,14 @@ final class UserController extends Controller
 
 <h2 id="executing-middleware">Executing Middleware</h2>
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, middleware will be executed automatically for you.  You can also define both [global middleware](configuration.md#component-middleware) and [route middleware](routing.md#middleware).  You can skip the rest of this section if using the skeleton app.
+<div class="context-framework" markdown="1">
 
-If you're not using the skeleton app, you'll have to set up a pipeline to execute your middleware for you.  Typically, middleware are wrapped in request handlers (eg `MiddlewareRequestHandler`) and executed in a pipeline.  You can create this pipeline using `MiddlewarePipelineFactory`:
+Middleware will be executed automatically for you.  You can also define both [global middleware](configuration.md#component-middleware) and [route middleware](routing.md#middleware).
+
+</div>
+<div class="context-library" markdown="1">
+
+You'll have to set up a pipeline to execute your middleware for you.  Typically, middleware are wrapped in request handlers (eg `MiddlewareRequestHandler`) and executed in a pipeline.  You can create this pipeline using `MiddlewarePipelineFactory`:
 
 ```php
 use Aphiria\Middleware\MiddlewarePipelineFactory;
@@ -164,3 +169,5 @@ $pipeline = new MiddlewarePipelineFactory()->createPipeline(
 $request = new RequestFactory()->createRequestFromSuperglobals($_SERVER);
 $response = $pipeline->handle($request);
 ```
+
+</div>

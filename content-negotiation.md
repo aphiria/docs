@@ -35,9 +35,14 @@ Content negotiation is a process between the client and server to determine how 
 * Language
   * Controlled by the `Content-Language` header for requests, and the `Accept-Language` header for responses
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, just update `aphiria.contentNegotiation.mediaTypeFormatters` in _config.php_, and you'll be ready to go.
+<div class="context-framework" markdown="1">
 
-If you're not using the skeleton app, setting up your content negotiator with default settings is trivial:
+Just update `aphiria.contentNegotiation.mediaTypeFormatters` in _config.php_, and you'll be ready to go.
+
+</div>
+<div class="context-library" markdown="1">
+
+Setting up your content negotiator with default settings is trivial:
 
 ```php
 use Aphiria\ContentNegotiation\ContentNegotiator;
@@ -72,11 +77,20 @@ $contentNegotiator = new ContentNegotiator(
 
 Now you're ready to start [negotiating](#negotiating-requests).
 
+</div>
+
 > **Note:** `AcceptLanguageMatcher` uses language tags from <a href="https://tools.ietf.org/html/rfc5646" target="_blank">RFC 5646</a>, and follows the lookup rules in <a href="https://tools.ietf.org/html/rfc4647#section-3.4" target="_blank">RFC 4647 Section 3.4</a>.
 
 <h2 id="negotiating-requests">Negotiating Requests</h2>
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you don't have to worry about negotiating requests - it's done for you automatically, and you can skip this section.  If you're not using it, then let's build off the [previous example](#basics) and negotiate a request manually.  Let's assume the raw request looked something like this:
+<div class="context-framework" markdown="1">
+
+There's nothing you have to do to negotiate requests - Aphiria handles it automatically.
+
+</div>
+<div class="context-library" markdown="1">
+
+Let's build off the [previous example](#basics) and negotiate a request manually.  Let's assume the raw request looked something like this:
 
 ```http
 POST https://example.com/users HTTP/1.1
@@ -103,9 +117,18 @@ echo $user->id; // 123
 echo $user->email; // "foo@example.com"
 ```
 
+</div>
+
 <h2 id="negotiating-responses">Negotiating Responses</h2>
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, then negotiating a response is done for you automatically, and you can skip this section.  If you're not, though, you can manually negotiate a response by inspecting the `Accept`, `Accept-Charset`, and `Accept-Language` headers.  If those headers are missing, we default to using the first media type formatter that can write the response body.
+<div class="context-framework" markdown="1">
+
+Aphiria also automatically negotiates your responses for you - there's nothing for you to do.
+
+</div>
+<div class="context-library" markdown="1">
+
+You can manually negotiate a response by inspecting the `Accept`, `Accept-Charset`, and `Accept-Language` headers.  If those headers are missing, we default to using the first media type formatter that can write the response body.
 
 Constructing a response with all the appropriate headers is a little involved when doing it manually, which is why Aphiria provides `NegotiatedResponseFactory` to handle it for you:
 
@@ -128,6 +151,8 @@ Content-Length: 36
 
 {"id":123,"email":"foo@example.com"}
 ```
+
+</div>
 
 <h3 id="negotiating-language">Negotiating Language</h3>
 
@@ -156,9 +181,14 @@ final class QueryStringLanguageMatcher implements ILanguageMatcher
 }
 ```
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, set `aphiria.contentNegotiation.languageMatcher` to `QueryStringLanguageMatcher::class` in _config.php_.
+<div class="context-framework" markdown="1">
 
-If you're not using the skeleton app, pass your language matcher into `ContentNegotiator`.
+Set `aphiria.contentNegotiation.languageMatcher` to `QueryStringLanguageMatcher::class` in _config.php_.
+
+</div>
+<div class="context-library" markdown="1">
+
+Pass your language matcher into `ContentNegotiator`.
 
 ```php
 use Aphiria\ContentNegotiation\ContentNegotiator;
@@ -169,6 +199,8 @@ $contentNegotiator = new ContentNegotiator(
     languageMatcher: $languageMatcher
 );
 ```
+
+</div>
 
 <h2 id="media-type-formatters">Media Type Formatters</h2>
 
@@ -181,7 +213,11 @@ Media type formatters can read and write a particular data format to a stream.  
 
 > **Note:** `HtmlMediaTypeFormatter` and `PlainTextMediaTypeFormatter` only handle strings - they do not deal with objects or arrays.
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, these are configured under `aphiria.contentNegotiation.mediaTypeFormatters` in _config.php_.
+<div class="context-framework" markdown="1">
+
+These are configured under `aphiria.contentNegotiation.mediaTypeFormatters` in _config.php_.
+
+</div>
 
 <h3 id="customizing-deserialization">Customizing (De)Serialization</h3>
 

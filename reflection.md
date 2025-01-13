@@ -94,21 +94,3 @@ Or recursively:
 ```php
 $subTypesOfFoo = $typeFinder->findAllSubtypesOfType(Foo::class, 'PATH_TO_SCAN', true);
 ```
-
-<div class="context-framework" markdown="1">
-
-Test framework context
-
-* List item 1
-* List item 2
-
-</div>
-
-<div class="context-library" markdown="1">
-
-Test library context
-
-* List item 1
-* List item 2
-
-</div>

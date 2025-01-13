@@ -58,7 +58,9 @@
 
 Console applications are great for administrative tasks and code generation.  With Aphiria, you can easily create your own console commands, display question prompts, and use HTML-like syntax for output styling.
 
-If you're already using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can skip to the [next section](#running-commands).  Otherwise, let's create a file called _aphiria_ in your project's root directory and paste the following code into it:
+<div class="context-library" markdown="1">
+
+Let's create a file called _aphiria_ in your project's root directory and paste the following code into it:
 
 ```php
 #!/usr/bin/env php
@@ -86,6 +88,8 @@ exit(\is_int($status) ? $status : $status instance StatusCode ? $status->value :
 ```
 
 Now, you're set to start [running commands](#running-commands).
+
+</div>
 
 <h3 id="why-is-this-library-included">Why Is This Library Included?</h3>
 
@@ -218,9 +222,33 @@ Each output offers a few methods:
 
 <h3 id="manually-registering-commands">Manually Registering Commands</h3>
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, this is already handled for you, and you can skip this section.  Otherwise, you'll have to register commands so that your application knows about them.  If you're using attributes, read [this section](#scanning-for-attributes) to learn how to manually register attribute commands.  If you're using the application builder library, refer to [its documentation](configuration.md#component-console-commands) to learn how to manually register your commands to your app.
+You have to register commands so that your application knows about them.  If you're using attributes, read [this section](#scanning-for-attributes) to learn how to manually register attribute commands, and feel free to skip the rest of the section.  Otherwise, let's look at how to manually register a command:
 
-Let's manually register a command to the application:
+<div class="context-framework" markdown="1">
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Console\Commands\Command;
+use Aphiria\Console\Commands\CommandRegistry;
+use Aphiria\Framework\Application\AphiriaModule;
+
+final class UserModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this
+            ->withCommands($appBuilder, function (CommandRegistry $commands) {
+                $commands->registerCommand(
+                    new Command('greet'),
+                    GreetingCommandHandler::class
+                );
+            });
+    }
+}
+```
+
+</div>
+<div class="context-library" markdown="1">
 
 ```php
 use Aphiria\Console\Commands\Command;
@@ -232,6 +260,8 @@ $commands->registerCommand($greetingCommand, GreetingCommandHandler::class);
 
 // Run the application (see above how to do this)...
 ```
+
+</div>
 
 To call this command, run this from the command line:
 
@@ -301,7 +331,9 @@ final class GreetingCommandHandler implements ICommandHandler
 
 <h3 id="scanning-for-attributes">Scanning For Attributes</h3>
 
-Before you can use attributes, you'll need to configure Aphiria to scan for them.  If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can do so in `GlobalModule`:
+Before you can use attributes, you'll need to configure Aphiria to scan for them.
+
+<div class="context-framework" markdown="1">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -316,7 +348,8 @@ final class GlobalModule extends AphiriaModule
 }
 ```
 
-Otherwise, you can manually configure your app to scan for attributes:
+</div>
+<div class="context-library" markdown="1">
 
 ```php
 use Aphiria\Console\Commands\Attributes\AttributeCommandRegistrant;
@@ -327,6 +360,8 @@ $commands = new CommandRegistry();
 $attributeCommandRegistrant = new AttributeCommandRegistrant(['PATH_TO_SCAN'], $container);
 $attributeCommandRegistrant->registerCommands($commands);
 ```
+
+</div>
 
 <h2 id="prompts">Prompts</h2>
 
@@ -578,7 +613,9 @@ The following elements come built-into Aphiria:
 
 <h3 id="custom-elements">Custom Elements</h3>
 
-You can create your own style elements.  If you are using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can use a [component](configuration.md#components) to register your custom element:
+You can create your own style elements.
+
+<div class="context-framework" markdown="1">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -597,7 +634,8 @@ final class GlobalModule extends AphiriaModule
 }
 ```
 
-Otherwise, if you're not using the skeleton app, you can register them to `ElementRegistry`.
+</div>
+<div class="context-library" markdown="1">
 
 ```php
 use Aphiria\Console\Commands\CommandRegistry;
@@ -628,6 +666,8 @@ $status = $app->run();
 exit(\is_int($status) ? $status : $status instance StatusCode ? $status->value : StatusCode::Ok->value);
 ```
 
+</div>
+
 <h3 id="overriding-built-in-elements">Overriding Built-In Elements</h3>
 
 To override a built-in element, just re-register it using the same methods as above.
@@ -642,7 +682,7 @@ Name | Description
 `framework:flushcaches` | Flushes all the framework's caches, eg the binder metadata, constraints, command, route, and trie caches
 `route:list` | Lists all the routes in your application
 
-If you're using the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a>, you can register all framework commands in `GlobalModule`:
+<div class="context-framework" markdown="1">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -662,3 +702,5 @@ To exclude some built-in commands so that you can override them with your own im
 ```php
 $this->withFrameworkCommands($appBuilder, ['app:serve']);
 ```
+
+</div>
