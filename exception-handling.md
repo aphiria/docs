@@ -72,6 +72,41 @@ By default, when the <a href="https://tools.ietf.org/html/rfc7807#section-3.1" t
 
 You might not want all exceptions to result in a 500.  For example, if you have a `UserNotFoundException`, you might want to map that to a 404.  Here's how:
 
+<div class="context-framework" markdown="1">
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Net\Http\HttpStatusCode;
+
+final class GlobalModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this
+            ->withProblemDetails(
+                $appBuilder,
+                UserNotFoundException::class,
+                status: HttpStatusCode::NotFound
+            )
+            // Add another more complicated one:
+            ->withProblemDetails(
+                $appBuilder,
+                OverdrawnException::class,
+                type: 'https://example.com/errors/overdrawn',
+                title: 'This account is overdrawn',
+                detail: fn($ex) => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
+                status: HttpStatusCode::BadRequest,
+                instance: fn($ex) => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
+                extensions: fn($ex) => ['overdrawnAmount' => $ex->overdrawnAmount]
+            );
+    }
+}
+```
+
+</div>
+<div class="context-library" markdown="1">
+
 ```php
 use Aphiria\Exceptions\GlobalExceptionHandler;
 use Aphiria\Framework\Api\Exceptions\ProblemDetailsExceptionRenderer;
@@ -97,6 +132,8 @@ $exceptionRenderer->mapExceptionToProblemDetails(
 );
 ```
 
+</div>
+
 > **Note:** All parameters that accept closures with the thrown exception can also take hard-coded values.
 
 When a `ProblemDetails` instance is serialized in a response, all of its extensions are serialized as top-level properties - not as key-value pairs under an `extensions` property.
@@ -117,6 +154,32 @@ When a `ProblemDetails` instance is serialized in a response, all of its extensi
 <h3 id="output-writers">Output Writers</h3>
 
 Output writers allow you to write errors to the output and return a status code.
+
+<div class="context-framework" markdown="1">
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+
+final class GlobalModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withConsoleExceptionOutputWriter(
+            $appBuilder,
+            DatabaseNotFound::class,
+            function (DatabaseNotFound $ex, IOutput $output) {
+                $output->writeln('<fatal>Contact a sysadmin</fatal>');
+        
+                return StatusCodes::FATAL;
+            }
+        );
+    }
+}
+```
+
+</div>
+<div class="context-library" markdown="1">
 
 ```php
 use Aphiria\Console\Output\IOutput;
@@ -147,6 +210,8 @@ $exceptionRenderer->registerManyOutputWriters([
 $globalExceptionHandler = new GlobalExceptionHandler($exceptionRenderer);
 $globalExceptionHandler->registerWithPhp();
 ```
+
+</div>
 
 <h2 id="logging">Logging</h2>
 

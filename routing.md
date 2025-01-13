@@ -601,11 +601,9 @@ final class MinLengthConstraint implements IRouteVariableConstraint
 }
 ```
 
-Let's register our constraint with the constraint factory.
-
 <div class="context-framework" markdown="1">
 
-You can use a [component](configuration.md#components):
+Let's register our constraint with the constraint factory.  You can use a [component](configuration.md#components):
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -627,7 +625,7 @@ final class GlobalModule extends AphiriaModule
 </div>
 <div class="context-library" markdown="1">
 
-You can register the constraint manually:
+Let's register our constraint with the constraint factory.  You can register the constraint manually:
 
 ```php
 use Aphiria\Routing\UriTemplates\Constraints\RouteVariableConstraintFactory;

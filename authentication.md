@@ -22,8 +22,8 @@
 </li>
 <li><a href="#authentication-results">Authentication Results</a></li>
 <li><a href="#customizing-authentication-failure-responses">Customizing Authentication Failure Responses</a></li>
-<li><a href="#user-accessors">User Accessors</a></li>
-<li><a href="#mocking-authentication">Mocking Authentication</a></li>
+<li class="context-framework"><a href="#user-accessors">User Accessors</a></li>
+<li class="context-framework"><a href="#mocking-authentication">Mocking Authentication</a></li>
 </ol>
 
 </div>
@@ -519,6 +519,8 @@ $user = $result->user;
 
 By default, when authentication in the `Authenticate` middleware fails, `challenge()` will be called on the same scheme handler that we attempted to authenticate with.  Most handlers' `challenge()` methods will set the status code to 401 or redirect you to the login page, depending on the implementation.  If you'd like to customize this, you can extend `Authenticate` and override `handleFailedAuthenticationResult()` to return a response.
 
+<div class="context-framework" markdown="1">
+
 <h2 id="user-accessors">User Accessors</h2>
 
 Once you have authenticated a principal using the `Authenticate` middleware, you can store and retrieve that principal for the duration of the request using `IUserAccessor`.  By default, `RequestPropertyUserAccessor` will be used to store the principal as a [custom property](http-requests.md#basics) on the request.  If you need to access the principal in your controller, simply call `$this->user`:
@@ -544,3 +546,5 @@ final class BookController extends Controller
 <h2 id="mocking-authentication">Mocking Authentication</h2>
 
 You can learn how to mock authentication in your tests [here](testing-apis.md#mocking-authentication).
+
+</div>
