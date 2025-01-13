@@ -16,6 +16,7 @@
 </ol>
 </li>
 <li><a href="#features">Features</a></li>
+<li><a href="#documentation">Documentation</a></li>
 <li><a href="#security-vulnerabilities">Security Vulnerabilities</a></li>
 <li><a href="#coding-style">Coding Style</a><ol>
 <li><a href="#linter">Linter</a></li>
@@ -75,6 +76,16 @@ To fix a bug, create a pull request with the fix and relevant PHPUnit tests that
 We always appreciate when you want to add a new feature to Aphiria.  For minor, backwards-compatible features, create a pull request.  Do not submit pull requests to individual libraries' repositories.  For major, possibly backwards-incompatible features, please open an issue first to discuss it prior to opening a pull request.
 
 Aphiria strives to not create any unnecessary library dependencies.  This even includes having dependencies on other Aphiria libraries whenever possible.  If your change will introduce a new dependency to a library, create an issue and ask about it before implementing it.
+
+<h2 id="documentation">Documentation</h2>
+
+You can find all the documentation for Aphiria in <a href="https://github.com/aphiria/docs" target="_blank">this</a> GitHub repository.  To improve our documentation, please feel free to submit a pull request.  A few things on style:
+
+* All `<h2>` and `<h3>` elements must have HTML IDs
+* All `<h2>` and `<h3>` elements must appear in the table of contents, with `<h3>` elements' list items being nested under the `<h2>` elements'
+* Wherever possible, you should document how to use a feature using both the full framework with the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a> and as a standalone library
+  * This should be done by surrounding each code example for the full framework with `<div class="context-framework" markdown="1"></div>` tags and as a standalone library with `<div class="context-library" markdown="1"></div>` tags
+* All links to another website should use an HTML `<a>` with the `target="_blank"` attribute
 
 <h2 id="security-vulnerabilities">Security Vulnerabilities</h2>
 
