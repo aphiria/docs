@@ -183,7 +183,7 @@ final class QueryStringLanguageMatcher implements ILanguageMatcher
 
 <div class="context-framework" markdown="1">
 
-Set `aphiria.contentNegotiation.languageMatcher` to `QueryStringLanguageMatcher::class` in _config.php_.
+Then, set `aphiria.contentNegotiation.languageMatcher` to `QueryStringLanguageMatcher::class` in _config.php_.
 
 </div>
 <div class="context-library" markdown="1">
