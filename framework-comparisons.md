@@ -66,7 +66,7 @@ Before we get into library comparisons, let's compare the frameworks at a high l
 * Unopinionated, ie it doesn't prescribe _how_ to do something - it places that completely in the developers' hands (akin to an Android phone)
 * Favors code-based configuration over magic string-based configuration
 * Can easily convert to-and-from PSRs
-* Thorough, searchable documentation
+* Thorough, searchable documentation that separates examples that take advantage of the full framework from examples of how to use a feature as a standalone library
 
 <h4 id="aphiria-general-cons">Cons</h4>
 
