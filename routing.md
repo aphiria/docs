@@ -58,7 +58,7 @@
 
 Routing is the process of mapping HTTP requests to actions.  You can check out what makes Aphiria's routing library different [here](framework-comparisons.md#aphiria-routing) as well as the [server configuration](installation.md#server-config) necessary to use it.
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 Let's look at how to register a route in a <a href="configuration.md#modules">module</a> (or view its [attribute-based alternative](#route-attributes-example)).  Routing is performed for you automatically, and there's nothing more to do besides actually defining your [controller](controllers.md):
 
@@ -82,7 +82,7 @@ final class BookModule extends AphiriaModule
 ````
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 You can use a fluent syntax for configuring your routes.  Let's look at a complete example that includes actually performing the routing:
 
@@ -317,7 +317,7 @@ Similar to [middleware](#route-attributes-middleware), you can add route constra
 
 Before you can use attributes, you'll need to configure Aphiria to scan for them.  
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -333,7 +333,7 @@ final class GlobalModule extends AphiriaModule
 ```
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 You can manually configure the router to scan for attributes:
 
@@ -387,7 +387,7 @@ You can also call `RouteCollectionBuilder::route()` and pass in the HTTP method(
 $routes->route(['GET'], path: '/user', host: 'api.example.com', isHttpsOnly: true);
 ```
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 The best place to define your routes is in modules using [application builders](configuration.md#component-routes).
 
@@ -601,7 +601,7 @@ final class MinLengthConstraint implements IRouteVariableConstraint
 }
 ```
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 Let's register our constraint with the constraint factory.  You can use a [component](configuration.md#components):
 
@@ -623,7 +623,7 @@ final class GlobalModule extends AphiriaModule
 ```
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 Let's register our constraint with the constraint factory.  You can register the constraint manually:
 
@@ -758,12 +758,12 @@ class BookController extends Controller
 
 The process of building your routes and compiling the trie is a relatively slow process, and isn't necessary in a production environment where route definitions aren't changing.  Aphiria provides both the ability to cache the results of your route builders and the compiled trie.
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 Aphiria will automatically cache important data when `APP_ENV` equals "production".
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 <h3 id="route-caching">Route Caching</h3>
 
@@ -800,7 +800,7 @@ $trieFactory = new TrieFactory($routes, $trieCache);
 ```
 
 
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 <h2 id="using-aphirias-net-library">Using Aphiria's Net Library</h2>
 

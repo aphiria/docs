@@ -65,7 +65,7 @@ If the object was not valid, a `ValidationException` will be thrown.  That's it 
 
 <h3 id="creating-a-validator">Creating A Validator</h3>
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 An instance of `IValidator` will already be [bound](dependency-injection.md#binders) to the DI container, which you can [inject](dependency-injection.md).
 
@@ -85,7 +85,7 @@ final class GlobalModule extends AphiriaModule
 ```
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 You can manually scan for attributes:
 
@@ -113,7 +113,7 @@ $validator = new Validator($objectConstraints);
 
 If you prefer to not use attributes, you can use a fluent syntax to manually register constraints instead.  
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 You can use a [component](configuration.md#components) to register constraints:
 
@@ -139,7 +139,7 @@ class UserModule extends AphiriaModule
 ```
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 ```php
 use Aphiria\Validation\Constraints\EmailConstraint;
@@ -423,12 +423,12 @@ final class ResourceFileErrorMessageTemplateRegistry implements IErrorMessageTem
 }
 ```
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 You can set `aphiria.validation.errorMessageTemplates.type` in _config.php_ to use your desired error message template registry.
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 You can pass it into your [interpolator](validation.md#built-in-error-message-interpolators) and pass the interpolator into your validator.
 
@@ -465,7 +465,7 @@ Aphiria comes with a couple error message interpolators.  `StringReplaceErrorMes
 
 If you do require i18n and are using the <a href="http://userguide.icu-project.org/formatparse/messages" target="_blank">ICU format</a>, `IcuErrorMessageInterpolator` is probably the better choice.
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 You can configure the interpolator to use by updating `aphiria.validation.errorMessageInterpolator.type` in _config.php_.
 

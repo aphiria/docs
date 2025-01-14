@@ -81,6 +81,7 @@ Before we get into library comparisons, let's compare the frameworks at a high l
 * An established history and huge community support
 * Lots of functionality baked into the framework, eg eventing
 * Some of its libraries are the back-bone of other very popular libraries and frameworks
+* Thorough, searchable documentation that separates examples that take advantage of the full framework from examples of how to use a feature as a standalone library
 
 <h4 id="symfony-general-cons">Cons</h4>
 

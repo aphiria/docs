@@ -30,12 +30,12 @@
 
 At some point, your application is going to throw an unhandled exception or shut down unexpectedly.  When this happens, it would be nice to log details about the error and present a nicely-formatted response for the user.  Aphiria provides `GlobalExceptionHandler` to do just this.  It can be used to render exceptions for both HTTP and console applications, and is framework-agnostic.
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 To learn more about how to configure exceptions in modules, read the [configuration documentation](configuration.md#component-exception-handler).
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 Let's review how to manually configure the exception handler.
 
@@ -55,7 +55,7 @@ That's it.  Now, whenever an unhandled error or exception is thrown, the global 
 
 <h2 id="problem-details-exception-renderer">Problem Details Exception Renderer</h2>
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 > **Note:** Please refer to the [configuration documentation](configuration.md#component-exception-handler) to learn more about configuring problem details for exceptions.
 
@@ -72,7 +72,7 @@ By default, when the <a href="https://tools.ietf.org/html/rfc7807#section-3.1" t
 
 You might not want all exceptions to result in a 500.  For example, if you have a `UserNotFoundException`, you might want to map that to a 404.  Here's how:
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -105,7 +105,7 @@ final class GlobalModule extends AphiriaModule
 ```
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 ```php
 use Aphiria\Exceptions\GlobalExceptionHandler;
@@ -140,7 +140,7 @@ When a `ProblemDetails` instance is serialized in a response, all of its extensi
 
 <h2 id="console-exception-renderer">Console Exception Renderer</h2>
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 > **Note:** Please refer to the [configuration documentation](configuration.md#component-exception-handler) to learn more about configuring exceptions in console apps.
 
@@ -155,7 +155,7 @@ When a `ProblemDetails` instance is serialized in a response, all of its extensi
 
 Output writers allow you to write errors to the output and return a status code.
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -179,7 +179,7 @@ final class GlobalModule extends AphiriaModule
 ```
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 ```php
 use Aphiria\Console\Output\IOutput;
@@ -215,12 +215,12 @@ $globalExceptionHandler->registerWithPhp();
 
 <h2 id="logging">Logging</h2>
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 > **Note:** You can configure the PSR-3 logger used in the global exception handler by editing the `aphiria.logging` values in _config.php_.
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 To configure your logger, you must add a handler:
 
@@ -244,7 +244,7 @@ $globalExceptionHandler->registerWithPhp();
 
 It's possible to map certain exceptions to a PSR-3 log level.  For example, if you have an exception that means your infrastructure might be down, you can cause it to log as an emergency.
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -267,7 +267,7 @@ final class GlobalModule extends AphiriaModule
 
 </div>
 
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 ```php
 use Aphiria\Exceptions\GlobalExceptionHandler;

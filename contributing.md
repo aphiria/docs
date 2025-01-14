@@ -84,7 +84,7 @@ You can find all the documentation for Aphiria in <a href="https://github.com/ap
 * All `<h2>` and `<h3>` elements must have HTML IDs
 * All `<h2>` and `<h3>` elements must appear in the table of contents, with `<h3>` elements' list items being nested under the `<h2>` elements'
 * Wherever possible, you should document how to use a feature using both the full framework with the <a href="https://github.com/aphiria/app" target="_blank">skeleton app</a> and as a standalone library
-  * This should be done by surrounding each code example for the full framework with `<div class="context-framework" markdown="1"></div>` tags and as a standalone library with `<div class="context-library" markdown="1"></div>` tags
+  * This should be done by surrounding each code example for the full framework with `<div class="context-framework"></div>` tags and as a standalone library with `<div class="context-library"></div>` tags
 * All links to another website should use an HTML `<a>` with the `target="_blank"` attribute
 
 <h2 id="security-vulnerabilities">Security Vulnerabilities</h2>

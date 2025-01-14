@@ -129,7 +129,7 @@ final class MinimumAgeRequirementHandler implements IAuthorizationRequirementHan
 
 Finally, let's register this requirement handler and use it in a policy.
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -155,7 +155,7 @@ final class GlobalModule extends AphiriaModule
 ```
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 ```php
 use Aphiria\Authorization\AuthorityBuilder;
@@ -277,7 +277,7 @@ final class AuthorizedDeleterRequirementHandler implements IAuthorizationRequire
 
 Now, let's register this policy.
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 ```php
 final class GlobalModule extends AphiriaModule
@@ -302,7 +302,7 @@ final class GlobalModule extends AphiriaModule
 ```
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 ```php
 use Aphiria\Authorization\AuthorityBuilder;

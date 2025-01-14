@@ -58,7 +58,7 @@
 
 Console applications are great for administrative tasks and code generation.  With Aphiria, you can easily create your own console commands, display question prompts, and use HTML-like syntax for output styling.
 
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 Let's create a file called _aphiria_ in your project's root directory and paste the following code into it:
 
@@ -224,7 +224,7 @@ Each output offers a few methods:
 
 You have to register commands so that your application knows about them.  If you're using attributes, read [this section](#scanning-for-attributes) to learn how to manually register attribute commands, and feel free to skip the rest of the section.  Otherwise, let's look at how to manually register a command:
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -248,7 +248,7 @@ final class UserModule extends AphiriaModule
 ```
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 ```php
 use Aphiria\Console\Commands\Command;
@@ -333,7 +333,7 @@ final class GreetingCommandHandler implements ICommandHandler
 
 Before you can use attributes, you'll need to configure Aphiria to scan for them.
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -349,7 +349,7 @@ final class GlobalModule extends AphiriaModule
 ```
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 ```php
 use Aphiria\Console\Commands\Attributes\AttributeCommandRegistrant;
@@ -615,7 +615,7 @@ The following elements come built-into Aphiria:
 
 You can create your own style elements.
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -635,7 +635,7 @@ final class GlobalModule extends AphiriaModule
 ```
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 ```php
 use Aphiria\Console\Commands\CommandRegistry;
@@ -682,7 +682,7 @@ Name | Description
 `framework:flushcaches` | Flushes all the framework's caches, eg the binder metadata, constraints, command, route, and trie caches
 `route:list` | Lists all the routes in your application
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;

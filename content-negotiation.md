@@ -35,12 +35,12 @@ Content negotiation is a process between the client and server to determine how 
 * Language
   * Controlled by the `Content-Language` header for requests, and the `Accept-Language` header for responses
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 Just update `aphiria.contentNegotiation.mediaTypeFormatters` in _config.php_, and you'll be ready to go.
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 Setting up your content negotiator with default settings is trivial:
 
@@ -83,12 +83,12 @@ Now you're ready to start [negotiating](#negotiating-requests).
 
 <h2 id="negotiating-requests">Negotiating Requests</h2>
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 There's nothing you have to do to negotiate requests - Aphiria handles it automatically.
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 Let's build off the [previous example](#basics) and negotiate a request manually.  Let's assume the raw request looked something like this:
 
@@ -121,12 +121,12 @@ echo $user->email; // "foo@example.com"
 
 <h2 id="negotiating-responses">Negotiating Responses</h2>
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 Aphiria also automatically negotiates your responses for you - there's nothing for you to do.
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 You can manually negotiate a response by inspecting the `Accept`, `Accept-Charset`, and `Accept-Language` headers.  If those headers are missing, we default to using the first media type formatter that can write the response body.
 
@@ -181,12 +181,12 @@ final class QueryStringLanguageMatcher implements ILanguageMatcher
 }
 ```
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 Then, set `aphiria.contentNegotiation.languageMatcher` to `QueryStringLanguageMatcher::class` in _config.php_.
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 Pass your language matcher into `ContentNegotiator`.
 
@@ -213,7 +213,7 @@ Media type formatters can read and write a particular data format to a stream.  
 
 > **Note:** `HtmlMediaTypeFormatter` and `PlainTextMediaTypeFormatter` only handle strings - they do not deal with objects or arrays.
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 These are configured under `aphiria.contentNegotiation.mediaTypeFormatters` in _config.php_.
 

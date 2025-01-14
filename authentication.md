@@ -268,7 +268,7 @@ We'll go into more detail on how to register an authentication scheme in the [ex
 
 You can register a scheme to be your application's default.  This means that any authentication that does not use a specific scheme will fall back to using the default one.
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 You can use a [component](configuration.md#components) to register a default scheme:
 
 ```php
@@ -290,7 +290,7 @@ final class GlobalModule extends AphiriaModule
 ```
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 You can use `AuthenticationBuilder::withScheme()` to register a default scheme:
 
 ```php
@@ -364,7 +364,7 @@ SQL;
 }
 ```
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 Let's register this scheme with the authenticator with a [component](configuration.md#components):
 
 ```php
@@ -389,7 +389,7 @@ final class GlobalModule extends AphiriaModule
 ```
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 Let's register this scheme with `AuthenticationBuilder`:
 
@@ -416,7 +416,7 @@ In the case that you are using cookie values to authenticate, you can extend `Co
 
 We won't go over how extend `CookieAuthenticationHandler` because it is very similar to the [example above](#basic-authentication), but here is how we would register our implementation:
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -452,7 +452,7 @@ final class GlobalModule extends AphiriaModule
 ```
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 ```php
 use Aphiria\Authentication\AuthenticationScheme;
@@ -519,7 +519,7 @@ $user = $result->user;
 
 By default, when authentication in the `Authenticate` middleware fails, `challenge()` will be called on the same scheme handler that we attempted to authenticate with.  Most handlers' `challenge()` methods will set the status code to 401 or redirect you to the login page, depending on the implementation.  If you'd like to customize this, you can extend `Authenticate` and override `handleFailedAuthenticationResult()` to return a response.
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 <h2 id="user-accessors">User Accessors</h2>
 

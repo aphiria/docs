@@ -140,12 +140,12 @@ final class UserController extends Controller
 
 <h2 id="executing-middleware">Executing Middleware</h2>
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 Middleware will be executed automatically for you.  You can also define both [global middleware](configuration.md#component-middleware) and [route middleware](routing.md#middleware).
 
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 You'll have to set up a pipeline to execute your middleware for you.  Typically, middleware are wrapped in request handlers (eg `MiddlewareRequestHandler`) and executed in a pipeline.  You can create this pipeline using `MiddlewarePipelineFactory`:
 

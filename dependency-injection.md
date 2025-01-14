@@ -147,7 +147,7 @@ final class UserBinder extends Binder
 }
 ```
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 
 You can register `UserBinder` to your app with an [application builder](configuration.md#component-binders).
 
@@ -157,10 +157,10 @@ You can register `UserBinder` to your app with an [application builder](configur
 
 Aphiria does something unique - it automatically dispatches a binder only when one or more of its bindings are needed by your application.  It does this by constructing a graph between binders and bound/resolved interfaces, allowing it to dispatch the bare minimum number of binders to handle a request, increasing performance.
 
-<div class="context-framework" markdown="1">
+<div class="context-framework">
 Your binders are automatically dispatched for you.
 </div>
-<div class="context-library" markdown="1">
+<div class="context-library">
 
 You'll have to manually dispatch your binders.  Rather than having to dispatch _every_ binder on every request, you can use `LazyBinderDispatcher` to lazily dispatch them, ie only when they're actually needed.  Let's build on the `UserBinder` from the [previous example](#binders) and set up our app to lazily dispatch it:
 
