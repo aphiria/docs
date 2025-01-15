@@ -140,15 +140,13 @@ final class UserModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
     {
-        // Manually add some routes
-        $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
-            $routes
-                ->get('users/:id')
-                ->mapsToMethod(UserController::class, 'getUserById');
-        });
-
-        // Enable route attributes
-        $this->withRouteAttributes($appBuilder);
+        $this
+            ->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
+                $routes
+                    ->get('users/:id')
+                    ->mapsToMethod(UserController::class, 'getUserById');
+            })
+            ->withRouteAttributes($appBuilder);
     }
 }
 ```
