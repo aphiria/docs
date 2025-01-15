@@ -41,6 +41,8 @@
 
 </nav>
 
+<div class="context-framework">
+
 <h2 id="application-builders">Application Builders</h2>
 
 Application builders provide an easy way to configure your application.  They are passed into [modules](#modules) where you can decorate them with the [components](#components) a part of your business domain needs (eg routes, binders, global middleware, console commands, validators, etc).  For example, if you are running a site where users can buy books, you might have a user module, a book module, and a shopping cart module.  Each of these modules will have separate binders, routes, console commands, etc.  So, why not bundle all the configuration logic by module?
@@ -522,6 +524,8 @@ final class MyModule implements IModule
 }
 ```
 
+</div>
+
 <h2 id="reading-from-configs">Reading From Configs</h2>
 
 Configs allow you to store changeable values that power your application.  Unlike environment variables, they do not typically change between environments.  Configurations must implement `IConfiguration`, which provides the following methods:
@@ -692,6 +696,8 @@ new GlobalConfigurationBuilder()
 
 After `build()` is called, you can start accessing the values from `config.php`, `config.json`, and environment variables via `GlobalConfiguration`.
 
+<div class="context-framework">
+
 <h2 id="custom-applications">Custom Applications</h2>
 
 This is more of an advanced topic.  Applications are specific to their runtimes, eg PHP-FPM or Swoole.  They typically take the input (eg an HTTP request or console input) and pass it to  a "gateway" object (eg `ApiGateway` or `ConsoleGateway`), which is the highest layer of application code that is agnostic to the PHP runtime.  So, if you switch from PHP-FPM to Swoole, you'd have to change the `IApplication` instance you're running, but the gateway would not have to change because it does not care what the PHP runtime is.
@@ -775,3 +781,5 @@ Finally, update `APP_BUILDER_API` in your _.env_ file, and your application will
 ```dotenv
 APP_BUILDER_API=\App\SwooleApplicationBuilder
 ```
+
+</div>

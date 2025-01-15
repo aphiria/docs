@@ -7,9 +7,10 @@
 <h2 id="table-of-contents">Table of Contents</h2>
 
 <ol>
-<li><a href="#basics">Basics</a></li><ol>
+<li><a href="#basics">Basics</a><ol>
 <li><a href="#developing-in-the-framework">Developing in the Framework</a></li>
 </ol>
+</li>
 <li><a href="#bugs">Bugs</a><ol>
 <li><a href="#reporting-bug">Reporting a Bug</a></li>
 <li><a href="#fixing-bug">Fixing a Bug</a></li>

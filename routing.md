@@ -799,9 +799,6 @@ $trieFactory = new TrieFactory($routes, $trieCache);
 // Finish setting up your route matcher...
 ```
 
-
-<div class="context-library">
-
 <h2 id="using-aphirias-net-library">Using Aphiria's Net Library</h2>
 
 You can use [Aphiria's net library](http-requests.md) to route the request instead of relying on PHP's superglobals:
