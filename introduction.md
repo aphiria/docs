@@ -26,9 +26,9 @@ final class UserController extends Controller
     public function __construct(private IUserService $users) {}
 
     #[Post('/users')]
-    public function createUser(Credentials $creds): IResponse
+    public function createUser(Credentials $credentials): IResponse
     {
-        $user = $this->users->create($creds->email, $creds->password);
+        $user = $this->users->create($credentials->email, $credentials->password);
 
         return $this->created("/users/{$user->id}", $user);
     }

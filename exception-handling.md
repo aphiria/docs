@@ -55,12 +55,6 @@ That's it.  Now, whenever an unhandled error or exception is thrown, the global 
 
 <h2 id="problem-details-exception-renderer">Problem Details Exception Renderer</h2>
 
-<div class="context-framework">
-
-> **Note:** Please refer to the [configuration documentation](configuration.md#component-exception-handler) to learn more about configuring problem details for exceptions.
-
-</div>
-
 `ProblemDetailsExceptionRenderer` is provided out of the box to simplify rendering <a href="https://tools.ietf.org/html/rfc7807" target="_blank">problem details</a> API responses for Aphiria applications.  This renderer tries to create a response using the following steps:
   
 1. If a [custom mapping](#custom-problem-details-mappings) exists for the thrown exception, it's used to create a problem details response
@@ -217,7 +211,7 @@ $globalExceptionHandler->registerWithPhp();
 
 <div class="context-framework">
 
-> **Note:** You can configure the PSR-3 logger used in the global exception handler by editing the `aphiria.logging` values in _config.php_.
+You can configure the PSR-3 logger used in the global exception handler by editing the `aphiria.logging` values in _config.php_.
 
 </div>
 <div class="context-library">

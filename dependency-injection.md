@@ -158,7 +158,9 @@ You can register `UserBinder` to your app with an [application builder](configur
 Aphiria does something unique - it automatically dispatches a binder only when one or more of its bindings are needed by your application.  It does this by constructing a graph between binders and bound/resolved interfaces, allowing it to dispatch the bare minimum number of binders to handle a request, increasing performance.
 
 <div class="context-framework">
+
 Your binders are automatically dispatched for you.
+
 </div>
 <div class="context-library">
 

@@ -52,6 +52,7 @@ or by composing `IAuthenticator` in your controllers:
 ```php
 use Aphiria\Api\Controllers\Controller;
 use Aphiria\Authentication\IAuthenticator;
+use Aphiria\Net\Http\IResponse;
 use Aphiria\Routing\Attributes\Get;
 
 final class UserController extends Controller
@@ -59,7 +60,7 @@ final class UserController extends Controller
     public function __construct(private IAuthenticator $authenticator) {}
     
     #[Get('/users/:id')]
-    public function getUserById(int $id): User
+    public function getUserById(int $id): User|IResponse
     {
         $authenticationResult = $this->authenticator->authenticate($this->request);
         
@@ -269,6 +270,7 @@ We'll go into more detail on how to register an authentication scheme in the [ex
 You can register a scheme to be your application's default.  This means that any authentication that does not use a specific scheme will fall back to using the default one.
 
 <div class="context-framework">
+
 You can use a [component](configuration.md#components) to register a default scheme:
 
 ```php
@@ -291,6 +293,7 @@ final class GlobalModule extends AphiriaModule
 
 </div>
 <div class="context-library">
+
 You can use `AuthenticationBuilder::withScheme()` to register a default scheme:
 
 ```php
@@ -365,6 +368,7 @@ SQL;
 ```
 
 <div class="context-framework">
+
 Let's register this scheme with the authenticator with a [component](configuration.md#components):
 
 ```php

@@ -288,7 +288,11 @@ use Aphiria\Routing\Attributes\Middleware;
 #[Middleware(Authorization::class, parameters: ['role' => 'admin'])]
 ```
 
-> **Note:** If you're using the full framework or the [middleware library](middleware.md), you can also use the nearly identical `Aphiria\Middleware\Attributes\Middleware` attribute instead of the routing library's.  The two are interchangeable.
+<div class="context-framework">
+
+> **Note:** You can also use the nearly identical `Aphiria\Middleware\Attributes\Middleware` attribute instead of the routing library's.  The two are interchangeable.
+
+</div>
 
 You can also add middleware to a controller class to indicate that it applies to all routes in that controller.
 
@@ -540,9 +544,11 @@ final class ApiVersionConstraint implements IRouteConstraint
 
 If we hit `/comments` with an "API-VERSION" header value of "v2.0", we'd match the second route in our example.
 
+<div class="context-library">
+
 <h3 id="getting-php-headers">Getting Headers in PHP</h3>
 
-PHP is irritatingly difficult to extract headers from `$_SERVER`.  If you're using a library/framework to grab headers, then use that.  Otherwise, you can use the `HeaderParser`:
+PHP is irritatingly difficult to extract headers from `$_SERVER`, which is why the routing library includes `HeaderParser`:
 
 ```php
 use Aphiria\Routing\Requests\RequestHeaderParser;
@@ -550,6 +556,8 @@ use Aphiria\Routing\Requests\RequestHeaderParser;
 $headers = new RequestHeaderParser()->parseHeaders($_SERVER);
 echo $headers['Content-Type']; // "application/json"
 ```
+
+</div>
 
 <h2 id="route-variable-constraints">Route Variable Constraints</h2>
 

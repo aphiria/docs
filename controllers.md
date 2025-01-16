@@ -199,8 +199,10 @@ final class UserController extends Controller
     
     // Assume the query string is "?includeAvatar=1"
     #[Get('/users/:userId')]
-    public function getUser(#[RouteVariable('userId')] int $id, #[QueryString('includeAvatar')] bool $showAvatar): User
-    {
+    public function getUser(
+        #[RouteVariable('userId')] int $id,
+        #[QueryString('includeAvatar')] bool $showAvatar
+    ): User {
         // $id will map to the "userId" route variable
         // $showAvatar will map to the "includeAvatar" query string parameter
         return $this->users->getUserById($id, $showAvatar);
