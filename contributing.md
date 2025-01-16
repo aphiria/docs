@@ -234,7 +234,7 @@ All class constants' names:
 All namespaces:
 
 * Must be Pascal case, eg `Aphiria\FooBar`
-  * For namespace acronyms &le; 2 characters long, capitalize each character, eg `IO`
+  * For namespace acronyms less than 3 characters long, capitalize each character, eg `IO`
 
 <h3 id="classes">Classes</h3>
 
@@ -244,7 +244,7 @@ All class names:
   * Your class name should describe exactly what it does, nothing more, and nothing less
   * If you are having trouble naming a class, that's probably a sign that it is doing too much and should be refactored
 * Must be Pascal case, eg `ListCompiler`
-  * For class name acronyms &le; 2 characters long, capitalize each character, eg `IO`
+  * For class name acronyms less than 3 characters long, capitalize each character, eg `IO`
   * Class filenames should simply be the class name with *.php* appended, eg *ListCompiler.php*
     
 Whenever possible, <a href="https://wiki.php.net/rfc/constructor_promotion" target="_blank">constructor property promotion</a> should be used for properties that have no custom logic in the constructor.
