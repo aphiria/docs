@@ -7,22 +7,22 @@
 <h2 id="table-of-contents">Table of Contents</h2>
 
 <ol>
-<li><a href="#application-builders">Application Builders</a><ol>
-<li><a href="#modules">Modules</a></li>
+<li class="context-framework"><a href="#application-builders">Application Builders</a><ol>
+<li class="context-framework"><a href="#modules">Modules</a></li>
 </ol>
 </li>
-<li><a href="#components">Components</a><ol>
-<li><a href="#component-binders">Binders</a></li>
-<li><a href="#component-routes">Routes</a></li>
-<li><a href="#component-middleware">Middleware</a></li>
-<li><a href="#component-console-commands">Console Commands</a></li>
-<li><a href="#component-authentiators">Authenticators</a></li>
-<li><a href="#component-authorities">Authorities</a></li>
-<li><a href="#component-validator">Validator</a></li>
-<li><a href="#component-exception-handler">Exception Handler</a></li>
+<li class="context-framework"><a href="#components">Components</a><ol>
+<li class="context-framework"><a href="#component-binders">Binders</a></li>
+<li class="context-framework"><a href="#component-routes">Routes</a></li>
+<li class="context-framework"><a href="#component-middleware">Middleware</a></li>
+<li class="context-framework"><a href="#component-console-commands">Console Commands</a></li>
+<li class="context-framework"><a href="#component-authentiators">Authenticators</a></li>
+<li class="context-framework"><a href="#component-authorities">Authorities</a></li>
+<li class="context-framework"><a href="#component-validator">Validator</a></li>
+<li class="context-framework"><a href="#component-exception-handler">Exception Handler</a></li>
 </ol>
 </li>
-<li><a href="#adding-custom-components">Adding Custom Components</a></li>
+<li class="context-framework"><a href="#adding-custom-components">Adding Custom Components</a></li>
 <li><a href="#reading-from-configs">Reading From Configs</a><ol>
 <li><a href="#reading-php-files">Reading PHP Files</a></li>
 <li><a href="#reading-json-files">Reading JSON Files</a></li>
