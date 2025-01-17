@@ -161,7 +161,6 @@ final class UserModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
     {
-        // Manually add some routes
         $this->withRouteVariableConstraint(
             $appBuilder,
             MinLengthConstraint::getSlug(),
@@ -184,7 +183,7 @@ final class UserModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
     {
-        // Add global middleware (executed before each route)
+        // Add global middleware (executed before each route in your app)
         $this->withGlobalMiddleware($appBuilder, new MiddlewareBinding(Cors::class));
 
         // Or use an array of bindings
