@@ -104,7 +104,7 @@ final class GlobalModule extends AphiriaModule
 
 <h2 id="components">Components</h2>
 
-A component is a piece of your application that is shared across business domains.  Below, we'll go over the components that are bundled with Aphiria, and some decoration methods to help configure them.
+A component is a piece of your application that is shared across business domains.  Below, we'll go over the components that are bundled with Aphiria and some decoration methods to help configure them.
 
 <h3 id="component-binders">Binders</h3>
 
