@@ -83,7 +83,7 @@ Another great thing about Aphiria's application builders is that they allow you 
 
 <h3 id="modules">Modules</h3>
 
-Either extend `AphiriaModule` or use the `AphiriaComponents` trait to register a module:
+Modules are a great place to configure each domain of your application.  To create one, either extend `AphiriaModule` or use the `AphiriaComponents` trait to register a module:
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
