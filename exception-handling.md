@@ -250,6 +250,8 @@ $globalExceptionHandler = new GlobalExceptionHandler($customApiExceptionRenderer
 $globalExceptionHandler->registerWithPhp();
 ```
 
+</div>
+
 <h2 id="console-exception-renderer">Console Exception Renderer</h2>
 
 <div class="context-framework">
