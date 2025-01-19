@@ -271,7 +271,7 @@ You can register a scheme to be your application's default.  This means that any
 
 <div class="context-framework">
 
-You can use a [component](configuration.md#components) to register a default scheme:
+You can use a [component](configuration.md#component-authenticators) to register a default scheme:
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -369,7 +369,7 @@ SQL;
 
 <div class="context-framework">
 
-Let's register this scheme with the authenticator with a [component](configuration.md#components):
+Let's register this scheme with the authenticator with a [component](configuration.md#component-authenticators):
 
 ```php
 use Aphiria\Application\IApplicationBuilder;

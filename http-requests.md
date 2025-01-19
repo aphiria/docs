@@ -187,7 +187,7 @@ $request = new NegotiatedRequestBuilder()
 
 <h2 id="headers">Headers</h2>
 
-Headers provide metadata about the HTTP message.  In Aphiria, they are an extension of [`HashTable`](collections.md#hash-tables), and also provide the following methods:
+Headers provide metadata about the HTTP message.  In Aphiria, they are an extension of a [hash table](collections.md#hash-tables), and also provide the following methods:
 
 * `getFirst(string $name): mixed`
 * `tryGetFirst(string $name, mixed &$value): bool`
