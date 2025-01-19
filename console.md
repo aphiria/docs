@@ -159,8 +159,7 @@ If you're checking to see if an option that does not have a value is set, use `a
 Console commands can accept arguments from the user.  Arguments can be required, optional, and/or arrays.  Array arguments allow a variable number of arguments to be passed in, like `php aphiria foo arg1 arg2 arg3 ...`.  The only catch is that array arguments must be the last argument defined for the command.  If you need to specify that an argument can be multiple types, eg required and an array, just pass in an array of types.
 
 ```php
-use Aphiria\Console\Input\Argument;
-use Aphiria\Console\Input\ArgumentType;
+use Aphiria\Console\Input\{Argument, ArgumentType};
 
 // The argument will be required and an array
 $type = [ArgumentType::Required, ArgumentType::IsArray];
@@ -192,8 +191,7 @@ Options can be arrays, eg `--foo=bar --foo=baz` will set the "foo" option to `["
 Like arguments, multiple option types can be specified with an array of types.
 
 ```php
-use Aphiria\Console\Input\Option;
-use Aphiria\Console\Input\OptionType;
+use Aphiria\Console\Input\{Option, OptionType};
 
 $type = [OptionType::IsArray, OptionType::RequiredValue];
 $option = new Option('foo', $type, 'f', 'The foo option');
@@ -228,8 +226,7 @@ You have to register commands so that your application knows about them.  If you
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
-use Aphiria\Console\Commands\Command;
-use Aphiria\Console\Commands\CommandRegistry;
+use Aphiria\Console\Commands\{Command, CommandRegistry};
 use Aphiria\Framework\Application\AphiriaModule;
 
 final class UserModule extends AphiriaModule
@@ -251,8 +248,7 @@ final class UserModule extends AphiriaModule
 <div class="context-library">
 
 ```php
-use Aphiria\Console\Commands\Command;
-use Aphiria\Console\Commands\CommandRegistry;
+use Aphiria\Console\Commands\{Command, CommandRegistry};
 
 $commands = new CommandRegistry();
 $greetingCommand = new Command('greet', arguments: [/* ... */], options: [/* ... */]);
@@ -372,8 +368,7 @@ Prompts are great for asking users for input beyond what is accepted by argument
 To ask a user to confirm an action with a simple "y" or "yes", use a confirmation prompt.
 
 ```php
-use Aphiria\Console\Output\Prompts\Confirmation;
-use Aphiria\Console\Output\Prompts\Prompt;
+use Aphiria\Console\Output\Prompts\{Confirmation, Prompt};
 
 $prompt = new Prompt();
 // This will return true if the answer began with "y" or "Y"

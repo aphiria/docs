@@ -41,8 +41,8 @@ Integration tests are a great way to make sure your application is working end-t
 Sending a request is very simple:
 
 ```php
-use App\Tests\IntegrationTestCase;
 use Aphiria\Net\Http\HttpStatusCode;
+use App\Tests\IntegrationTestCase;
 
 final class BookQueryTest extends IntegrationTestCase
 {
