@@ -52,7 +52,7 @@
 
 <h2 id="preface">Preface</h2>
 
-Before we get into comparing Aphiria against other frameworks, remember that each framework is just a tool.  Some tools are better suited to some problems than others.  This sort of comparison is inherently subjective, although we will do our best to keep things objective.  If you feel we've misconstrued or missed anything, please feel free to <a href="https://github.com/aphiria/docs/blob/1.x/framework-comparisons.md" target="_blank">submit an issue or pull request to the documentation</a> to improve it.
+Before we get into comparing Aphiria against other frameworks, remember that each framework is just a tool.  Some tools are better suited to some problems than others.  This sort of comparison is inherently subjective, although we will do our best to keep things objective.  If you feel we've misconstrued or missed anything, please feel free to <a href="https://github.com/aphiria/docs/blob/1.x/framework-comparisons.md" target="_blank">submit an issue or pull request to the documentation</a> to improve it or update its examples as other frameworks update their features.
 
 <h2 id="general">General</h2>
 
@@ -63,7 +63,7 @@ Before we get into library comparisons, let's compare the frameworks at a high l
 <h4 id="aphiria-general-pros">Pros</h4>
 
 * Expressive syntax for building REST APIs
-* Unopinionated, ie it doesn't prescribe _how_ to do something - it places that completely in the developers' hands (akin to an Android phone)
+* Unopinionated, ie it doesn't prescribe _how_ to do something - it places that completely in the developers' hands (akin to Android's permissiveness vs iPhone's locked down ecosystem)
 * Favors code-based configuration over magic string-based configuration
 * Can easily convert to-and-from PSRs
 * Thorough, searchable documentation that separates examples that take advantage of the full framework from examples of how to use a feature as a standalone library
@@ -80,14 +80,13 @@ Before we get into library comparisons, let's compare the frameworks at a high l
 
 * An established history and huge community support
 * Lots of functionality baked into the framework, eg eventing
-* Some of its libraries are the back-bone of other very popular libraries and frameworks
+* Some of its libraries are the back-bone of other very popular libraries and frameworks (including some of Aphiria's)
 * Thorough, searchable documentation that separates examples that take advantage of the full framework from examples of how to use a feature as a standalone library
 
 <h4 id="symfony-general-cons">Cons</h4>
 
 * Configuration is usually string-based
 * Perceived by some to be difficult to get up and running with
-* The documentation is difficult to navigate through
 
 <h3 id="laravel-general">Laravel</h3>
 
@@ -196,7 +195,7 @@ Controllers are the actions that are executed when a user hits a URI.  They typi
 
 <h2 id="http-library">HTTP Library</h2>
 
-PHP's abstractions around HTTP requests and responses are pretty bare bones.  Most frameworks find it necessary to build out classes and helper to better construct and read from requests and responses.
+PHP's abstractions around HTTP requests and responses are pretty bare bones.  Most frameworks find it necessary to build out classes and helpers to better construct and read from requests and responses.
 
 <h3 id="aphiria-http-library">Aphiria</h3>
 
