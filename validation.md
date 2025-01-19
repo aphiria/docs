@@ -124,7 +124,7 @@ use Aphiria\Validation\Constraints\EmailConstraint;
 use Aphiria\Validation\Constraints\RequiredConstraint;
 use Aphiria\Validation\ObjectConstraintsRegistryBuilder;
 
-class UserModule extends AphiriaModule
+final class UserModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
     {

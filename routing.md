@@ -714,7 +714,7 @@ Generated URIs will be a relative path unless the URI template specified a host.
 Optional route variables can be specified, too.  Let's assume the URI template for `GetBooksFromArchive` is `/archives/:year[/:month]`:
 
 ```php
-class BookController extends Controller
+final class BookController extends Controller
 {
     public function __construct(private IRouteUriFactory $routeUriFactory) {}
     
@@ -744,7 +744,7 @@ use Aphiria\Api\Controllers\Controller;
 use Aphiria\Framework\Routing\{IRouteRequestFactory, RouteRequestFactory};
 use Aphiria\Routing\Attributes\Get;
 
-class BookController extends Controller
+final class BookController extends Controller
 {
     public function __construct(private IRouteRequestFactory $routeRequestFactory) {}
     

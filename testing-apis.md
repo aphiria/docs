@@ -113,7 +113,7 @@ use Aphiria\Security\Identity;
 use Aphiria\Security\User;
 use App\Tests\Integration\IntegrationTestCase;
 
-class UserIntegrationTest extends IntegrationTestCase
+final class UserIntegrationTest extends IntegrationTestCase
 {
     public function testUpdatingEmail(): void
     {

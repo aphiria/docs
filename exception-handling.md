@@ -157,7 +157,7 @@ use Aphiria\Net\Http\IResponseFactory;
 use Aphiria\Net\Http\Response;
 use Aphiria\Net\Http\StringBody;
 
-class CustomApiExceptionRenderer implements IApiExceptionRenderer
+final class CustomApiExceptionRenderer implements IApiExceptionRenderer
 {   
     public function __construct(
         private ?IRequest $request = null,
@@ -208,7 +208,7 @@ use Aphiria\Net\Http\IResponseFactory;
 use Aphiria\Net\Http\Response;
 use Aphiria\Net\Http\StringBody;
 
-class CustomApiExceptionRenderer implements IExceptionRenderer
+final class CustomApiExceptionRenderer implements IExceptionRenderer
 {   
     public function __construct(
         private ?IRequest $request = null,
