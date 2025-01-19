@@ -696,6 +696,8 @@ After `build()` is called, you can start accessing the values from `config.php`,
 
 <div class="context-framework">
 
+Your global configuration is created for you in the constructor of `GlobalModule` in the skeleton app.
+
 <h2 id="custom-applications">Custom Applications</h2>
 
 This is more of an advanced topic.  Applications are specific to their runtimes, eg PHP-FPM or Swoole.  They typically take the input (eg an HTTP request or console input) and pass it to  a "gateway" object (eg `ApiGateway` or `ConsoleGateway`), which is the highest layer of application code that is agnostic to the PHP runtime.  So, if you switch from PHP-FPM to Swoole, you'd have to change the `IApplication` instance you're running, but the gateway would not have to change because it does not care what the PHP runtime is.

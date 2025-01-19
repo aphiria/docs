@@ -175,11 +175,11 @@ This would match `archives/2017`, `archives/2017/07`, and `archives/2017/07/24`.
 
 <h3 id="route-groups">Route Groups</h3>
 
-Often times, a lot of your routes will share similar properties, such as hosts and paths to match on, or middleware.  Route groups can even be nested.  Learn more how to add them as [attributes](#route-attributes-groups) or [route builders](#route-builders-groups).
+Often times, a lot of your routes will share similar properties, such as hosts and paths to match on, or [middleware](middleware.md).  Route groups can even be nested.  Learn more how to add them as [attributes](#route-attributes-groups) or [route builders](#route-builders-groups).
 
 <h3 id="middleware">Middleware</h3>
 
-Middleware are a great way to modify both the request and the response on an endpoint.  Aphiria lets you define middleware on your endpoints without binding you to any particular library/framework's middleware implementations.  Learn how to add them as [attributes](#route-attributes-middleware) or [route builders](#route-builders-middleware).
+Middleware are a great way to modify both the request and the response on an endpoint.  Aphiria lets you define [middleware](middleware.md) on your endpoints without binding you to any particular library/framework's middleware implementations.  Learn how to add them as [attributes](#route-attributes-middleware) or [route builders](#route-builders-middleware).
 
 <h4 id="middleware-parameters">Middleware Parameters</h4>
 

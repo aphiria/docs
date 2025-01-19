@@ -108,6 +108,12 @@ $request = new RequestFactory()->createRequestFromSuperglobals($_SERVER);
 
 Aphiria reads all the information it needs from the `$_SERVER` superglobal - it doesn't need the others.
 
+<div class="context-framework">
+
+> **Note:** The current request is automatically created and bound to the [container](dependency-injection.md) for you.
+
+</div>
+
 <h3 id="request-builders">Request Builders</h3>
 
 Aphiria comes with a fluent syntax for building your requests, which is somewhat similar to PSR-7.  Let's look at a simple example:
@@ -190,7 +196,7 @@ Headers provide metadata about the HTTP message.  In Aphiria, they are an extens
 
 <h2 id="bodies">Bodies</h2>
 
-HTTP bodies contain data associated with the HTTP message, and are optional.  They're represented by `Aphiria\Net\Http\IBody`, and provide a few methods to read and write their contents to streams and to strings:
+HTTP bodies contain data associated with the HTTP message, and are optional.  They're represented by `Aphiria\Net\Http\IBody`, and provide a few methods to read and write their contents to [streams](io.md#streams) and to strings:
 
 ```php
 use Aphiria\IO\Streams\Stream;
@@ -234,7 +240,7 @@ $body = new StreamBody($stream);
 
 <h2 id="uris">URIs</h2>
 
-A URI identifies a resource, typically over a network.  They contain such information as the scheme, host, port, path, query string, and fragment.  Aphiria represents them in `Aphiria\Net\Uri`, and they include the following methods:
+A URI identifies a resource, typically over a network.  They contain such information as the scheme, host, port, path, query string, and fragment.  Aphiria represents them in `Aphiria\Net\Uri`, and they include the following properties and methods:
 
 ```php
 use Aphiria\Net\Uri;

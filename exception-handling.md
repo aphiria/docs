@@ -11,6 +11,7 @@
 <li><a href="#problem-details-exception-renderer">Problem Details Exception Renderer</a><ol>
 <li><a href="#custom-problem-details-mappings">Custom Problem Details Mappings</a></li>
 </ol>
+<li><a href="#custom-api-exception-renderer">Custom API Exception Renderer</a></li>
 </li>
 <li><a href="#console-exception-renderer">Console Exception Renderer</a><ol>
 <li><a href="#output-writers">Output Writers</a></li>
@@ -131,6 +132,123 @@ $exceptionRenderer->mapExceptionToProblemDetails(
 > **Note:** All parameters that accept closures with the thrown exception can also take hard-coded values.
 
 When a `ProblemDetails` instance is serialized in a response, all of its extensions are serialized as top-level properties - not as key-value pairs under an `extensions` property.
+
+<h2 id="custom-api-exception-renderer">Custom API Exception Renderer</h2>
+
+You may prefer to use a different renderer than `ProblemDetailsExceptionRenderer` for your API exceptions.  For example, let's say you want to return a response with the following shape:
+
+```json
+{
+    "error": "THE_EXCEPTION_MESSAGE"
+}
+```
+
+First, create the exception renderer:
+
+<div class="context-framework">
+
+```php
+use Aphiria\ContentNegotiation\NegotiatedResponseFactory;
+use Aphiria\Framework\Api\Exceptions\IApiExceptionRenderer;
+use Aphiria\Net\Http\Headers;
+use Aphiria\Net\Http\HttpStatusCode;
+use Aphiria\Net\Http\IResponse;
+use Aphiria\Net\Http\IResponseFactory;
+use Aphiria\Net\Http\Response;
+use Aphiria\Net\Http\StringBody;
+
+class CustomApiExceptionRenderer implements IApiExceptionRenderer
+{   
+    public function __construct(
+        private ?IRequest $request = null,
+        private IResponseFactory $responseFactory = new NegotiatedResponseFactory(),
+        private IResponseWriter $responseWriter = new StreamResponseWriter()
+    ) {}
+
+    public function createResponse(Exception $ex): IResponse
+    {
+        if ($this->request === null) {
+            // The exception must've been thrown very early in the app
+            $headers = new Headers();
+            $headers->add('Content-Type', 'application/json');
+            
+            return new Response(
+                HttpStatusCode::InternalServerError,
+                $headers
+                new StringBody(\json_encode(['error' => $ex->getMessage()]))
+            );
+        }
+        
+        // We can negotiate the response
+        return $this->responseFactory->createResponse(
+            $this->request,
+            HttpStatusCode::InternalServerError,
+            rawBody: ['error' => $ex->getMessage()]
+        );
+    }
+    
+    public function render(Exception $ex): void
+    {
+        $this->responseWriter->writeResponse($this->createResponse($ex));
+    }
+}
+```
+
+Then, to use `CustomApiExceptionRenderer`, just set `aphiria.exceptions.apiExceptionRenderer` in _config.php_ to its class name.
+
+</div>
+<div class="context-library">
+
+```php
+use Aphiria\ContentNegotiation\NegotiatedResponseFactory;
+use Aphiria\Exceptions\IExceptionRenderer;
+use Aphiria\Net\Http\Headers;
+use Aphiria\Net\Http\HttpStatusCode;
+use Aphiria\Net\Http\IResponseFactory;
+use Aphiria\Net\Http\Response;
+use Aphiria\Net\Http\StringBody;
+
+class CustomApiExceptionRenderer implements IExceptionRenderer
+{   
+    public function __construct(
+        private ?IRequest $request = null,
+        private IResponseFactory $responseFactory = new NegotiatedResponseFactory(),
+        private IResponseWriter $responseWriter = new StreamResponseWriter()
+    ) {}
+    
+    public function render(Exception $ex): void
+    {
+        if ($this->request === null) {
+            // The exception must've been thrown very early in the app
+            $headers = new Headers();
+            $headers->add('Content-Type', 'application/json');
+            $response = new Response(
+                HttpStatusCode::InternalServerError,
+                $headers
+                new StringBody(\json_encode(['error' => $ex->getMessage()]))
+            );
+        } else {
+            // We can negotiate the response
+            $response = $this->responseFactory->createResponse(
+                $this->request,
+                HttpStatusCode::InternalServerError,
+                rawBody: ['error' => $ex->getMessage()]
+            );
+        }
+        
+        $this->responseWriter->writeResponse($response);
+    }
+}
+```
+
+Then, to use `CustomApiExceptionRenderer`, pass it into `GlobalExceptionHandler`:
+
+```php
+// Assume $request is already set
+$customApiExceptionRenderer = new CustomApiExceptionHandler($request);
+$globalExceptionHandler = new GlobalExceptionHandler($customApiExceptionRenderer);
+$globalExceptionHandler->registerWithPhp();
+```
 
 <h2 id="console-exception-renderer">Console Exception Renderer</h2>
 

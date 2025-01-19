@@ -111,7 +111,7 @@ $validator = new Validator($objectConstraints);
 
 </div>
 
-If you prefer to not use attributes, you can use a fluent syntax to manually register constraints instead.  
+If you prefer to not use attributes, you can use a fluent syntax to manually register [constraints](#constraints) instead.  
 
 <div class="context-framework">
 
@@ -257,24 +257,24 @@ A constraint is something that a value must pass to be considered valid.  For ex
 
 Aphiria comes with some useful constraints built-in:
 
-Name | Attribute | Description
------- | ------ | ------
-`AlphaConstraint` | `Alpha` | The value must only contain alphabet characters
-`AlphanumericConstraint` | `Alphanumeric` | The value must only contain alphanumeric characters
-`BetweenConstraint` | `Between` | The value must fall in between two values (takes in whether or not the min and max are inclusive)
-`CallbackConstraint` | N/A | The value must satisfy a callback that returns a boolean
-`DateConstraint` | `Date` | The value must match a date-time format
-`EachConstraint` | `Each` | The value must satisfy a list of constraints (takes in a list of `IConstraint`)
-`EqualsConstraint` | `Equals` | The value must equal a value
-`InConstraint` | `In` | The value must be in a list of acceptable values
-`IntegerConstraint` | `Integer` | The value must be an integer
-`IPAddressConstraint` | `IPAddress` | The value must be an IP address
-`MaxConstraint` | `Max` | The value cannot exceed a max value (takes in whether or not the max is inclusive)
-`MinConstraint` | `Min` | The value cannot go below a min value (takes in whether or not the min is inclusive)
-`NotInConstraint` | `NotIn` | The value must not be in a list of values
-`NumericConstraint` | `Numeric` | The value must be numeric
-`RegexConstraint` | `Regex` | The value must satisfy a regular expression
-`RequiredConstraint` | `Required` | The value must not be null
+Name | Attribute        | Description
+------ |------------------| ------
+`AlphaConstraint` | `#[Alpha]`       | The value must only contain alphabet characters
+`AlphanumericConstraint` | `#[Alphanumeric]` | The value must only contain alphanumeric characters
+`BetweenConstraint` | `#[Between]`      | The value must fall in between two values (takes in whether or not the min and max are inclusive)
+`CallbackConstraint` | N/A              | The value must satisfy a callback that returns a boolean
+`DateConstraint` | `#[Date]`         | The value must match a date-time format
+`EachConstraint` | `#[Each]`         | The value must satisfy a list of constraints (takes in a list of `IConstraint`)
+`EqualsConstraint` | `#[Equals]`       | The value must equal a value
+`InConstraint` | `#[In]`           | The value must be in a list of acceptable values
+`IntegerConstraint` | `#[Integer]`      | The value must be an integer
+`IPAddressConstraint` | `#[IPAddress]`    | The value must be an IP address
+`MaxConstraint` | `#[Max]`          | The value cannot exceed a max value (takes in whether or not the max is inclusive)
+`MinConstraint` | `#[Min]`          | The value cannot go below a min value (takes in whether or not the min is inclusive)
+`NotInConstraint` | `#[NotIn]`        | The value must not be in a list of values
+`NumericConstraint` | `#[Numeric]`      | The value must be numeric
+`RegexConstraint` | `#[Regex]`        | The value must satisfy a regular expression
+`RequiredConstraint` | `#[Required]`     | The value must not be null
 
 <h3 id="custom-constraints">Custom Constraints</h3>
 
