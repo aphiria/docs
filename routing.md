@@ -150,26 +150,15 @@ header('Allow', implode(', ', $result->allowedMethods));
 
 <h3 id="route-variables">Route Variables</h3>
 
-Aphiria provides a simple syntax for your URIs.  To capture variables in your route, use `:varName`, eg:
-
-```php
-users/:userId/profile
-```
+Aphiria provides a simple syntax for your URIs.  To capture variables in your route, use `:varName`, eg `users/:userId/profile`.
 
 You can also add [constraints](#route-variable-constraints) to your variables.
 
 <h3 id="optional-route-parts">Optional Route Parts</h3>
 
-If part of your route is optional, then surround it with brackets.  For example, the following will match both `archives/2017` and `archives/2017/7`:
-```php
-archives/:year[/:month]
-```
+If part of your route is optional, then surround it with brackets.  For example, the following will match both `archives/2017` and `archives/2017/7`: `archives/:year[/:month]`.
 
-Optional route parts can be nested:
-
-```php
-archives/:year[/:month[/:day]]
-```
+Optional route parts can be nested: `archives/:year[/:month[/:day]]`.
 
 This would match `archives/2017`, `archives/2017/07`, and `archives/2017/07/24`.
 
