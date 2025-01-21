@@ -156,11 +156,7 @@ You can also add [constraints](#route-variable-constraints) to your variables.
 
 <h3 id="optional-route-parts">Optional Route Parts</h3>
 
-If part of your route is optional, then surround it with brackets.  For example, the following will match both `archives/2017` and `archives/2017/7`: `archives/:year[/:month]`.
-
-Optional route parts can be nested: `archives/:year[/:month[/:day]]`.
-
-This would match `archives/2017`, `archives/2017/07`, and `archives/2017/07/24`.
+If part of your route is optional, then surround it with brackets.  For example, the following will match both `archives/2017` and `archives/2017/7`: `archives/:year[/:month]`.  Optional route parts can be nested: `archives/:year[/:month[/:day]]`.  This would match `archives/2017`, `archives/2017/07`, and `archives/2017/07/24`.
 
 <h3 id="route-groups">Route Groups</h3>
 
