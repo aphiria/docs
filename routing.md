@@ -459,6 +459,7 @@ $routes->route(['GET'], path: '/user', host: 'api.example.com', isHttpsOnly: tru
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Routing\RouteCollectionBuilder;
+use Aphiria\Routing\RouteGroupOptions;
 
 final class CourseModule extends AphiriaModule
 {
@@ -612,6 +613,7 @@ You can also add [parameters to your middleware](#middleware-parameters):
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Routing\RouteCollectionBuilder;
+use Aphiria\Routing\Middleware\MiddlewareBinding;
 
 final class FooModule extends AphiriaModule
 {
@@ -641,6 +643,8 @@ final class FooModule extends AphiriaModule
 <div class="context-library">
 
 ```php
+use Aphiria\Routing\Middleware\MiddlewareBinding;
+
 $routes
     ->get('foo')
     ->mapsToMethod(MyController::class, 'myMethod')
