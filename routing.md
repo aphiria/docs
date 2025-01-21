@@ -404,7 +404,7 @@ $routes->put('/foo');
 
 </div>
 
-Each method accepts the following parameters:
+Let's look at the different parameters route builders accept:
 
 <div class="context-framework">
 
@@ -437,8 +437,6 @@ $routes
 
 </div>
 
-They all return an instance of `RouteBuilder`, which lets you specify things like controller methods, [middleware](#route-builders-middleware), and [constraints](#route-builders-constraints).
-
 You can also call `RouteCollectionBuilder::route()` and pass in the HTTP method(s) you'd like to map to.
 
 <div class="context-framework">
@@ -465,12 +463,6 @@ final class UserModule extends AphiriaModule
 ```php
 $routes->route(['GET'], path: '/user', host: 'api.example.com', isHttpsOnly: true);
 ```
-
-</div>
-
-<div class="context-framework">
-
-The best place to define your routes is in modules using [application builders](configuration.md#component-routes).
 
 </div>
 
