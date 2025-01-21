@@ -453,11 +453,14 @@ $routes->route(['GET'], path: '/user', host: 'api.example.com', isHttpsOnly: tru
 
 <h3 id="route-builders-groups">Route Groups</h3>
 
+Route groups let you logically group routes with shared parameters, eg path prefixes and middleware.
+
 <div class="context-framework">
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Routing\Middleware\MiddlewareBinding;
 use Aphiria\Routing\RouteCollectionBuilder;
 use Aphiria\Routing\RouteGroupOptions;
 
@@ -612,8 +615,8 @@ You can also add [parameters to your middleware](#middleware-parameters):
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
-use Aphiria\Routing\RouteCollectionBuilder;
 use Aphiria\Routing\Middleware\MiddlewareBinding;
+use Aphiria\Routing\RouteCollectionBuilder;
 
 final class FooModule extends AphiriaModule
 {
