@@ -16,7 +16,7 @@
 <li class="context-framework"><a href="#component-routes">Routes</a></li>
 <li class="context-framework"><a href="#component-middleware">Middleware</a></li>
 <li class="context-framework"><a href="#component-console-commands">Console Commands</a></li>
-<li class="context-framework"><a href="#component-authentiators">Authenticators</a></li>
+<li class="context-framework"><a href="#component-authenticators">Authenticators</a></li>
 <li class="context-framework"><a href="#component-authorities">Authorities</a></li>
 <li class="context-framework"><a href="#component-validator">Validator</a></li>
 <li class="context-framework"><a href="#component-exception-handler">Exception Handler</a></li>

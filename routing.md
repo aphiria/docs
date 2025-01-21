@@ -366,6 +366,33 @@ $result = $routeMatcher->matchRoute(
 
 Route builders are an alternative to [attributes](#route-attributes) that give you a fluent syntax for mapping your routes to controller methods.  They also let you [bind any middleware](#route-builders-middleware) classes and properties to the route.  The following methods are available to create routes:
 
+<div class="context-framework">
+
+ ```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Routing\RouteCollectionBuilder;
+
+final class FooModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
+            $routes->delete('/foo');
+            $routes->get('/foo');
+            $routes->options('/foo');
+            $routes->patch('/foo');
+            $routes->post('/foo');
+            $routes->put('/foo');
+        });
+    }
+}
+```
+
+</div>
+<div class="context-library">
+
+
  ```php
 $routes->delete('/foo');
 $routes->get('/foo');
@@ -375,7 +402,32 @@ $routes->post('/foo');
 $routes->put('/foo');
 ```
 
+</div>
+
 Each method accepts the following parameters:
+
+<div class="context-framework">
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Routing\RouteCollectionBuilder;
+
+final class UserModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
+            $routes
+                ->get(path: '/user', host: 'api.example.com', isHttpsOnly: true)
+                ->mapsToMethod(UserController::class, 'getUserById');
+        });
+    }
+}
+```
+
+</div>
+<div class="context-library">
 
 ```php
 $routes
@@ -383,13 +435,38 @@ $routes
     ->mapsToMethod(UserController::class, 'getUserById');
 ```
 
+</div>
+
 They all return an instance of `RouteBuilder`, which lets you specify things like controller methods, [middleware](#route-builders-middleware), and [constraints](#route-builders-constraints).
 
 You can also call `RouteCollectionBuilder::route()` and pass in the HTTP method(s) you'd like to map to.
 
+<div class="context-framework">
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Routing\RouteCollectionBuilder;
+
+final class UserModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
+            $routes->route(['GET'], path: '/user', host: 'api.example.com', isHttpsOnly: true);
+        });
+    }
+}
+```
+
+</div>
+<div class="context-library">
+
 ```php
 $routes->route(['GET'], path: '/user', host: 'api.example.com', isHttpsOnly: true);
 ```
+
+</div>
 
 <div class="context-framework">
 
@@ -398,6 +475,47 @@ The best place to define your routes is in modules using [application builders](
 </div>
 
 <h3 id="route-builders-groups">Route Groups</h3>
+
+<div class="context-framework">
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Routing\RouteCollectionBuilder;
+
+final class CourseModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
+            $routes->group(
+                new RouteGroupOptions(
+                    path: '/courses/:courseId',
+                    host: 'api.example.com',
+                    isHttpsOnly: true,
+                    constraints: [new MyConstraint()],
+                    middlewareBindings: [new MiddlewareBinding(Authentication::class)],
+                    parameters: ['role' => 'admin']
+                ),
+                function (RouteCollectionBuilder $routes) {
+                    // This route's path will be "courses/:courseId"
+                    $routes
+                        ->get('')
+                        ->mapsToMethod(CourseController::class, 'getCourseById');
+            
+                    // This route's path will be "courses/:courseId/professors"
+                    $routes
+                        ->get('/professors')
+                        ->mapsToMethod(CourseController::class, 'getCourseProfessors');
+                }
+            );
+        });
+    }
+}
+```
+
+</div>
+<div class="context-library">
 
 ```php
 use Aphiria\Routing\Middleware\MiddlewareBinding;
@@ -427,9 +545,35 @@ $routes->group(
 );
 ```
 
+</div>
+
 <h3 id="route-builders-middleware">Middleware</h3>
 
 To bind a single middleware class to your route, call:
+
+<div class="context-framework">
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Routing\RouteCollectionBuilder;
+
+final class FooModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
+            $routes
+                ->get('foo')
+                ->mapsToMethod(MyController::class, 'myMethod')
+                ->withMiddleware(FooMiddleware::class);
+        });
+    }
+}
+```
+
+</div>
+<div class="context-library">
 
 ```php
 $routes
@@ -438,7 +582,36 @@ $routes
     ->withMiddleware(FooMiddleware::class);
 ```
 
+</div>
+
 To bind many middleware classes, call:
+
+<div class="context-framework">
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Routing\RouteCollectionBuilder;
+
+final class FooModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
+            $routes
+                ->get('foo')
+                ->mapsToMethod(MyController::class, 'myMethod')
+                ->withManyMiddleware([
+                    FooMiddleware::class,
+                    BarMiddleware::class
+                ]);
+        });
+    }
+}
+```
+
+</div>
+<div class="context-library">
 
 ```php
 $routes
@@ -450,9 +623,45 @@ $routes
     ]);
 ```
 
+</div>
+
 Under the hood, these class names get converted to instances of `MiddlewareBinding`.
 
 You can also add [parameters to your middleware](#middleware-parameters):
+
+<div class="context-framework">
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Routing\RouteCollectionBuilder;
+
+final class FooModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
+            $routes
+                ->get('foo')
+                ->mapsToMethod(MyController::class, 'myMethod')
+                ->withMiddleware(Authorization::class, ['role' => 'admin']);
+            
+            // Or
+            
+            $routes
+                ->get('foo')
+                ->mapsToMethod(MyController::class, 'myMethod')
+                ->withManyMiddleware([
+                    new MiddlewareBinding(Authorization::class, ['role' => 'admin']),
+                    // Other middleware...
+                ]);
+        });
+    }
+}
+```
+
+</div>
+<div class="context-library">
 
 ```php
 $routes
@@ -471,9 +680,35 @@ $routes
     ]);
 ```
 
+</div>
+
 <h3 id="route-builders-constraints">Route Constraints</h3>
 
 To add a single route constraint to a route, call:
+
+<div class="context-framework">
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Routing\RouteCollectionBuilder;
+
+final class PostModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
+            $routes
+                ->get('posts')
+                ->mapsToMethod(PostController::class, 'getAllPosts')
+                ->withConstraint(new FooConstraint());
+        });
+    }
+}
+```
+
+</div>
+<div class="context-library">
 
 ```php
 $routes
@@ -482,7 +717,33 @@ $routes
     ->withConstraint(new FooConstraint());
 ```
 
+</div>
+
 To add many route constraints, call:
+
+<div class="context-framework">
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Routing\RouteCollectionBuilder;
+
+final class PostModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
+            $routes
+                ->get('posts')
+                ->mapsToMethod(PostController::class, 'getAllPosts')
+                ->withManyConstraints([new FooConstraint(), new BarConstraint()]);
+        });
+    }
+}
+```
+
+</div>
+<div class="context-library">
 
 ```php
 $routes
@@ -490,6 +751,8 @@ $routes
     ->mapsToMethod(PostController::class, 'getAllPosts')
     ->withManyConstraints([new FooConstraint(), new BarConstraint()]);
 ```
+
+</div>
 
 <h2 id="versioned-api-example">Versioned API Example</h2>
 
