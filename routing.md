@@ -60,7 +60,25 @@ Routing is the process of mapping HTTP requests to actions.  You can check out w
 
 <div class="context-framework">
 
-Let's look at how to register a route in a <a href="configuration.md#modules">module</a> (or view its [attribute-based alternative](#route-attributes-example)).  Routing is performed for you automatically, and there's nothing more to do besides actually defining your [controller](controllers.md):
+Let's look at how to register a route in a [module](configuration.md#modules).  First, let's define a controller to route to:
+
+```php
+use Aphiria\Api\Controllers\Controller;
+use App\Books\{Book, IBookService};
+
+class BookController extends Controller
+{
+    // Assume we have a book service to retrieve books from
+    public function __construct(private IBookService $books) {}
+
+    public function getBooksById(int $bookId): Book
+    {
+        return $this->books->getBooksById($bookId);
+    }
+}
+```
+
+Next, let's use a [route builder](#route-builders) to add a route to this controller (you can also use [attribute-based routing](#route-attributes-example)):
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
@@ -81,10 +99,38 @@ final class BookModule extends AphiriaModule
 }
 ````
 
+Now, whenever your app receives a request like `GET /books/123`, Aphiria will automatically instantiate `BookController` using the [dependency injection container](dependency-injection.md) and route the request to `getBookById()`.  You can learn more about Aphiria controllers [here](controllers.md).
+
 </div>
 <div class="context-library">
 
-You can use a fluent syntax for configuring your routes.  Let's look at a complete example that includes actually performing the routing:
+You can use a fluent syntax or [attributes](#route-attributes-example) to configure your routes.  We'll look at a complete example that routes a request.  First, let's define a controller that this path routes to using PSR-7 responses and PSR-7 containers:
+
+```php
+use App\Books\{Book, IBookService};
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Http\Message\ResponseInterface;
+
+class BookController
+{
+    // Assume we have a book service to retrieve books from
+    public function __construct(private IBookService $books) {}
+
+    public function getBooksById(int $bookId): ResponseInterface
+    {
+        $book = $this->books->getBooksById($bookId);
+        $psr17Factory = new Psr17Factory();
+        
+        // Assume our Book class has a toJson() method
+        return $psr17Factory
+            ->createResponse(200)
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody($psr17Factory->createStream($book->toJson()));
+    }
+}
+```
+
+Next, let's add a route to this controller method:
 
 ```php
 use Aphiria\Routing\Matchers\TrieRouteMatcher;
@@ -92,7 +138,7 @@ use Aphiria\Routing\RouteCollectionBuilder;
 use Aphiria\Routing\UriTemplates\Compilers\Tries\TrieFactory;
 use App\Books\Api\{Authorization, BookController};
 
-// Register the routes
+// Register the route
 $routes = new RouteCollectionBuilder();
 $routes
     ->get('/books/:bookId')
@@ -110,40 +156,48 @@ $result = $routeMatcher->matchRoute(
 );
 ```
 
-Let's say the request was `GET /books/123`.  You can check if a match was found by calling:
+Let's say the request was `GET /books/123`.  You can route it to the controller:
 
 ```php
-if ($result->matchFound) {
-    // ...
+if (!$result->matchFound) {
+    \header('HTTP/1.1 404 Not Found');
+    
+    exit();
 }
-```
 
-Grabbing the matched controller info is as simple as:
+// Create the controller (assume we already have $container configured)
+$controller = $container->get($result->route->action->controllerName);
+// Resolve the parameters
+$resolvedParameters = [];
+$reflectedMethod = new \ReflectionMethod($controller, $result->route->action->methodName);
 
-```php
-$result->route->action->controllerName; // "BookController"
-$result->route->action->methodName; // "getBooksById"
-```
-
-To get the [route variables](#route-variables), call:
-
-```php
-$result->routeVariables; // ["bookId" => "123"]
-```
-
-To get the [middleware bindings](#middleware), call:
-
-```php
-foreach ($result->route->middlewareBindings as $middlewareBinding) {
-    $middlewareBinding->className; // "Authorization"
-    $middlewareBinding->parameters; // ["role" => "admin"]
+foreach ($reflectedMethod->getParameters() as $reflectedParameter) {
+    $parameterName = $reflectedParameter->getName();
+    $routeVariable = $result->routeVariables[$parameterName]
+        ?? throw new \Exception("No value for route parameter $parameterName");
+    $type = $reflectedParameter->getType();
+    $resolvedParameters[] = match ($type) {
+        'int' => (int)$routeVariable,
+        'bool' => (bool)$routeVariable,
+        'float' => (float)$routeVariable,
+        'string' => (string)$routeVariable,
+        default => throw new \Exception("Unsupported route parameter type $type");
+    }
 }
-```
 
-You can configure your app to return a 405 response using the result's allowed methods:
+// Invoke the controller method
+$response = $controller->{$result->route->action->methodName}(...$resolvedParameters);
+// Finally, emit our response
+\header("HTTP/1.1 {$response->getStatusCode()} {$response->getReasonPhrase()}");
 
-```php
-header('Allow', implode(', ', $result->allowedMethods));
+foreach ($response->getHeaders() as $name => $values) {
+    foreach ($values as $value) {
+        \header("$name: $value");
+    }
+}
+
+echo $response->getBody();
+exit();
 ```
 
 </div>
@@ -180,7 +234,7 @@ Aphiria provides the optional functionality to define your routes via attributes
 
 <h3 id="route-attributes-example">Example</h3>
 
-Let's actually define a route:
+Let's actually define a route with attributes:
 
 ```php
 use Aphiria\Api\Controllers\Controller;
@@ -320,6 +374,8 @@ final class GlobalModule extends AphiriaModule
     }
 }
 ```
+
+> **Note:** You can configure the paths to scan for attributes in `aphiria.routing.attributePaths` in your _config.php_.
 
 </div>
 <div class="context-library">
@@ -747,23 +803,23 @@ use Aphiria\Routing\Attributes\{Get, RouteConstraint};
 
 final class CommentController extends Controller
 {
-    #[Get('/comments', parameters: ['API-VERSION' => 'v1.0'])]
+    #[Get('/comments', parameters: ['Api-Version' => 'v1.0'])]
     #[RouteConstraint(ApiVersionConstraint::class)]
     public function getAllComments1_0(): array
     {
-        // This route will require an API-VERSION value of 'v1.0'
+        // This route will require an Api-Version value of 'v1.0'
     }
     
-    #[Get('/comments', parameters: ['API-VERSION' => 'v2.0'])]
+    #[Get('/comments', parameters: ['Api-Version' => 'v2.0'])]
     #[RouteConstraint(ApiVersionConstraint::class)]
     public function getAllComments2_0(): array
     {
-        // This route will require an API-VERSION value of "v2.0"
+        // This route will require an Api-Version value of "v2.0"
     }
 }
 ```
 
-Now, let's add a route constraint to match the "API-VERSION" header to the parameter on our route:
+Now, let's add a route constraint to match the "Api-Version" header to the parameter on our route:
 
 ```php
 use Aphiria\Routing\Matchers\Constraints\IRouteConstraint;
@@ -780,16 +836,16 @@ final class ApiVersionConstraint implements IRouteConstraint
     ): bool {
         $parameters = $matchedRouteCandidate->route->parameters;
 
-        if (!isset($parameters['API-VERSION'])) {
+        if (!isset($parameters['Api-Version'])) {
             return false;
         }
 
-        return \in_array($parameters['API-VERSION'], $headers['API-VERSION'], true);
+        return \in_array($parameters['Api-Version'], $headers['Api-Version'], true);
     }
 }
 ```
 
-If we hit `/comments` with an "API-VERSION" header value of "v2.0", we'd match the second route in our example.
+If we hit `/comments` with an "Api-Version" header value of "v2.0", we'd match the second route in our example.
 
 <div class="context-library">
 
