@@ -371,7 +371,7 @@ When our routes get compiled, the route group path will be prefixed to the path 
   
 <h3 id="route-attributes-middleware">Middleware</h3>
 
-Middleware are a separate attribute and can be applied to an entire controller class or to specific controller method:
+Middleware are a separate attribute and can be applied to an entire controller class or to a specific controller method:
 
 ```php
 use Aphiria\Routing\Attributes\Middleware;
