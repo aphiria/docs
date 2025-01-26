@@ -16,11 +16,11 @@
 </ol>
 </li>
 <li><a href="#route-attributes">Route Attributes</a><ol>
+<li><a href="#scanning-for-attributes">Scanning For Attributes</a></li>
 <li><a href="#route-attributes-example">Example</a></li>
 <li><a href="#route-attributes-groups">Route Groups</a></li>
 <li><a href="#route-attributes-middleware">Middleware</a></li>
 <li><a href="#route-attributes-constraints">Route Constraints</a></li>
-<li><a href="#scanning-for-attributes">Scanning For Attributes</a></li>
 </ol>
 </li>
 <li><a href="#route-builders">Route Builders</a><ol>
@@ -30,7 +30,7 @@
 </ol>
 </li>
 <li><a href="#versioned-api-example">Versioned API Example</a><ol>
-<li><a href="#getting-php-headers">Getting Headers in PHP</a></li>
+<li class="context-library"><a href="#getting-php-headers">Getting Headers in PHP</a></li>
 </ol>
 </li>
 <li><a href="#route-variable-constraints">Route Variable Constraints</a><ol>
@@ -66,7 +66,7 @@ Let's look at how to register a route in a [module](configuration.md#modules).  
 use Aphiria\Api\Controllers\Controller;
 use App\Books\{Book, IBookService};
 
-class BookController extends Controller
+final class BookController extends Controller
 {
     // Assume we have a book service to retrieve books from
     public function __construct(private IBookService $books) {}
@@ -104,14 +104,14 @@ Now, whenever your app receives a request like `GET /books/123`, Aphiria will au
 </div>
 <div class="context-library">
 
-You can use a fluent syntax or [attributes](#route-attributes-example) to configure your routes.  We'll look at a complete example that routes a request.  First, let's define a controller that this path routes to using PSR-7 responses and PSR-7 containers:
+You can use a fluent syntax or [attributes](#route-attributes-example) to configure your routes.  We'll look at a complete example that routes a request.  First, let's define a controller that this path routes to using PSR-7 responses and PSR-11 containers:
 
 ```php
 use App\Books\{Book, IBookService};
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseInterface;
 
-class BookController
+final class BookController
 {
     // Assume we have a book service to retrieve books from
     public function __construct(private IBookService $books) {}
@@ -148,7 +148,7 @@ $routes
 // Set up the route matcher
 $routeMatcher = new TrieRouteMatcher(new TrieFactory($routes->build())->createTrie());
 
-// Finally, let's find a matching route
+// Find a matching route
 $result = $routeMatcher->matchRoute(
     $_SERVER['REQUEST_METHOD'],
     $_SERVER['HTTP_HOST'],
@@ -161,6 +161,13 @@ Let's say the request was `GET /books/123`.  You can route it to the controller:
 ```php
 if (!$result->matchFound) {
     \header('HTTP/1.1 404 Not Found');
+    
+    exit();
+}
+
+if ($result->methodIsAllowed === false) {
+    \header('HTTP/1.1 405 Method Not Allowed');
+    \header('Allow', implode(', ', $result->allowedMethods));
     
     exit();
 }
@@ -204,9 +211,7 @@ exit();
 
 <h3 id="route-variables">Route Variables</h3>
 
-Aphiria provides a simple syntax for your URIs.  To capture variables in your route, use `:varName`, eg `users/:userId/profile`.
-
-You can also add [constraints](#route-variable-constraints) to your variables.
+Aphiria provides a simple syntax for your URIs.  To capture variables in your host or path, use `:varName`, eg `:subdomain.example.com` in the host or `users/:userId/profile` in the path.
 
 <h3 id="optional-route-parts">Optional Route Parts</h3>
 
@@ -231,6 +236,53 @@ Sometimes, you might find it useful to add some custom logic for matching routes
 <h2 id="route-attributes">Route Attributes</h2>
 
 Aphiria provides the optional functionality to define your routes via attributes if you so choose.  A benefit to defining your routes this way is that it keeps the definition of your routes close (literally) to your controller methods, reducing the need to jump around your code base.
+
+<h3 id="scanning-for-attributes">Scanning For Attributes</h3>
+
+Before you can use attributes, you'll need to configure Aphiria to scan for them.
+
+<div class="context-framework">
+
+```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+
+final class GlobalModule extends AphiriaModule
+{
+    public function configure(IApplicationBuilder $appBuilder): void
+    {
+        $this->withRouteAttributes($appBuilder);
+    }
+}
+```
+
+> **Note:** You can configure the paths to scan for attributes in `aphiria.routing.attributePaths` in your _config.php_.
+
+</div>
+<div class="context-library">
+
+You can manually configure the router to scan for attributes:
+
+```php
+use Aphiria\Routing\Attributes\AttributeRouteRegistrant;
+use Aphiria\Routing\Matchers\TrieRouteMatcher;
+use Aphiria\Routing\RouteCollection;
+use Aphiria\Routing\UriTemplates\Compilers\Tries\TrieFactory;
+
+$routes = new RouteCollection();
+$routeAttributeRegistrant = new AttributeRouteRegistrant(['PATH_TO_SCAN']);
+$routeAttributeRegistrant->registerRoutes($routes);
+$routeMatcher = new TrieRouteMatcher(new TrieFactory($routes)->createTrie());
+
+// Find a matching route
+$result = $routeMatcher->matchRoute(
+    $_SERVER['REQUEST_METHOD'],
+    $_SERVER['HTTP_HOST'],
+    $_SERVER['REQUEST_URI']
+);
+```
+
+</div>
 
 <h3 id="route-attributes-example">Example</h3>
 
@@ -280,7 +332,7 @@ use Aphiria\Routing\Attributes\Get;
 )]
 ```
 
-You can read more about how request parameters are resolved in your controller methods <a href="controllers.md#request-parameters">here</a>.
+You can read more about how request parameters are resolved in your controller methods [here](controllers.md#request-parameters).
 
 <h3 id="route-attributes-groups">Route Groups</h3>
 
@@ -319,12 +371,16 @@ When our routes get compiled, the route group path will be prefixed to the path 
   
 <h3 id="route-attributes-middleware">Middleware</h3>
 
-Middleware are a separate attribute:
+Middleware are a separate attribute and can be applied to an entire controller class or to specific controller method:
 
 ```php
 use Aphiria\Routing\Attributes\Middleware;
 
 #[Middleware(Authorization::class, parameters: ['role' => 'admin'])]
+final class BookController
+{
+    // ...
+}
 ```
 
 <div class="context-framework">
@@ -332,8 +388,6 @@ use Aphiria\Routing\Attributes\Middleware;
 > **Note:** You can also use the nearly identical `Aphiria\Middleware\Attributes\Middleware` attribute instead of the routing library's.  The two are interchangeable.
 
 </div>
-
-You can also add middleware to a controller class to indicate that it applies to all routes in that controller.
 
 <h3 id="route-attributes-constraints">Route Constraints</h3>
 
@@ -355,53 +409,6 @@ final class UserController extends Controller
 ```
 
 Similar to [middleware](#route-attributes-middleware), you can add route constraints to a controller class to apply it to all routes in that controller.
-
-<h3 id="scanning-for-attributes">Scanning For Attributes</h3>
-
-Before you can use attributes, you'll need to configure Aphiria to scan for them.  
-
-<div class="context-framework">
-
-```php
-use Aphiria\Application\IApplicationBuilder;
-use Aphiria\Framework\Application\AphiriaModule;
-
-final class GlobalModule extends AphiriaModule
-{
-    public function configure(IApplicationBuilder $appBuilder): void
-    {
-        $this->withRouteAttributes($appBuilder);
-    }
-}
-```
-
-> **Note:** You can configure the paths to scan for attributes in `aphiria.routing.attributePaths` in your _config.php_.
-
-</div>
-<div class="context-library">
-
-You can manually configure the router to scan for attributes:
-
-```php
-use Aphiria\Routing\Attributes\AttributeRouteRegistrant;
-use Aphiria\Routing\Matchers\TrieRouteMatcher;
-use Aphiria\Routing\RouteCollection;
-use Aphiria\Routing\UriTemplates\Compilers\Tries\TrieFactory;
-
-$routes = new RouteCollection();
-$routeAttributeRegistrant = new AttributeRouteRegistrant(['PATH_TO_SCAN']);
-$routeAttributeRegistrant->registerRoutes($routes);
-$routeMatcher = new TrieRouteMatcher(new TrieFactory($routes)->createTrie());
-
-// Find a matching route
-$result = $routeMatcher->matchRoute(
-    $_SERVER['REQUEST_METHOD'],
-    $_SERVER['HTTP_HOST'],
-    $_SERVER['REQUEST_URI']
-);
-```
-
-</div>
 
 <h2 id="route-builders">Route Builders</h2>
 
@@ -684,7 +691,7 @@ final class FooModule extends AphiriaModule
                 ->mapsToMethod(MyController::class, 'myMethod')
                 ->withMiddleware(Authorization::class, ['role' => 'admin']);
             
-            // Or
+            // Or...
             
             $routes
                 ->get('foo')
@@ -709,7 +716,7 @@ $routes
     ->mapsToMethod(MyController::class, 'myMethod')
     ->withMiddleware(Authorization::class, ['role' => 'admin']);
 
-// Or
+// Or...
 
 $routes
     ->get('foo')
@@ -1036,7 +1043,7 @@ final class BookController extends Controller
 }
 ```
 
-If you use <a href="controllers.md#parameter-attributes">parameter attributes</a>, Aphiria will respect them when determining where to apply the route variables (eg by putting them in the route path/host or in the query string).
+If you use [parameter attributes](controllers.md#parameter-attributes), Aphiria will respect them when determining where to apply the route variables (eg by putting them in the route path/host or in the query string).
 
 <h3 id="creating-route-requests">Creating Route Requests</h3>
 

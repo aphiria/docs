@@ -69,7 +69,7 @@ When specifying a URI, you can use either pass just the path or the fully-qualif
 ```php
 $this->get('/books/123');
 
-// Or
+// Or...
 
 $this->get('http://localhost:8080/books/123');
 ```

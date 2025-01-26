@@ -177,7 +177,7 @@ $blogPost = new BlogPost('How to Reticulate Splines');
 // Will throw a ValidationException if $blogPost is invalid
 $valdiator->validateObject($blogPost);
 
-// Or
+// Or...
 
 $violations = [];
 
@@ -197,7 +197,7 @@ $blogPost = new BlogPost('How to Reticulate Splines');
 // Will throw a ValidationException if $blogPost->title is invalid
 $valdiator->validateProperty($blogPost, 'title');
 
-// Or
+// Or...
 
 $violations = [];
 
@@ -219,7 +219,7 @@ $blogPost = new BlogPost('How to Reticulate Splines');
 // Will throw a ValidationException if $blogPost->getTitleSlug() is invalid
 $valdiator->validateMethod($blogPost, 'getTitleSlug');
 
-// Or
+// Or...
 
 $violations = [];
 
@@ -239,7 +239,7 @@ If you want to validate an individual value, you can:
 // Will throw a ValidationException if $email is invalid
 $valdiator->validateValue($email, [new EmailConstraint()]);
 
-// Or
+// Or...
 
 $violations = [];
 
