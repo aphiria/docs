@@ -71,9 +71,9 @@ final class BookController extends Controller
     // Assume we have a book service to retrieve books from
     public function __construct(private IBookService $books) {}
 
-    public function getBooksById(int $bookId): Book
+    public function getBookById(int $bookId): Book
     {
-        return $this->books->getBooksById($bookId);
+        return $this->books->getBookById($bookId);
     }
 }
 ```
@@ -116,9 +116,9 @@ final class BookController
     // Assume we have a book service to retrieve books from
     public function __construct(private IBookService $books) {}
 
-    public function getBooksById(int $bookId): ResponseInterface
+    public function getBookById(int $bookId): ResponseInterface
     {
-        $book = $this->books->getBooksById($bookId);
+        $book = $this->books->getBookById($bookId);
         $psr17Factory = new Psr17Factory();
         
         // Assume our Book class has a toJson() method
