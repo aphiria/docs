@@ -40,7 +40,7 @@ HTTP is a stateless protocol.  What that means is that each request has no memor
 
 Aphiria sessions must implement `ISession` (`Session` comes built-in).
 
-<h4 id="setting-data">Setting Data</h4>
+<h3 id="setting-data">Setting Data</h3>
 
 Any kind of serializable data can be written to sessions:
 
@@ -52,14 +52,14 @@ $session->setVariable('someString', 'foo');
 $session->setVariable('someArray', ['bar', 'baz']);
 ```
 
-<h4 id="getting-data">Getting Data</h4>
+<h3 id="getting-data">Getting Data</h3>
 
 ```php
 $session->setVariable('theName', 'theValue');
 echo $session->setVariable('theName'); // "theValue"
 ```
 
-<h4 id="getting-all-data">Getting All Data</h4>
+<h3 id="getting-all-data">Getting All Data</h3>
 
 ```php
 $session->setVariable('foo', 'bar');
@@ -69,7 +69,7 @@ echo $data['foo']; // "bar"
 echo $data['baz']; // "blah"
 ```
 
-<h4 id="checking-if-session-has-variable">Checking if a Session Has a Variable</h4>
+<h3 id="checking-if-session-has-variable">Checking if a Session Has a Variable</h3>
 
 ```php
 echo $session->containsVariable('foo'); // 0
@@ -77,19 +77,19 @@ $session->setVariable('foo', 'bar');
 echo $session->containsVariable('foo'); // 1
 ```
 
-<h4 id="deleting-data">Deleting Data</h4>
+<h3 id="deleting-data">Deleting Data</h3>
 
 ```php
 $session->deleteVariable('foo');
 ```
 
-<h4 id="flushing-all-data">Flushing All Data</h4>
+<h3 id="flushing-all-data">Flushing All Data</h3>
 
 ```php
 $session->flush();
 ```
 
-<h4 id="flashing-data">Flashing Data</h4>
+<h3 id="flashing-data">Flashing Data</h3>
 
 If you want to only keep data in a session only for the next request, you can use `flash()`:
 
@@ -99,7 +99,7 @@ $session->flash('validationErrors', ['Invalid username']);
 
 On the next request, the data in `validationErrors` will be deleted.  Use `reflash()` if you need to extend the lifetime of the flash data by one more request.
 
-<h4 id="regenerating-the-id">Regenerating the ID</h4>
+<h3 id="regenerating-the-id">Regenerating the ID</h3>
 
 ```php
 $session->regenerateId();
