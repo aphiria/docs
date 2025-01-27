@@ -609,7 +609,7 @@ use Aphiria\Application\Configuration\JsonConfigurationFileReader;
 $config = new JsonConfigurationFileReader()->readConfiguration('config.json');
 ```
 
-<h3 id="reading-YAML-files">Reading YAML Files</h3>
+<h3 id="reading-yaml-files">Reading YAML Files</h3>
 
 Aphiria supports reading YAML config files, too, as long as they parse to an associative array in PHP.
 
