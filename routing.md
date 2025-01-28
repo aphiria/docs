@@ -338,6 +338,8 @@ You can read more about how request parameters are resolved in your controller m
 
 You can apply route groups, constraints, and middleware to all endpoints in a controller using the `#[Controller]` attribute.
 
+<div class="context-framework">
+
 ```php
 use Aphiria\Api\Controllers\Controller as BaseController;
 use Aphiria\Authentication\Attributes\Authenticate;
@@ -367,6 +369,40 @@ final class CourseController extends BaseController
 }
 ```
 
+</div>
+<div class="context-library">
+
+```php
+use Aphiria\Authentication\Attributes\Authenticate;
+use Aphiria\Net\Http\IResponse;
+use Aphiria\Routing\Attributes\{Controller, Get, RouteConstraint};
+use App\Courses\Course;
+
+#[Controller(
+    path: '/courses/:courseId',
+    host: 'api.example.com',
+    isHttpsOnly: true
+)]
+#[RouteConstraint(MyConstraint::class)]
+#[Authenticate]
+final class CourseController
+{
+    #[Get('')]
+    public function getCourseById(int $courseId): IResponse
+    {
+        // ...
+    }
+    
+    #[Get('/professors')]
+    public function getCourseProfessors(int $courseId): IResponse
+    {
+        // ...
+    }
+}
+```
+
+</div>
+
 When our routes get compiled, the route group path will be prefixed to the path of any route within the controller.  In the above example, this would create a route with path `/courses/:courseId` and another with path `/courses/:courseId/professors`.
   
 <h3 id="route-attributes-middleware">Middleware</h3>
@@ -393,6 +429,8 @@ final class BookController
 
 You can specify the name of the route constraint class and any primitive constructor parameter values:
 
+<div class="context-framework">
+
 ```php
 use Aphiria\Routing\Attributes\{Get, RouteConstraint};
 use App\Users\User;
@@ -407,6 +445,27 @@ final class UserController extends Controller
     }
 }
 ```
+
+</div>
+<div class="context-library">
+
+```php
+use Aphiria\Net\Http\IResponse;
+use Aphiria\Routing\Attributes\{Get, RouteConstraint};
+use App\Users\User;
+
+final class UserController
+{
+    #[Get('/users/:userId')]
+    #[RouteConstraint(MyConstraint::class, constructorParameters: ['param1'])]
+    public function getUserById(int $userId): IResponse
+    {
+        // ...
+    }
+}
+```
+
+</div>
 
 Similar to [middleware](#route-attributes-middleware), you can add route constraints to a controller class to apply it to all routes in that controller.
 
@@ -805,6 +864,8 @@ $routes
 
 Let's say your app sends an API version header, and you want to match an endpoint that supports that version.  You could do this by using a route "parameter" and a route constraint.  Let's create some routes that have the same path, but support different versions of the API:
 
+<div class="context-framework">
+
 ```php
 use Aphiria\Routing\Attributes\{Get, RouteConstraint};
 
@@ -825,6 +886,33 @@ final class CommentController extends Controller
     }
 }
 ```
+
+</div>
+<div class="context-library">
+
+```php
+use Aphiria\Net\Http\IResponse;
+use Aphiria\Routing\Attributes\{Get, RouteConstraint};
+
+final class CommentController extends Controller
+{
+    #[Get('/comments', parameters: ['Api-Version' => 'v1.0'])]
+    #[RouteConstraint(ApiVersionConstraint::class)]
+    public function getAllComments1_0(): IResponse
+    {
+        // This route will require an Api-Version value of 'v1.0'
+    }
+    
+    #[Get('/comments', parameters: ['Api-Version' => 'v2.0'])]
+    #[RouteConstraint(ApiVersionConstraint::class)]
+    public function getAllComments2_0(): IResponse
+    {
+        // This route will require an Api-Version value of "v2.0"
+    }
+}
+```
+
+</div>
 
 Now, let's add a route constraint to match the "Api-Version" header to the parameter on our route:
 
@@ -985,6 +1073,8 @@ Our route will now enforce a serial number with minimum length 6.
 
 You might find yourself wanting to create a link to a particular route within your app.  Let's say you have a route named `GetUserById` with a URI template of `/users/:userId`.  We can generate a link to get a particular user.  The best way is to inject an instance of `IRouteUriFactory` into your controller:
 
+<div class="context-framework">
+
 ```php
 use Aphiria\Api\Controllers\Controller;
 use Aphiria\Net\Http\IResponse;
@@ -1019,11 +1109,53 @@ $routeUriFactory = new AstRouteUriFactory($routes);
 $uriForUser123 = $routeUriFactory->createRouteUri('GetUserById', ['id' => 123]);
 ```
 
+</div>
+<div class="context-library">
+
+```php
+use Aphiria\Net\Http\IResponse;
+use Aphiria\Routing\Attributes\{Get, Post};
+use Aphiria\Routing\UriTemplates\IRouteUriFactory;
+
+final class UserController
+{
+    public function __construct(private IRouteUriFactory $routeUriFactory) {}
+    
+    #[Post('/users')]
+    public function createUser(User $user): IResponse
+    {
+        // Create the user...
+        
+        $location = $this->routeUriFactory->createRouteUri('GetUserById', ['userId' => $user->id]);
+        
+        return $this->created($location);
+    }
+    
+    #[Get('/users/:userId', name: 'GetUserById')]
+    public function getUserById(int $userId): IResponse
+    {
+        // Get the user...
+    }
+}
+
+// Assume you've already created your routes
+$routeUriFactory = new AstRouteUriFactory($routes);
+
+// Will create "/users/123"
+$uriForUser123 = $routeUriFactory->createRouteUri('GetUserById', ['id' => 123]);
+```
+
+</div>
+
 Generated URIs will be a relative path unless the URI template specified a host.  Absolute URIs are assumed to be HTTPS unless the URI template is specifically set to not be HTTPS-only.
 
 Optional route variables can be specified, too.  Let's assume the URI template for `GetBooksFromArchive` is `/archives/:year[/:month]`:
 
+<div class="context-framework">
+
 ```php
+use Aphiria\Api\Controllers\Controller;
+
 final class BookController extends Controller
 {
     public function __construct(private IRouteUriFactory $routeUriFactory) {}
@@ -1043,11 +1175,40 @@ final class BookController extends Controller
 }
 ```
 
+</div>
+<div class="context-library">
+
+```php
+use Aphiria\Net\Http\IResponse;
+
+final class BookController
+{
+    public function __construct(private IRouteUriFactory $routeUriFactory) {}
+    
+    #[Get('/books/links')]
+    public function getArchiveLinks(): IResponse
+    {
+        $links = [
+            // Will create "/archives/2019"
+            $this->routeUriFactory->createRouteUri('GetBooksFromArchive', ['year' => 2019]),
+            // Will create "/archives/2019/12"
+            $this->routeUriFactory->createRouteUri('GetBooksFromArchive', ['year' => 2019, 'month' => 12]),
+        ];
+        
+        return $links;
+    }
+}
+```
+
+</div>
+
 If you use [parameter attributes](controllers.md#parameter-attributes), Aphiria will respect them when determining where to apply the route variables (eg by putting them in the route path/host or in the query string).
 
 <h3 id="creating-route-requests">Creating Route Requests</h3>
 
 If your routes include a `#[Header]` variable that you'd like to auto-populate or you want to create an [HTTP request](http-requests.md) for your route and not just a URI, you can use `RouteRequestFactory`:
+
+<div class="context-framework">
 
 ```php
 use Aphiria\Api\Controllers\Controller;
@@ -1069,6 +1230,35 @@ final class BookController extends Controller
     }
 }
 ```
+
+</div>
+<div class="context-library">
+
+```php
+use Aphiria\Framework\Routing\{IRouteRequestFactory, RouteRequestFactory};
+use Aphiria\Net\Http\IResponse;
+use Aphiria\Net\Http\Response;
+use Aphiria\Routing\Attributes\Get;
+
+final class BookController
+{
+    public function __construct(private IRouteRequestFactory $routeRequestFactory) {}
+    
+    #[Get('/books/dump-request')]
+    public function dumpRequest(): IResponse
+    {
+        // For demonstration's sake, we'll just dump the raw HTTP request
+        $body = (string)$this->routeRequestFactory->createRouteRequest(
+            'GetBooksFromArchive',
+            ['year' => 2019]
+        );
+        
+        return new Response(body: $body);
+    }
+}
+```
+
+</div>
 
 > **Note:** If your route supports multiple HTTP methods, you must specify the HTTP method to use as a third parameter in `createRouteRequest()`.  If your route supports GET requests, it will automatically also support HEAD requests.  In this case, the factory will default to creating a GET request unless you specify 'HEAD' as the method.
 
