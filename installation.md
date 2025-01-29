@@ -104,7 +104,7 @@ php aphiria app:serve
 Create a virtual host in your Apache config with the following settings:
 
 ```apacheconf
-<VirtualHost *:80>
+<VirtualHost *:8080>
     ServerName YOUR_SITE_DOMAIN
     DocumentRoot YOUR_SITE_DIRECTORY/public
 
@@ -129,7 +129,7 @@ Add the following to your nginx config:
 
 ```nginx
 server {
-    listen 80;
+    listen 8080;
     server_name YOUR_SITE_DOMAIN;
     root YOUR_SITE_DIRECTORY/public;
     index index.php;
@@ -157,7 +157,7 @@ server {
 Add the following to your Caddyfile config:
 
 ```caddyfile
-YOUR_SITE_DOMAIN:80 {
+YOUR_SITE_DOMAIN:8080 {
     rewrite {
         r .*
         ext /
