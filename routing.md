@@ -667,7 +667,7 @@ final class FooModule extends AphiriaModule
     {
         $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
             $routes
-                ->get('foo')
+                ->get('/foo')
                 ->mapsToMethod(MyController::class, 'myMethod')
                 ->withMiddleware(FooMiddleware::class);
         });
