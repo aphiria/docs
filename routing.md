@@ -211,11 +211,11 @@ exit();
 
 <h3 id="route-variables">Route Variables</h3>
 
-Aphiria provides a simple syntax for your URIs.  To capture variables in your host or path, use `:varName`, eg `:subdomain.example.com` in the host or `users/:userId/profile` in the path.
+Aphiria provides a simple syntax for your URIs.  To capture variables in your host or path, use `:varName`, eg `:subdomain.example.com` in the host or `/users/:userId/profile` in the path.
 
 <h3 id="optional-route-parts">Optional Route Parts</h3>
 
-If part of your route is optional, then surround it with brackets.  For example, the following will match both `archives/2017` and `archives/2017/7`: `archives/:year[/:month]`.  Optional route parts can be nested: `archives/:year[/:month[/:day]]`.  This would match `archives/2017`, `archives/2017/07`, and `archives/2017/07/24`.
+If part of your route is optional, then surround it with brackets.  For example, the following will match both `/archives/2017` and `/archives/2017/7`: `/archives/:year[/:month]`.  Optional route parts can be nested: `/archives/:year[/:month[/:day]]`.  This would match `/archives/2017`, `/archives/2017/07`, and `/archives/2017/07/24`.
 
 <h3 id="route-groups">Route Groups</h3>
 
@@ -680,7 +680,7 @@ final class FooModule extends AphiriaModule
 
 ```php
 $routes
-    ->get('foo')
+    ->get('/foo')
     ->mapsToMethod(MyController::class, 'myMethod')
     ->withMiddleware(FooMiddleware::class);
 ```
@@ -702,7 +702,7 @@ final class FooModule extends AphiriaModule
     {
         $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
             $routes
-                ->get('foo')
+                ->get('/foo')
                 ->mapsToMethod(MyController::class, 'myMethod')
                 ->withManyMiddleware([
                     FooMiddleware::class,
@@ -718,7 +718,7 @@ final class FooModule extends AphiriaModule
 
 ```php
 $routes
-    ->get('foo')
+    ->get('/foo')
     ->mapsToMethod(MyController::class, 'myMethod')
     ->withManyMiddleware([
         FooMiddleware::class,
@@ -746,14 +746,14 @@ final class FooModule extends AphiriaModule
     {
         $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
             $routes
-                ->get('foo')
+                ->get('/foo')
                 ->mapsToMethod(MyController::class, 'myMethod')
                 ->withMiddleware(Authorization::class, ['role' => 'admin']);
             
             // Or...
             
             $routes
-                ->get('foo')
+                ->get('/foo')
                 ->mapsToMethod(MyController::class, 'myMethod')
                 ->withManyMiddleware([
                     new MiddlewareBinding(Authorization::class, ['role' => 'admin']),
@@ -771,14 +771,14 @@ final class FooModule extends AphiriaModule
 use Aphiria\Routing\Middleware\MiddlewareBinding;
 
 $routes
-    ->get('foo')
+    ->get('/foo')
     ->mapsToMethod(MyController::class, 'myMethod')
     ->withMiddleware(Authorization::class, ['role' => 'admin']);
 
 // Or...
 
 $routes
-    ->get('foo')
+    ->get('/foo')
     ->mapsToMethod(MyController::class, 'myMethod')
     ->withManyMiddleware([
         new MiddlewareBinding(Authorization::class, ['role' => 'admin']),
@@ -805,7 +805,7 @@ final class PostModule extends AphiriaModule
     {
         $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
             $routes
-                ->get('posts')
+                ->get('/posts')
                 ->mapsToMethod(PostController::class, 'getAllPosts')
                 ->withConstraint(new FooConstraint());
         });
@@ -818,7 +818,7 @@ final class PostModule extends AphiriaModule
 
 ```php
 $routes
-    ->get('posts')
+    ->get('/posts')
     ->mapsToMethod(PostController::class, 'getAllPosts')
     ->withConstraint(new FooConstraint());
 ```
@@ -840,7 +840,7 @@ final class PostModule extends AphiriaModule
     {
         $this->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
             $routes
-                ->get('posts')
+                ->get('/posts')
                 ->mapsToMethod(PostController::class, 'getAllPosts')
                 ->withManyConstraints([new FooConstraint(), new BarConstraint()]);
         });
@@ -853,7 +853,7 @@ final class PostModule extends AphiriaModule
 
 ```php
 $routes
-    ->get('posts')
+    ->get('/posts')
     ->mapsToMethod(PostController::class, 'getAllPosts')
     ->withManyConstraints([new FooConstraint(), new BarConstraint()]);
 ```
