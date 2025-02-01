@@ -60,7 +60,7 @@ Routing is the process of mapping HTTP requests to actions.  You can check out w
 
 <div class="context-framework">
 
-Let's look at how to register a route in a [module](configuration.md#modules).  First, let's define a controller to route to:
+Let's look at how to register a route in a [module](application-builders.md#modules).  First, let's define a controller to route to:
 
 ```php
 use Aphiria\Api\Controllers\Controller;
@@ -1009,7 +1009,7 @@ final class MinLengthConstraint implements IRouteVariableConstraint
 
 <div class="context-framework">
 
-Let's register our constraint with the constraint factory.  You can use a [component](configuration.md#component-routes):
+Let's register our constraint with the constraint factory.  You can use a [component](application-builders.md#component-routes):
 
 ```php
 use Aphiria\Application\IApplicationBuilder;

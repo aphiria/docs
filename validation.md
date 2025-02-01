@@ -115,7 +115,7 @@ If you prefer to not use attributes, you can use a fluent syntax to manually reg
 
 <div class="context-framework">
 
-You can use a [component](configuration.md#component-validator) to register constraints:
+You can use a [component](application-builders.md#component-validator) to register constraints:
 
 ```php
 use Aphiria\Application\IApplicationBuilder;

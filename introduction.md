@@ -55,7 +55,7 @@ final class UserServiceBinder extends Binder
 }
 ```
 
-Next, let's use a [module](configuration.md#modules) to register the binder.  We'll also configure our app to map an exception that `IUserService` might throw to an HTTP response.  Modules give you a place to configure each piece of your business domain, allowing you to easily plug-and-play code into your app.
+Next, let's use a [module](application-builders.md#modules) to register the binder.  We'll also configure our app to map an exception that `IUserService` might throw to an HTTP response.  Modules give you a place to configure each piece of your business domain, allowing you to easily plug-and-play code into your app.
 
 ```php
 final class UserModule extends AphiriaModule
@@ -99,7 +99,7 @@ Great question.  The idea for Aphiria was conceived after using ASP.NET Core.  I
  
 * A lot of coupling between framework libraries, making it difficult to substitute in third party libraries
 * Lack of support for [automatic content negotiation](content-negotiation.md)
-* Lack of simple, [code-based application configuration](configuration.md#application-builders)
+* Lack of simple, [code-based application configuration](application-builders.md#basics)
 * No [code-based model validators](validation.md)
 * No baked-in, optional support for [route](routing.md#route-attributes), [command](console.md#command-attributes), or [validator](validation.md#creating-a-validator) attributes
 * Generally too much magic going on behind the scenes

@@ -142,7 +142,7 @@ final class UserController extends Controller
 
 <div class="context-framework">
 
-Middleware will be executed automatically for you.  You can also define both [global middleware](configuration.md#component-middleware) and [route middleware](routing.md#middleware).
+Middleware will be executed automatically for you.  You can also define both [global middleware](application-builders.md#component-middleware) and [route middleware](routing.md#middleware).
 
 </div>
 <div class="context-library">

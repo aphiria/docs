@@ -149,7 +149,7 @@ final class UserBinder extends Binder
 
 <div class="context-framework">
 
-You can register `UserBinder` to your app with an [application builder](configuration.md#component-binders).
+You can register `UserBinder` to your app with an [application builder](application-builders.md#component-binders).
 
 </div>
 
