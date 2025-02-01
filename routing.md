@@ -1106,7 +1106,7 @@ final class UserController extends Controller
 $routeUriFactory = new AstRouteUriFactory($routes);
 
 // Will create "/users/123"
-$uriForUser123 = $routeUriFactory->createRouteUri('GetUserById', ['id' => 123]);
+$uriForUser123 = $routeUriFactory->createRouteUri('GetUserById', ['userId' => 123]);
 ```
 
 </div>
@@ -1142,7 +1142,7 @@ final class UserController
 $routeUriFactory = new AstRouteUriFactory($routes);
 
 // Will create "/users/123"
-$uriForUser123 = $routeUriFactory->createRouteUri('GetUserById', ['id' => 123]);
+$uriForUser123 = $routeUriFactory->createRouteUri('GetUserById', ['userId' => 123]);
 ```
 
 </div>
