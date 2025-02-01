@@ -156,7 +156,7 @@ server {
 
 Add the following to your Caddyfile config:
 
-```caddyfile
+```
 YOUR_SITE_DOMAIN:8080 {
     rewrite {
         r .*

@@ -590,6 +590,6 @@ final class SwooleApplicationBuilder extends ApplicationBuilder
 
 Finally, update `APP_BUILDER_API` in your _.env_ file, and your application will now support running asynchronously via Swoole.
 
-```dotenv
+```
 APP_BUILDER_API=\App\SwooleApplicationBuilder
 ```
