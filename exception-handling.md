@@ -33,7 +33,7 @@ At some point, your application is going to throw an unhandled exception or shut
 
 <div class="context-framework">
 
-To learn more about how to configure exceptions in modules, read the [configuration documentation](application-builders.md#component-exception-handler).
+To learn more about how to configure exceptions in modules, read the [application builders documentation](application-builders.md#component-exception-handler).
 
 </div>
 <div class="context-library">
@@ -256,7 +256,7 @@ $globalExceptionHandler->registerWithPhp();
 
 <div class="context-framework">
 
-> **Note:** Please refer to the [configuration documentation](application-builders.md#component-exception-handler) to learn more about configuring exceptions in console apps.
+> **Note:** Please refer to the [application builders documentation](application-builders.md#component-exception-handler) to learn more about configuring exceptions in console apps.
 
 </div>
 
