@@ -1,4 +1,4 @@
-<h1 id="doc-title">Configuration</h1>
+<h1 id="doc-title">Config Files</h1>
 
 <nav class="toc-nav">
 
