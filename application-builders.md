@@ -51,7 +51,7 @@ final class UserModule extends AphiriaModule
             ->withBinders($appBuilder, new UserServiceBinder())
             ->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
                 $routes
-                    ->get('users/:id')
+                    ->get('/users/:id')
                     ->mapsToMethod(UserController::class, 'getUserById');
             })
             ->withCommands($appBuilder, function (CommandRegistry $commands) {
@@ -130,7 +130,7 @@ final class UserModule extends AphiriaModule
         $this
             ->withRoutes($appBuilder, function (RouteCollectionBuilder $routes) {
                 $routes
-                    ->get('users/:id')
+                    ->get('/users/:id')
                     ->mapsToMethod(UserController::class, 'getUserById');
             })
             ->withRouteAttributes($appBuilder);
