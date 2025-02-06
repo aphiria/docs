@@ -274,6 +274,7 @@ Output writers allow you to write errors to the output and return a status code.
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
+use App\DatabaseNotFoundException;
 
 final class GlobalModule extends AphiriaModule
 {
@@ -281,8 +282,8 @@ final class GlobalModule extends AphiriaModule
     {
         $this->withConsoleExceptionOutputWriter(
             $appBuilder,
-            DatabaseNotFound::class,
-            function (DatabaseNotFound $ex, IOutput $output) {
+            DatabaseNotFoundException::class,
+            function (DatabaseNotFoundException $ex, IOutput $output) {
                 $output->writeln('<fatal>Contact a sysadmin</fatal>');
         
                 return StatusCodes::FATAL;
@@ -300,11 +301,12 @@ use Aphiria\Console\Output\IOutput;
 use Aphiria\Console\StatusCodes;
 use Aphiria\Exceptions\GlobalExceptionHandler;
 use Aphiria\Framework\Console\Exceptions\ConsoleExceptionRenderer;
+use App\DatabaseNotFoundException;
 
 $exceptionRenderer = new ConsoleExceptionRenderer();
 $exceptionRenderer->registerOutputWriter(
-    DatabaseNotFound::class,
-    function (DatabaseNotFound $ex, IOutput $output) {
+    DatabaseNotFoundException::class,
+    function (DatabaseNotFoundException $ex, IOutput $output) {
         $output->writeln('<fatal>Contact a sysadmin</fatal>');
 
         return StatusCodes::FATAL;
@@ -313,7 +315,7 @@ $exceptionRenderer->registerOutputWriter(
 
 // You can also register many exceptions-to-output writers
 $exceptionRenderer->registerManyOutputWriters([
-    DatabaseNotFound::class => function (DatabaseNotFound $ex, IOutput $output) {
+    DatabaseNotFoundException::class => function (DatabaseNotFound $ex, IOutput $output) {
         $output->writeln('<fatal>Contact a sysadmin</fatal>');
 
         return StatusCodes::FATAL;
@@ -365,6 +367,7 @@ use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Authentication\AuthenticationScheme;
 use Aphiria\Authentication\Schemes\CookieAuthenticationOptions;
 use Aphiria\Framework\Application\AphiriaModule;
+use App\DatabaseNotFoundException;
 
 final class GlobalModule extends AphiriaModule
 {
@@ -386,6 +389,7 @@ final class GlobalModule extends AphiriaModule
 ```php
 use Aphiria\Exceptions\GlobalExceptionHandler;
 use Aphiria\Framework\Api\Exceptions\ApiExceptionRenderer;
+use App\DatabaseNotFoundException;
 use Psr\Log\LogLevel;
 
 $globalExceptionHandler = new GlobalExceptionHandler(new ApiExceptionRenderer());
