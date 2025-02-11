@@ -285,7 +285,7 @@ final class GlobalModule extends AphiriaModule
         $this->withAuthenticationScheme(
             $appBuilder,
             new AuthenticationScheme('cookie', MyCookieHandler::class),
-            true
+            isDefault: true
         );
     }
 }

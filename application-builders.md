@@ -177,7 +177,7 @@ final class UserModule extends AphiriaModule
         $this->withGlobalMiddleware($appBuilder, [new MiddlewareBinding(Cors::class)]);
 
         // Or with a priority (lower number == higher priority)
-        $this->withGlobalMiddleware($appBuilder, new MiddlewareBinding(Cors::class), 1);
+        $this->withGlobalMiddleware($appBuilder, new MiddlewareBinding(Cors::class), priority: 1);
     }
 }
 ```
@@ -209,7 +209,7 @@ final class UserModule extends AphiriaModule
             ->withConsoleElement($appBuilder, new Element('foo', new Style(Color::Magenta)))
             ->withFrameworkCommands($appBuilder)
             // Or, if you wish to exclude certain built-in commands:
-            ->withFrameworkCommands($appBuilder, ['app:serve']);
+            ->withFrameworkCommands($appBuilder, commandNamesToExclude: ['app:serve']);
     }
 }
 ```
@@ -239,7 +239,7 @@ final class GlobalModule extends AphiriaModule
                 'cookie',
                 CookieAuthenticationHandler::class,
                 new CookieAuthenticationOptions(cookieName: 'authToken', claimsIssuer: 'https://example.com')
-            ), true);
+            ), isDefault: true);
     }
 }
 ```

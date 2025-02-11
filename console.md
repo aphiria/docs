@@ -695,7 +695,7 @@ final class GlobalModule extends AphiriaModule
 To exclude some built-in commands so that you can override them with your own implementation, eg `app:serve`, pass in an array of command names.
 
 ```php
-$this->withFrameworkCommands($appBuilder, ['app:serve']);
+$this->withFrameworkCommands($appBuilder, commandNamesToExclude: ['app:serve']);
 ```
 
 </div>
