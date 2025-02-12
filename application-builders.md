@@ -76,7 +76,7 @@ Modules are a great place to configure each domain of your application.  To crea
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
-use App\{MyModule1, MyModule2}
+use App\{MyModule1, MyModule2};
 
 final class GlobalModule extends AphiriaModule
 {
@@ -445,7 +445,7 @@ Let's register the binder and component to our app:
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\DependencyInjection\IContainer;
 use Aphiria\Framework\Application\AphiriaModule;
-use App\{SymfonyRouterBinder, SymfonyRouterComponent}
+use App\{SymfonyRouterBinder, SymfonyRouterComponent};
 
 final class GlobalModule extends AphiriaModule
 {
