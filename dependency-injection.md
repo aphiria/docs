@@ -35,6 +35,7 @@ A common way of defining what dependencies to inject for a particular class is u
 
 ```php
 use Aphiria\DependencyInjection\Container;
+use App\{IUserService, UserService};
 
 $container = new Container();
 $container->bindInstance(IUserService::class, new UserService());
@@ -48,6 +49,8 @@ $userService = $container->resolve(IUserService::class);
 A binding is a way of telling the container what instance to use when resolving an interface.  There are a few different ways of registering bindings:
 
 ```php
+use App\{IUserService, UserService};
+
 // Whenever you need IUserService, always use the same instance of UserService
 $container->bindInstance(IUserService::class, new UserService());
 
@@ -69,6 +72,8 @@ $container->bindClass(IUserService::class, UserService::class, resolveAsSingleto
 You can check if the container has a particular binding:
 
 ```php
+use App\IUserService;
+
 if ($container->hasBinding(IUserService::class)) {
     // ...
 }
@@ -77,12 +82,16 @@ if ($container->hasBinding(IUserService::class)) {
 You can also remove a binding:
 
 ```php
+use App\IUserService;
+
 $container->unbind(IUserService::class);
 ```
 
 If you'd like to try resolving a binding without an exception being thrown, use `tryResolve()`:
 
 ```php
+use App\{IUserService, UserService};
+
 $userService = null;
 
 if (!$container->tryResolve(IUserService::class, $userService)) {
@@ -97,6 +106,8 @@ if (!$container->tryResolve(IUserService::class, $userService)) {
 Auto-wiring is when you let the container use reflection to scan the constructor and attempt to automatically instantiate each parameter.  Let's build off the [targeted binding example](#targeted-bindings).
 
 ```php
+use App\{IUserRepository, UserRepository, UserService};
+
 $container->bindInstance(IUserRepository::class, new UserRepository());
 $userService = $container->resolve(UserService::class);
 ```
@@ -110,6 +121,8 @@ The container will scan `UserService::__construct()`, see the `IUserRepository` 
 If you want a binding to only apply when auto-wiring a specific class, use a targeted binding.  Let's say that `UserService` looked like this:
 
 ```php
+namespace App;
+
 final class UserService implements IUserService
 {
     public function __construct(private IUserRepository $userRepository) {}
@@ -121,6 +134,8 @@ final class UserService implements IUserService
 You can tell the container to use a specific instance of `IUserRepository` when resolving `UserService`:
 
 ```php
+use App\{IUserRepository, UserRepository, UserService};
+
 $container->for(
     UserService::class,
     fn($container) => $container->bindInstance(IUserRepository::class, new UserRepository())
@@ -136,6 +151,7 @@ A binder is a simple class that registers bindings to the container for a partic
 ```php
 use Aphiria\DependencyInjection\Binders\Binder;
 use Aphiria\DependencyInjection\IContainer;
+use App\{IUserRepository, IUserService, UserRepository, IUserRepository};
 
 final class UserBinder extends Binder
 {
@@ -170,6 +186,7 @@ You'll have to manually dispatch your binders.  Rather than having to dispatch _
 use Aphiria\DependencyInjection\Binders\LazyBinderDispatcher;
 use Aphiria\DependencyInjection\Binders\Metadata\Caching\FileBinderMetadataCollectionCache;
 use Aphiria\DependencyInjection\Container;
+use App\UserBinder;
 
 $container = new Container();
 $metadataCache = \getenv('ENV_NAME') === 'production'

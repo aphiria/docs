@@ -131,7 +131,7 @@ $request = new RequestBuilder()
 You can specify a body of a request:
 
 ```php
-use Aphiria\Net\Http\StringBody;
+use Aphiria\Net\Http\{RequestBuilder, StringBody};
 
 $request = new RequestBuilder()
     ->withMethod('POST')
@@ -146,6 +146,8 @@ $request = new RequestBuilder()
 You can specify multiple headers in one call:
 
 ```php
+use Aphiria\Net\Http\RequestBuilder;
+
 $request = new RequestBuilder()
     ->withManyHeaders(['Foo' => 'bar', 'Baz' => 'buzz'])
     ->build();
@@ -154,6 +156,8 @@ $request = new RequestBuilder()
 You can also set any request properties:
 
 ```php
+use Aphiria\Net\Http\RequestBuilder;
+
 $request = new RequestBuilder()
     ->withProperty('routeVars', ['id' => 123])
     ->build();
@@ -162,7 +166,7 @@ $request = new RequestBuilder()
 If you'd like to use a different request target type besides origin form, you may:
 
 ```php
-use Aphiria\Net\Http\RequestTargetType;
+use Aphiria\Net\Http\{RequestBuilder, RequestTargetType};
 
 $request = new RequestBuilder()
     ->withRequestTargetType(RequestTargetType::AbsoluteForm)
@@ -175,6 +179,7 @@ Aphiria also has a [negotiated](content-negotiation.md) request builder that can
 
 ```php
 use Aphiria\ContentNegotiation\NegotiatedRequestBuilder;
+use App\User;
 
 $request = new NegotiatedRequestBuilder()
     ->withMethod('POST')
@@ -351,7 +356,8 @@ echo (string)$request;
 By default, this will use <a href="https://tools.ietf.org/html/rfc7230#section-5.3.1" target="_blank">origin-form</a> for the request target, but you can override the request type via the constructor:
 
 ```php
-use Aphiria\Net\Http\RequestTargetType;
+use Aphiria\Net\Http\{Request, RequestTargetType};
+use Aphiria\Net\Uri;
 
 $request = new Request(
     'GET',

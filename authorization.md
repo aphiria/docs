@@ -29,6 +29,7 @@ use Aphiria\Api\Controllers\Controller;
 use Aphiria\Authorization\Attributes\AuthorizeRoles;
 use Aphiria\Net\Http\IResponse;
 use Aphiria\Routing\Attributes\Post;
+use App\Article;
 
 final class ArticleController extends Controller
 {
@@ -47,6 +48,8 @@ Here's the identical functionality, just using `IAuthority` instead of an attrib
 use Aphiria\Authorization\AuthorizationPolicy;
 use Aphiria\Authorization\IAuthority;
 use Aphiria\Authorization\RequirementHandlers\RolesRequirement;
+use Aphiria\Net\Http\IResponse;
+use App\Article;
 
 final class ArticleController extends Controller
 {
@@ -80,6 +83,8 @@ A policy consists of a name, one or more requirements, and the [authentication s
 Let's say our application requires users to be at least 13 years old to use it.  In this case, we'll create a policy that checks the `ClaimType::DateOfBirth` claim.  First, let's define our POPO requirement class:
 
 ```php
+namespace App;
+
 final class MinimumAgeRequirement
 {
     public function __construct(public readonly int $minimumAge) {}
@@ -89,6 +94,8 @@ final class MinimumAgeRequirement
 Next, let's create a handler that checks this requirement:
 
 ```php
+namespace App;
+
 use Aphiria\Authorization\AuthorizationContext;
 use Aphiria\Authorization\IAuthorizationRequirementHandler;
 use Aphiria\Security\ClaimType;
@@ -135,6 +142,7 @@ Finally, let's register this requirement handler and use it in a policy.
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Authorization\AuthorizationPolicy;
 use Aphiria\Framework\Application\AphiriaModule;
+use App\{MinimumAgeRequirement, MinimumAgeRequirementHandler};
 
 final class GlobalModule extends AphiriaModule
 {
@@ -160,6 +168,7 @@ final class GlobalModule extends AphiriaModule
 ```php
 use Aphiria\Authorization\AuthorityBuilder;
 use Aphiria\Authorization\AuthorizationPolicy;
+use App\{MinimumAgeRequirement, MinimumAgeRequirementHandler};
 
 $authority = new AuthorityBuilder()
     ->withRequirementHandler(MinimumAgeRequirement::class, new MinimumAgeRequirementHandler())
@@ -179,6 +188,7 @@ use Aphiria\Api\Controllers\Controller;
 use Aphiria\Authorization\Attributes\AuthorizePolicy;
 use Aphiria\Net\Http\IResponse;
 use Aphiria\Routing\Attributes\Post;
+use App\Rental;
 
 final class RentalController extends Controller
 {
@@ -194,8 +204,11 @@ final class RentalController extends Controller
 Similarly, we could authorize this by composing `IAuthority`:
 
 ```php
+use Aphiria\Api\Controllers\Controller;
 use Aphiria\Authentication\Attributes\Authenticate;
 use Aphiria\Authorization\IAuthority;
+use Aphiria\Net\Http\IResponse;
+use App\Rental;
 
 #[Authenticate]
 final class RentalController extends Controller
@@ -221,6 +234,8 @@ Resource authorization is the process of checking if a user has the authority to
 First, let's start by defining a requirement for our policy:
 
 ```php
+namespace App;
+
 final class AuthorizedDeleterRequirement
 {
     public function __construct(public readonly array $authorizedRoles) {}
@@ -230,10 +245,13 @@ final class AuthorizedDeleterRequirement
 Next, let's define a handler for this requirement:
 
 ```php
+namespace App;
+
 use Aphiria\Authorization\AuthorizationContext;
 use Aphiria\Authorization\IAuthorizationRequirementHandler;
 use Aphiria\Security\ClaimType;
 use Aphiria\Security\IPrincipal;
+use App\Comment;
 
 final class AuthorizedDeleterRequirementHandler implements IAuthorizationRequirementHandler
 {
@@ -280,6 +298,11 @@ Now, let's register this policy.
 <div class="context-framework">
 
 ```php
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Authorization\AuthorizationPolicy;
+use Aphiria\Framework\Application\AphiriaModule;
+use App\{AuthorizedDeleterRequirement, AuthorizedDeleterRequirementHandler};
+
 final class GlobalModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
@@ -307,6 +330,7 @@ final class GlobalModule extends AphiriaModule
 ```php
 use Aphiria\Authorization\AuthorityBuilder;
 use Aphiria\Authorization\AuthorizationPolicy;
+use App\{AuthorizedDeleterRequirement, AuthorizedDeleterRequirementHandler};
 
 $authority = new AuthorityBuilder()
     ->withRequirementHandler(AuthorizedDeleterRequirement::class, new AuthorizedDeleterRequirementHandler())
@@ -324,6 +348,7 @@ use Aphiria\Authentication\Attributes\Authenticate;
 use Aphiria\Authorization\IAuthority;
 use Aphiria\Net\Http\IResponse;
 use Aphiria\Routing\Attributes\Delete;
+use App\ICommentRepository;
 
 #[Authenticate]
 final class CommentController extends Controller

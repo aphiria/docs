@@ -120,24 +120,29 @@ Use `ResponseFormatter::setCookies()` to set multiple cookies at once.
 To delete a cookie on the client, call
 
 ```php
+use Aphiria\Net\Http\Formatting\ResponseFormatter;
+
 new ResponseFormatter()->deleteCookie($response, 'userid');
 ```
 
 <h2 id="writing-responses">Writing Responses</h2>
 
-Once you're ready to start sending the response back to the client, you can use `ResponseWriter`:
+Once you're ready to start sending the response back to the client, you can use `StreamResponseWriter`:
 
 ```php
-use Aphiria\Net\Http\ResponseWriter;
+use Aphiria\Net\Http\StreamResponseWriter;
 
-new ResponseWriter()->writeResponse($response);
+new StreamResponseWriter()->writeResponse($response);
 ```
 
 By default, this will write the response to the `php://output` stream.  You can override the stream it writes to via the constructor:
 
 ```php
+use Aphiria\IO\Streams\Stream;
+use Aphiria\Net\Http\StreamResponseWriter;
+
 $outputStream = new Stream(fopen('path/to/output', 'wb'));
-new ResponseWriter($outputStream)->writeResponse($response);
+new StreamResponseWriter($outputStream)->writeResponse($response);
 ```
 
 <h2 id="serializing-responses">Serializing Responses</h2>

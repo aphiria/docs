@@ -144,6 +144,7 @@ PSR-11's aim was to give a simple interface for [dependency injection containers
 ```php
 use Aphiria\DependencyInjection\Container;
 use Aphiria\PsrAdapters\Psr11\Psr11Container;
+use App\Foo;
 
 $aphiriaContainer = new Container();
 $psr11Container = new Psr11Container($aphiriaContainer);

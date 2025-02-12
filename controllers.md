@@ -31,8 +31,7 @@ A controller contains the methods that are invoked when your app [handles a requ
 ```php
 use Aphiria\Api\Controllers\Controller;
 use Aphiria\Routing\Attributes\Get;
-use App\Users\IUserService;
-use App\Users\User;
+use App\{IUserService, User};
 
 final class UserController extends Controller
 {
@@ -51,6 +50,10 @@ Aphiria will instantiate `UserController` via [dependency injection](dependency-
 You can also be a bit more explicit and return a response yourself.  For example, the following controller method is functionally identical to the previous example:
 
 ```php
+use Aphiria\Api\Controllers\Controller;
+use Aphiria\Net\Http\IResponse;
+use App\IUserService;
+
 final class UserController extends Controller
 {
     public function __construct(private IUserService $users) {}
@@ -91,7 +94,10 @@ If your controller method has a `void` return type, a 204 "No Content" response 
 Setting headers is simple, too:
 
 ```php
+use Aphiria\Api\Controllers\Controller;
 use Aphiria\Net\Http\Headers;
+use Aphiria\Net\Http\IResponse;
+use App\IUserService;
 
 final class UserController extends Controller
 {
@@ -118,6 +124,10 @@ Your controller methods will frequently need to do things like deserialize the r
 Object type hints are always assumed to be the request body, and can be automatically deserialized to any POPO:
 
 ```php
+use Aphiria\Api\Controllers\Controller;
+use Aphiria\Net\Http\IResponse;
+use App\{IUserService, UserDto};
+
 final class UserController extends Controller
 {
     public function __construct(private IUserService $users) {}
@@ -139,6 +149,10 @@ This works for any media type (eg JSON) that you've registered to your [content 
 Aphiria also supports resolving request parameters (eg values from the request URI or headers) in your controller methods.  It will scan route variables, and then, if no matches are found, the query string for scalar parameters.  For example, this method will grab the user ID from the route path and `includeAvatar` from the query string and cast it to a `bool`:
 
 ```php
+use Aphiria\Api\Controllers\Controller;
+use Aphiria\Routing\Attributes\Get;
+use App\User;
+
 final class UserController extends Controller
 {
     // ...
@@ -157,6 +171,11 @@ Nullable parameters and parameters with default values are also supported.  If a
 Aphiria uses `RequestParameterDeserializer` to deserialize raw request parameters to values.  By default, booleans, `DateTime`s, `DateTimeImmutable`s, floats, integers, and strings are configured for you.  By default, Aphiria attempts to deserialize `DateTime` and `DateTimeImmutable` values using the `aphiria.serialization.dateTimeFormat`, then the `aphiria.serialization.dateFormat` config value in _config.php_ if the former fails.  If you'd like to register your own deserializers, extend `Aphiria\Framework\Api\Binders\ControllerBinder` and implement your own `getRequestParameterDeserializer()` method and [register that binder](dependency-injection.md#binders).  Adding a custom deserializer is easy:
 
 ```php
+use Aphiria\Api\Controllers\{IRequestParameterDeserializer, RequestParameterDeserializer};
+use Aphiria\DependencyInjection\IContainer;
+use Aphiria\Framework\Api\Binders\ControllerBinder;
+use App\YourType;
+
 final class CustomControllerBinder extends ControllerBinder
 {
     protected function getRequestParameterDeserializer(IContainer $container): IRequestParameterDeserializer
@@ -177,6 +196,10 @@ final class CustomControllerBinder extends ControllerBinder
 You may find yourself wanting to be more explicit about where to resolve request parameters from in your controller.  For this, Aphiria provides `#[Header]`, `#[QueryString]`, and `#[RouteVariable]` attributes.  Not specifying an attribute will default to the resolution rules <a href="#request-parameters">above</a>.  Here's an example that's functionally identical to the above:
 
 ```php
+use Aphiria\Api\Controllers\Controller;
+use Aphiria\Routing\Attributes\{Get, QueryString, RouteVariable};
+use App\User;
+
 final class UserController extends Controller
 {
     // ...
@@ -193,6 +216,10 @@ final class UserController extends Controller
 Each attribute also allows you to map the controller method parameter to the name of a route variable, query string parameter, or header.  This allows you to decouple the parameter names from the URI.  The following is identical to the previous example:
 
 ```php
+use Aphiria\Api\Controllers\Controller;
+use Aphiria\Routing\Attributes\{Get, QueryString, RouteVariable};
+use App\User;
+
 final class UserController extends Controller
 {
     // ...
@@ -215,6 +242,10 @@ final class UserController extends Controller
 Request bodies might contain an array of values.  Because PHP doesn't support generics or typed arrays, you cannot use type-hints alone to deserialize arrays of values.  However, it's still easy to do within your controller methods:
 
 ```php
+use Aphiria\Api\Controllers\Controller;
+use Aphiria\Routing\Attributes\Post;
+use App\User;
+
 final class UserController extends Controller
 {
     // ...
@@ -237,7 +268,10 @@ final class UserController extends Controller
 If a request body cannot be automatically deserialized, as in the case of [arrays of objects in request bodies](#arrays-in-request-bodies), you must manually perform validation.
 
 ```php
+use Aphiria\Api\Controllers\Controller;
 use Aphiria\Api\Validation\IRequestBodyValidator;
+use Aphiria\Net\Http\IResponse;
+use App\User;
 
 final class UserController extends Controller
 {
@@ -259,6 +293,13 @@ final class UserController extends Controller
 Your controllers might need to do more advanced reading of [request data](http-requests.md), such as reading cookies, reading multipart bodies, or determining the content type of the request.  To simplify this kind of work, an instance of `RequestParser` is automatically set in your controller:
 
 ```php
+use Aphiria\Api\Controllers\Controller;
+use Aphiria\Net\Http\Headers;
+use Aphiria\Net\Http\HttpStatusCode;
+use Aphiria\Net\Http\IResponse;
+use Aphiria\Net\Http\Response;
+use Aphiria\Net\Http\StringBody;
+
 final class JsonPrettifierController extends Controller
 {
     #[Post('/prettyjson')]
@@ -284,6 +325,12 @@ final class JsonPrettifierController extends Controller
 If you need to write data back to the [response](http-responses.md), eg cookies or creating a redirect, an instance of `ResponseFormatter` is automatically available in the controller:
 
 ```php
+use Aphiria\Api\Controllers\Controller;
+use Aphiria\Net\Http\Headers\Cookie;
+use Aphiria\Net\Http\IResponse;
+use Aphiria\Routing\Attributes\Put;
+use App\{IPreferenceService, Preferences};
+
 final class PreferencesController extends Controller
 {
     public function __construct(private IPreferenceService $preferences) {}
@@ -295,7 +342,7 @@ final class PreferencesController extends Controller
         $this->preferences->save($preferences);
     
         // Write a cookie containing the preferences for a better UX
-        $response = new Response();
+        $response = $this->ok();
         $preferencesCookie = new Cookie('preferences', $preferences->toJson(), 60 * 60 * 24 * 30);
         $this->responseFormatter->setCookie($response, $preferencesCookie);
         
@@ -309,6 +356,11 @@ final class PreferencesController extends Controller
 If you're using the [authentication library](authentication.md), you can grab the current [user](authentication.md#principals):
 
 ```php
+use Aphiria\Api\Controllers\Controller;
+use Aphiria\Authentication\Attributes\Authenticate;
+use Aphiria\Routing\Attributes\Get;
+use App\Book;
+
 final class BookController extends Controller
 {
     #[Get('/books/:id')]

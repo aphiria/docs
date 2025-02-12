@@ -73,6 +73,7 @@ You might not want all exceptions to result in a 500.  For example, if you have 
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Net\Http\HttpStatusCode;
+use App\{OverdrawnException, UserNotFoundException};
 
 final class GlobalModule extends AphiriaModule
 {
@@ -106,6 +107,7 @@ final class GlobalModule extends AphiriaModule
 use Aphiria\Exceptions\GlobalExceptionHandler;
 use Aphiria\Framework\Api\Exceptions\ProblemDetailsExceptionRenderer;
 use Aphiria\Net\Http\HttpStatusCode;
+use App\UserNotFoundException;
 
 $exceptionRenderer = new ProblemDetailsExceptionRenderer();
 $exceptionRenderer->mapExceptionToProblemDetails(UserNotFoundException::class, status: HttpStatusCode::NotFound);
@@ -116,6 +118,8 @@ $globalExceptionHandler->registerWithPhp();
 You can also specify other properties in the problem details:
 
 ```php
+use App\OverdrawnException;
+
 $exceptionRenderer->mapExceptionToProblemDetails(
     OverdrawnException::class,
     type: 'https://example.com/errors/overdrawn',
@@ -148,6 +152,8 @@ First, create the exception renderer:
 <div class="context-framework">
 
 ```php
+namespace App;
+
 use Aphiria\ContentNegotiation\NegotiatedResponseFactory;
 use Aphiria\Framework\Api\Exceptions\IApiExceptionRenderer;
 use Aphiria\Net\Http\Headers;
@@ -194,12 +200,14 @@ final class CustomApiExceptionRenderer implements IApiExceptionRenderer
 }
 ```
 
-Then, to use `CustomApiExceptionRenderer`, just set `aphiria.exceptions.apiExceptionRenderer` in _config.php_ to its class name.
+Then, to use `CustomApiExceptionRenderer`, just set `aphiria.exceptions.apiExceptionRenderer` in _config.php_ to its fully-qualified class name.
 
 </div>
 <div class="context-library">
 
 ```php
+namespace App;
+
 use Aphiria\ContentNegotiation\NegotiatedResponseFactory;
 use Aphiria\Exceptions\IExceptionRenderer;
 use Aphiria\Net\Http\Headers;
@@ -244,6 +252,8 @@ final class CustomApiExceptionRenderer implements IExceptionRenderer
 Then, to use `CustomApiExceptionRenderer`, pass it into `GlobalExceptionHandler`:
 
 ```php
+use App\CustomApiExceptionRenderer;
+
 // Assume $request is already set
 $customApiExceptionRenderer = new CustomApiExceptionHandler($request);
 $globalExceptionHandler = new GlobalExceptionHandler($customApiExceptionRenderer);
@@ -273,6 +283,8 @@ Output writers allow you to write errors to the output and return a status code.
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Console\Output\IOutput;
+use Aphiria\Console\StatusCode;
 use Aphiria\Framework\Application\AphiriaModule;
 use App\DatabaseNotFoundException;
 
@@ -286,7 +298,7 @@ final class GlobalModule extends AphiriaModule
             function (DatabaseNotFoundException $ex, IOutput $output) {
                 $output->writeln('<fatal>Contact a sysadmin</fatal>');
         
-                return StatusCodes::FATAL;
+                return StatusCode::Fatal;
             }
         );
     }
@@ -298,7 +310,7 @@ final class GlobalModule extends AphiriaModule
 
 ```php
 use Aphiria\Console\Output\IOutput;
-use Aphiria\Console\StatusCodes;
+use Aphiria\Console\StatusCode;
 use Aphiria\Exceptions\GlobalExceptionHandler;
 use Aphiria\Framework\Console\Exceptions\ConsoleExceptionRenderer;
 use App\DatabaseNotFoundException;
@@ -309,16 +321,16 @@ $exceptionRenderer->registerOutputWriter(
     function (DatabaseNotFoundException $ex, IOutput $output) {
         $output->writeln('<fatal>Contact a sysadmin</fatal>');
 
-        return StatusCodes::FATAL;
+        return StatusCode::Fatal;
     }
 );
 
 // You can also register many exceptions-to-output writers
 $exceptionRenderer->registerManyOutputWriters([
-    DatabaseNotFoundException::class => function (DatabaseNotFound $ex, IOutput $output) {
+    DatabaseNotFoundException::class => function (DatabaseNotFoundException $ex, IOutput $output) {
         $output->writeln('<fatal>Contact a sysadmin</fatal>');
 
-        return StatusCodes::FATAL;
+        return StatusCode::Fatal;
     },
     // ...
 ]);
@@ -364,10 +376,9 @@ It's possible to map certain exceptions to a PSR-3 log level.  For example, if y
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
-use Aphiria\Authentication\AuthenticationScheme;
-use Aphiria\Authentication\Schemes\CookieAuthenticationOptions;
 use Aphiria\Framework\Application\AphiriaModule;
 use App\DatabaseNotFoundException;
+use Psr\Log\LogLevel;
 
 final class GlobalModule extends AphiriaModule
 {

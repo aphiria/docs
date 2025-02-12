@@ -64,7 +64,7 @@ Let's look at how to register a route in a [module](application-builders.md#modu
 
 ```php
 use Aphiria\Api\Controllers\Controller;
-use App\Books\{Book, IBookService};
+use App\{Book, IBookService};
 
 final class BookController extends Controller
 {
@@ -82,8 +82,10 @@ Next, let's use a [route builder](#route-builders) to add a route to this contro
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Authorization\Middleware\Authorize;
 use Aphiria\Framework\Application\AphiriaModule;
-use Aphiria\Routing\RouteCollectionBuilder;
+use Aphiria\Routing\RouteCollectionBuilder
+use App\BookController;
 
 final class BookModule extends AphiriaModule
 {
@@ -93,7 +95,7 @@ final class BookModule extends AphiriaModule
             $routes
                 ->get('/books/:bookId')
                 ->mapsToMethod(BookController::class, 'getBookById')
-                ->withMiddleware(Authorization::class)
+                ->withMiddleware(Authorize::class)
         });
     }
 }
@@ -107,7 +109,7 @@ Now, whenever your app receives a request like `GET /books/123`, Aphiria will au
 You can use a fluent syntax or [attributes](#route-attributes-example) to configure your routes.  We'll look at a complete example that routes a request.  First, let's define a controller that this path routes to using PSR-7 responses and PSR-11 containers:
 
 ```php
-use App\Books\{Book, IBookService};
+use App\{Book, IBookService};
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseInterface;
 
@@ -136,7 +138,7 @@ Next, let's add a route to this controller method:
 use Aphiria\Routing\Matchers\TrieRouteMatcher;
 use Aphiria\Routing\RouteCollectionBuilder;
 use Aphiria\Routing\UriTemplates\Compilers\Tries\TrieFactory;
-use App\Books\Api\{Authorization, BookController};
+use App\{Authorize, BookController};
 
 // Register the route
 $routes = new RouteCollectionBuilder();
@@ -291,8 +293,8 @@ Let's actually define a route with attributes:
 ```php
 use Aphiria\Api\Controllers\Controller;
 use Aphiria\Authentication\Attributes\Authenticate;
-use Aphiria\Routing\Attributes\{Get, Middleware};
-use App\Books\Book;
+use Aphiria\Routing\Attributes\Get;
+use App\Book;
 
 final class BookController extends Controller
 {
@@ -344,7 +346,7 @@ You can apply route groups, constraints, and middleware to all endpoints in a co
 use Aphiria\Api\Controllers\Controller as BaseController;
 use Aphiria\Authentication\Attributes\Authenticate;
 use Aphiria\Routing\Attributes\{Controller, Get, RouteConstraint};
-use App\Courses\Course;
+use App\Course;
 
 #[Controller(
     path: '/courses/:courseId',
@@ -376,7 +378,7 @@ final class CourseController extends BaseController
 use Aphiria\Authentication\Attributes\Authenticate;
 use Aphiria\Net\Http\IResponse;
 use Aphiria\Routing\Attributes\{Controller, Get, RouteConstraint};
-use App\Courses\Course;
+use App\{Course, MyConstraint};
 
 #[Controller(
     path: '/courses/:courseId',
@@ -411,8 +413,9 @@ Middleware are a separate attribute and can be applied to an entire controller c
 
 ```php
 use Aphiria\Routing\Attributes\Middleware;
+use App\Authorize;
 
-#[Middleware(Authorization::class, parameters: ['role' => 'admin'])]
+#[Middleware(Authorize::class, parameters: ['role' => 'admin'])]
 final class BookController
 {
     // ...
@@ -432,8 +435,9 @@ You can specify the name of the route constraint class and any primitive constru
 <div class="context-framework">
 
 ```php
+use Aphiria\Api\Controllers\Controller;
 use Aphiria\Routing\Attributes\{Get, RouteConstraint};
-use App\Users\User;
+use App\{MyConstraint, User};
 
 final class UserController extends Controller
 {
@@ -452,7 +456,7 @@ final class UserController extends Controller
 ```php
 use Aphiria\Net\Http\IResponse;
 use Aphiria\Routing\Attributes\{Get, RouteConstraint};
-use App\Users\User;
+use App\{MyConstraint, User};
 
 final class UserController
 {
@@ -519,6 +523,7 @@ Let's look at the different parameters route builders accept:
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Routing\RouteCollectionBuilder;
+use App\UserController;
 
 final class UserModule extends AphiriaModule
 {
@@ -537,6 +542,8 @@ final class UserModule extends AphiriaModule
 <div class="context-library">
 
 ```php
+use App\UserController;
+
 $routes
     ->get(path: '/user', host: 'api.example.com', isHttpsOnly: true)
     ->mapsToMethod(UserController::class, 'getUserById');
@@ -581,10 +588,12 @@ Route groups let you logically group routes with shared parameters, eg path pref
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Authentication\Attributes\Authenticate;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Routing\Middleware\MiddlewareBinding;
 use Aphiria\Routing\RouteCollectionBuilder;
 use Aphiria\Routing\RouteGroupOptions;
+use App\{CourseController, MyConstraint};
 
 final class CourseModule extends AphiriaModule
 {
@@ -597,7 +606,7 @@ final class CourseModule extends AphiriaModule
                     host: 'api.example.com',
                     isHttpsOnly: true,
                     constraints: [new MyConstraint()],
-                    middlewareBindings: [new MiddlewareBinding(Authentication::class)],
+                    middlewareBindings: [new MiddlewareBinding(Authenticate::class)],
                     parameters: ['role' => 'admin']
                 ),
                 function (RouteCollectionBuilder $routes) {
@@ -624,6 +633,7 @@ final class CourseModule extends AphiriaModule
 use Aphiria\Routing\Middleware\MiddlewareBinding;
 use Aphiria\Routing\RouteCollectionBuilder;
 use Aphiria\Routing\RouteGroupOptions;
+use App\{Authenticate, CourseController, MyConstraint};
 
 $routes->group(
     new RouteGroupOptions(
@@ -631,7 +641,7 @@ $routes->group(
         host: 'api.example.com',
         isHttpsOnly: true,
         constraints: [new MyConstraint()],
-        middlewareBindings: [new MiddlewareBinding(Authentication::class)],
+        middlewareBindings: [new MiddlewareBinding(Authenticate::class)],
         parameters: ['role' => 'admin']
     ),
     function (RouteCollectionBuilder $routes) {
@@ -660,6 +670,7 @@ To bind a single middleware class to your route, call:
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Routing\RouteCollectionBuilder;
+use App\{FooMiddleware, MyController};
 
 final class FooModule extends AphiriaModule
 {
@@ -679,6 +690,8 @@ final class FooModule extends AphiriaModule
 <div class="context-library">
 
 ```php
+use App\{FooMiddleware, MyController};
+
 $routes
     ->get('/foo')
     ->mapsToMethod(MyController::class, 'myMethod')
@@ -695,6 +708,7 @@ To bind many middleware classes, call:
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Routing\RouteCollectionBuilder;
+use App\{BarMiddleware, FooMiddleware, MyController};
 
 final class FooModule extends AphiriaModule
 {
@@ -717,6 +731,8 @@ final class FooModule extends AphiriaModule
 <div class="context-library">
 
 ```php
+use App\{BarMiddleware, FooMiddleware, MyController};
+
 $routes
     ->get('/foo')
     ->mapsToMethod(MyController::class, 'myMethod')
@@ -736,9 +752,11 @@ You can also add [parameters to your middleware](#middleware-parameters):
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Authorization\Middleware\Authorize;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Routing\Middleware\MiddlewareBinding;
 use Aphiria\Routing\RouteCollectionBuilder;
+use App\MyController;
 
 final class FooModule extends AphiriaModule
 {
@@ -748,7 +766,7 @@ final class FooModule extends AphiriaModule
             $routes
                 ->get('/foo')
                 ->mapsToMethod(MyController::class, 'myMethod')
-                ->withMiddleware(Authorization::class, ['role' => 'admin']);
+                ->withMiddleware(Authorize::class, ['role' => 'admin']);
             
             // Or...
             
@@ -756,7 +774,7 @@ final class FooModule extends AphiriaModule
                 ->get('/foo')
                 ->mapsToMethod(MyController::class, 'myMethod')
                 ->withManyMiddleware([
-                    new MiddlewareBinding(Authorization::class, ['role' => 'admin']),
+                    new MiddlewareBinding(Authorize::class, ['role' => 'admin']),
                     // Other middleware...
                 ]);
         });
@@ -769,11 +787,12 @@ final class FooModule extends AphiriaModule
 
 ```php
 use Aphiria\Routing\Middleware\MiddlewareBinding;
+use App\{Authorize, MyController};
 
 $routes
     ->get('/foo')
     ->mapsToMethod(MyController::class, 'myMethod')
-    ->withMiddleware(Authorization::class, ['role' => 'admin']);
+    ->withMiddleware(Authorize::class, ['role' => 'admin']);
 
 // Or...
 
@@ -781,7 +800,7 @@ $routes
     ->get('/foo')
     ->mapsToMethod(MyController::class, 'myMethod')
     ->withManyMiddleware([
-        new MiddlewareBinding(Authorization::class, ['role' => 'admin']),
+        new MiddlewareBinding(Authorize::class, ['role' => 'admin']),
         // Other middleware...
     ]);
 ```
@@ -798,6 +817,7 @@ To add a single route constraint to a route, call:
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Routing\RouteCollectionBuilder;
+use App\{FooConstraint, PostController};
 
 final class PostModule extends AphiriaModule
 {
@@ -817,6 +837,8 @@ final class PostModule extends AphiriaModule
 <div class="context-library">
 
 ```php
+use App\{FooConstraint, PostController};
+
 $routes
     ->get('/posts')
     ->mapsToMethod(PostController::class, 'getAllPosts')
@@ -833,6 +855,7 @@ To add many route constraints, call:
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Routing\RouteCollectionBuilder;
+use App\{BarConstraint, FooConstraint, PostController};
 
 final class PostModule extends AphiriaModule
 {
@@ -852,6 +875,8 @@ final class PostModule extends AphiriaModule
 <div class="context-library">
 
 ```php
+use App\{BarConstraint, FooConstraint, PostController};
+
 $routes
     ->get('/posts')
     ->mapsToMethod(PostController::class, 'getAllPosts')
@@ -867,7 +892,9 @@ Let's say your app sends an API version header, and you want to match an endpoin
 <div class="context-framework">
 
 ```php
+use Aphiria\Api\Controllers\Controller;
 use Aphiria\Routing\Attributes\{Get, RouteConstraint};
+use App\ApiVersionConstraint;
 
 final class CommentController extends Controller
 {
@@ -892,9 +919,11 @@ final class CommentController extends Controller
 
 ```php
 use Aphiria\Net\Http\IResponse;
-use Aphiria\Routing\Attributes\{Get, RouteConstraint};
+use Aphiria\Routing\Attributes\{Controller, Get, RouteConstraint};
+use App\ApiVersionConstraint;
 
-final class CommentController extends Controller
+#[Controller]
+final class CommentController
 {
     #[Get('/comments', parameters: ['Api-Version' => 'v1.0'])]
     #[RouteConstraint(ApiVersionConstraint::class)]
@@ -989,6 +1018,8 @@ Name | Description
 You can register your own constraint by implementing `IRouteVariableConstraint`.  Let's make a constraint that enforces a certain minimum string length:
 
 ```php
+namespace App;
+
 use Aphiria\Routing\UriTemplates\Constraints\IRouteVariableConstraint;
 
 final class MinLengthConstraint implements IRouteVariableConstraint
@@ -1014,6 +1045,7 @@ Let's register our constraint with the constraint factory.  You can use a [compo
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
+use App\MinLengthConstraint;
 
 final class GlobalModule extends AphiriaModule
 {
@@ -1036,6 +1068,7 @@ Let's register our constraint with the constraint factory.  You can register the
 ```php
 use Aphiria\Routing\UriTemplates\Constraints\RouteVariableConstraintFactory;
 use Aphiria\Routing\UriTemplates\Constraints\RouteVariableConstraintFactoryRegistrant;
+use App\MinLengthConstraint;
 
 // Register some built-in constraints to our factory
 $constraintFactory = new RouteVariableConstraintFactoryRegistrant()
@@ -1054,6 +1087,7 @@ Finally, register this constraint factory with the trie compiler:
 use Aphiria\Routing\Matchers\TrieRouteMatcher;
 use Aphiria\Routing\RouteCollectionBuilder;
 use Aphiria\Routing\UriTemplates\Compilers\Tries\{TrieCompiler, TrieFactory};
+use App\PartController;
 
 $routes = new RouteCollectionBuilder();
 $routes
@@ -1079,7 +1113,8 @@ You might find yourself wanting to create a link to a particular route within yo
 use Aphiria\Api\Controllers\Controller;
 use Aphiria\Net\Http\IResponse;
 use Aphiria\Routing\Attributes\{Get, Post};
-use Aphiria\Routing\UriTemplates\IRouteUriFactory;
+use Aphiria\Routing\UriTemplates\{AstRouteUriFactory, IRouteUriFactory};
+use App\User;
 
 final class UserController extends Controller
 {
@@ -1114,21 +1149,23 @@ $uriForUser123 = $routeUriFactory->createRouteUri('GetUserById', ['userId' => 12
 
 ```php
 use Aphiria\Net\Http\IResponse;
-use Aphiria\Routing\Attributes\{Get, Post};
-use Aphiria\Routing\UriTemplates\IRouteUriFactory;
+use Aphiria\Routing\Attributes\{Controller, Get, Post};
+use Aphiria\Routing\UriTemplates\{AstRouteUriFactory, IRouteUriFactory};
 
+#[Controller]
 final class UserController
 {
     public function __construct(private IRouteUriFactory $routeUriFactory) {}
     
     #[Post('/users')]
-    public function createUser(User $user): IResponse
+    public function createUser(): IResponse
     {
         // Create the user...
         
         $location = $this->routeUriFactory->createRouteUri('GetUserById', ['userId' => $user->id]);
         
-        return $this->created($location);
+        // Create response with the location...
+        
     }
     
     #[Get('/users/:userId', name: 'GetUserById')]
@@ -1155,6 +1192,8 @@ Optional route variables can be specified, too.  Let's assume the URI template f
 
 ```php
 use Aphiria\Api\Controllers\Controller;
+use Aphiria\Routing\Attributes\Get;
+use Aphiria\Routing\UriTemplates\IRouteUriFactory;
 
 final class BookController extends Controller
 {
@@ -1180,7 +1219,10 @@ final class BookController extends Controller
 
 ```php
 use Aphiria\Net\Http\IResponse;
+use Aphiria\Routing\Attributes\{Controller, Get};
+use Aphiria\Routing\UriTemplates\IRouteUriFactory;
 
+#[Controller]
 final class BookController
 {
     public function __construct(private IRouteUriFactory $routeUriFactory) {}
@@ -1236,10 +1278,10 @@ final class BookController extends Controller
 
 ```php
 use Aphiria\Framework\Routing\{IRouteRequestFactory, RouteRequestFactory};
-use Aphiria\Net\Http\IResponse;
-use Aphiria\Net\Http\Response;
-use Aphiria\Routing\Attributes\Get;
+use Aphiria\Net\Http\{IResponse, Response};
+use Aphiria\Routing\Attributes\{Controller, Get};
 
+#[Controller]
 final class BookController
 {
     public function __construct(private IRouteRequestFactory $routeRequestFactory) {}

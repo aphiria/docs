@@ -90,7 +90,8 @@ Occasionally, you'll find yourself wanting to pass primitive values to middlewar
 
 ```php
 use Aphiria\Middleware\ParameterizedMiddleware;
-use Aphiria\Net\Http\{IRequest, IRequestHandler, IResponse};
+use Aphiria\Net\Http\{IRequest, IRequestHandler, IResponse, Response};
+use App\IAuthService;
 
 final class RoleMiddleware extends ParameterizedMiddleware
 {
@@ -121,7 +122,9 @@ final class RoleMiddleware extends ParameterizedMiddleware
 To actually specify `role`, pass it into your [route configuration](routing.md#route-attributes-middleware):
 
 ```php
+use Aphiria\Api\Controllers\Controller;
 use Aphiria\Routing\Attributes\{Delete, Middleware};
+use App\RoleMiddleware;
 
 final class UserController extends Controller
 {
@@ -151,6 +154,7 @@ You'll have to set up a pipeline to execute your middleware for you.  Typically,
 
 ```php
 use Aphiria\Middleware\MiddlewarePipelineFactory;
+use App\{AuthenticationMiddleware, ControllerRequestHandler, LoggingMiddleware};
 
 // Assume these are defined by your application
 $loggingMiddleware = new LoggingMiddleware();
@@ -166,6 +170,8 @@ $pipeline = new MiddlewarePipelineFactory()->createPipeline(
 `$pipeline` will itself be a request handler, which you can then send a request through and receive a response:
 
 ```php
+use Aphiria\Net\Http\RequestFactory;
+
 $request = new RequestFactory()->createRequestFromSuperglobals($_SERVER);
 $response = $pipeline->handle($request);
 ```

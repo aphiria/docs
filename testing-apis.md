@@ -42,6 +42,7 @@ Sending a request is very simple:
 
 ```php
 use Aphiria\Net\Http\HttpStatusCode;
+use App\Book;
 use App\Tests\IntegrationTestCase;
 
 final class BookQueryTest extends IntegrationTestCase
@@ -93,6 +94,8 @@ If you pass in an instance of `IBody`, that will be used as the request body.  O
 You may find yourself wanting to [retrieve the response body as a typed PHP object](content-negotiation.md).  For example, let's say your API has an endpoint to create a user, and you want to make sure to delete that user by ID after your test:
 
 ```php
+use App\{CreatedUser, User};
+
 $response = $this->post('/users', body: new User('foo@bar.com'));
 // Assume our application has a CreatedUser class with an ID property
 $createdUser = $this->negotiateResponseBody(CreatedUser::class, $response);
@@ -180,6 +183,8 @@ $this->assertHeaderMatchesRegex('/^Bearer [a-z0-9]+$/i', $response, 'Authorizati
 <h3 id="assert-parsed-body-equals">assertParsedBodyEquals</h3>
 
 ```php
+use App\User;
+
 // Assert that the response body, after content negotiation, equals a value
 $this->assertParsedBodyEquals(new User('Dave'), $response);
 ```
@@ -187,6 +192,8 @@ $this->assertParsedBodyEquals(new User('Dave'), $response);
 <h3 id="assert-parsed-body-passes-callback">assertParsedBodyPassesCallback</h3>
 
 ```php
+use App\User;
+
 // Assert that the response body, after content negotiation, passes a callback
 $this->assertParsedBodyPassesCallback($response, User::class, fn($user) => $user->name === 'Dave');
 ```
@@ -194,6 +201,8 @@ $this->assertParsedBodyPassesCallback($response, User::class, fn($user) => $user
 <h3 id="assert-status-code-equals">assertStatusCodeEquals</h3>
 
 ```php
+use Aphiria\Net\Http\HttpStatusCode;
+
 // Assert that the response status code equals a value (can also use an int)
 $this->assertStatusCodeEquals(HttpStatusCode::Ok, $response);
 ```

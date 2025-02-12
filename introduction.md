@@ -21,6 +21,13 @@
 Aphiria is a suite of decoupled libraries that help you write expressive REST APIs without bleeding into your code base.  Let's look at an example controller.
 
 ```php
+namespace App;
+
+use Aphiria\Api\Controllers\Controller;
+use Aphiria\Net\Http\IResponse;
+use Aphiria\Routing\Attributes\{Get, Post};
+use App\{Credentials, IUserService, User};
+
 final class UserController extends Controller
 {
     public function __construct(private IUserService $users) {}
@@ -46,6 +53,12 @@ In `createUser()`, Aphiria uses [content negotiation](content-negotiation.md) to
 Let's configure our [DI container](dependency-injection.md) to inject an instance of `IUserService` into our controller via a [binder](dependency-injection.md#binders).
 
 ```php
+namespace App;
+
+use Aphiria\DependencyInjection\Binders\Binder;
+use Aphiria\DependencyInjection\IContainer;
+use App\{IUserService, UserService};
+
 final class UserServiceBinder extends Binder
 {
     public function bind(IContainer $container): void
@@ -58,6 +71,13 @@ final class UserServiceBinder extends Binder
 Next, let's use a [module](application-builders.md#modules) to register the binder.  We'll also configure our app to map an exception that `IUserService` might throw to an HTTP response.  Modules give you a place to configure each piece of your business domain, allowing you to easily plug-and-play code into your app.
 
 ```php
+namespace App;
+
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Net\Http\HttpStatusCode;
+use App\{UserNotFoundException, UserServiceBinder};
+
 final class UserModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
@@ -76,6 +96,12 @@ final class UserModule extends AphiriaModule
 Finally, let's register the module with our app, which is itself a module.
 
 ```php
+namespace App;
+
+use Aphiria\Application\IApplicationBuilder;
+use Aphiria\Framework\Application\AphiriaModule;
+use App\UserModule;
+
 final class GlobalModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void

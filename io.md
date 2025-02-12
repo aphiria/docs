@@ -90,6 +90,8 @@ If it is not knowable, then `length` will return `null`.
 Sometimes, you'll need to copy one stream to another.  One example would be writing a response body's stream to the `php://output` stream.  You can do this via
 
 ```php
+use Aphiria\IO\Streams\Stream;
+
 $destinationStream = new Stream(fopen('php://output', 'r+b'));
 $sourceStream = new Stream(fopen('path/to/file', 'r+b'));
 $sourceStream->copyToStream($destinationStream);

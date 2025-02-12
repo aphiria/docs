@@ -42,6 +42,7 @@ use Aphiria\Console\Commands\Command;
 use Aphiria\Console\Commands\CommandRegistry;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Routing\RouteCollectionBuilder;
+use App\{GenerateUserReportCommandHandler, UserController, UserServiceBinder};
 
 final class UserModule extends AphiriaModule
 {
@@ -75,12 +76,13 @@ Modules are a great place to configure each domain of your application.  To crea
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
+use App\{MyModule1, MyModule2}
 
 final class GlobalModule extends AphiriaModule
 {
     public function configure(IApplicationBuilder $appBuilder): void
     {
-        $this->withModules($appBuilder, new MyModule());
+        $this->withModules($appBuilder, new MyModule1());
 
         // Or register many modules
 
@@ -100,6 +102,7 @@ You can configure your module to require [binders](dependency-injection.md#binde
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
+use App\UserServiceBinder;
 
 final class UserModule extends AphiriaModule
 {
@@ -122,6 +125,7 @@ You can manually register [routes](routing.md) for your module, and you can enab
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Routing\RouteCollectionBuilder;
+use App\UserController;
 
 final class UserModule extends AphiriaModule
 {
@@ -143,6 +147,7 @@ You can also register [custom route variable constraints](routing.md#making-your
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
+use App\MinLengthConstraint;
 
 final class UserModule extends AphiriaModule
 {
@@ -192,6 +197,7 @@ use Aphiria\Console\Commands\Command;
 use Aphiria\Console\Commands\CommandRegistry;
 use Aphiria\Console\Output\Compilers\Elements\{Color, Element, Style};
 use Aphiria\Framework\Application\AphiriaModule;
+use App\GenerateUserReportCommandHandler;
 
 final class UserModule extends AphiriaModule
 {
@@ -283,6 +289,7 @@ use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Validation\Constraints\EmailConstraint;
 use Aphiria\Validation\ObjectConstraintsRegistryBuilder;
+use App\User;
 
 final class UserModule extends AphiriaModule
 {
@@ -309,6 +316,7 @@ use Aphiria\Console\Output\IOutput;
 use Aphiria\Console\StatusCodes;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Net\Http\HttpStatusCode;
+use App\{OverdrawnException, UserCorruptedException, UserNotFoundException};
 use Psr\Log\LogLevel;
 
 final class UserModule extends AphiriaModule
@@ -365,6 +373,8 @@ Let's say you prefer to use Symfony's router, and want to be able to add routes 
 First, let's create a binder for the router so that the DI container can resolve it:
 
 ```php
+namespace App;
+
 use Aphiria\DependencyInjection\Binders\Binder;
 use Aphiria\DependencyInjection\IContainer;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
@@ -389,6 +399,8 @@ final class SymfonyRouterBinder extends Binder
 Next, let's define a component to let us add routes.
 
 ```php
+namespace App;
+
 use Aphiria\Api\Application;
 use Aphiria\Application\IComponent;
 use Aphiria\DependencyInjection\IContainer;
@@ -433,6 +445,7 @@ Let's register the binder and component to our app:
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\DependencyInjection\IContainer;
 use Aphiria\Framework\Application\AphiriaModule;
+use App\{SymfonyRouterBinder, SymfonyRouterComponent}
 
 final class GlobalModule extends AphiriaModule
 {
@@ -452,6 +465,7 @@ All that's left is to start using the component from a module:
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Application\IModule;
+use App\SymfonyRouterComponent;
 use Symfony\Component\Routing\Route;
 
 final class MyModule implements IModule
@@ -468,8 +482,11 @@ final class MyModule implements IModule
 If you'd like a more fluent syntax like the Aphiria components, just use a trait:
 
 ```php
+namespace App;
+
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\DependencyInjection\Container;
+use App\SymfonyRouterComponent;
 use Symfony\Component\Routing\Route;
 
 trait SymfonyComponents
@@ -495,6 +512,7 @@ Then, use that trait inside your module:
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Application\IModule;
+use App\SymfonyComponents;
 use Symfony\Component\Routing\Route;
 
 final class MyModule implements IModule
@@ -526,6 +544,8 @@ interface IApplication
 The simplest way to change the `IApplication` you're running is to create your own `IApplicationBuilder` and update the appropriate environment variable to use it.  For example, let's say we wanted to switch our Aphiria app to use Swoole instead:
 
 ```php
+namespace App;
+
 use Aphiria\Application\IApplication;
 use Aphiria\Net\Http\IRequest;
 use Aphiria\Net\Http\IRequestHandler;
@@ -571,6 +591,7 @@ use Aphiria\Application\IApplication;
 use Aphiria\Application\ApplicationBuilder;
 use Aphiria\DependencyInjection\IServiceResolver;
 use Aphiria\Net\Http\IRequestHandler;
+use App\SwooleApplication;
 use Swoole\Http\Server;
 
 final class SwooleApplicationBuilder extends ApplicationBuilder

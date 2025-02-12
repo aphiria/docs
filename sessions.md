@@ -121,7 +121,11 @@ $handler = new DriverSessionHandler($driver);
 To use sessions in your controllers, simply inject it into the controller's constructor:
 
 ```php
+use Aphiria\Api\Controllers\Controller;
+use Aphiria\Net\Http\IResponse;
+use Aphiria\Routing\Attributes\Post;
 use Aphiria\Sessions\ISession;
+use App\LoginDto;
 
 final class AuthController extends Controller
 {
@@ -174,6 +178,7 @@ You might find yourself storing sensitive data in sessions, in which case you'll
 
 ```php
 use Aphiria\Sessions\Handlers\DriverSessionHandler;
+use Aphiria\Sessions\Handlers\FileSessionDriver;
 use Aphiria\Sessions\Handlers\ISessionEncrypter;
 
 $driver = new FileSessionDriver('/tmp/sessions');

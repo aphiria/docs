@@ -114,6 +114,7 @@ In Aphiria, a command defines the name, [arguments](#arguments), and [options](#
 Let's take a look at an example:
 
 ```php
+namespace App;
 
 use Aphiria\Console\Commands\Attributes\{Argument, Command, Option};
 use Aphiria\Console\Commands\ICommandHandler;
@@ -228,6 +229,7 @@ You have to register commands so that your application knows about them.  If you
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Console\Commands\{Command, CommandRegistry};
 use Aphiria\Framework\Application\AphiriaModule;
+use App\GreetingCommandHandler;
 
 final class UserModule extends AphiriaModule
 {
@@ -249,6 +251,7 @@ final class UserModule extends AphiriaModule
 
 ```php
 use Aphiria\Console\Commands\{Command, CommandRegistry};
+use App\GreetingCommandHandler;
 
 $commands = new CommandRegistry();
 $greetingCommand = new Command('greet', arguments: [/* ... */], options: [/* ... */]);
@@ -309,7 +312,8 @@ Let's look at an example that duplicates the [greeting example from above](#regi
 
 ```php
 use Aphiria\Console\Commands\Attributes\{Argument, Command, Option};
-use Aphiria\Console\Input\{ArgumentType, OptionType};
+use Aphiria\Console\Input\{ArgumentType, Input, OptionType};
+use Aphiria\Console\Output\IOutput;
 
  #[
     Command('greet', 'Greets a person'),
@@ -614,7 +618,7 @@ You can create your own style elements.
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
-use Aphiria\Console\Output\Compilers\Elements\{Color, Element, Style};
+use Aphiria\Console\Output\Compilers\Elements\{Color, Element, Style, TextStyle};
 use Aphiria\Framework\Application\AphiriaModule;
 
 final class GlobalModule extends AphiriaModule
@@ -623,7 +627,7 @@ final class GlobalModule extends AphiriaModule
     {
         $this->withConsoleElement(
             $appBuilder,
-            new Element('foo', new Style(Colors::BLACK, Colors::YELLOW, [TextStyles::BOLD])
+            new Element('foo', new Style(Color::Black, Color::Yellow, [TextStyle::Bold])
         );
     }
 }
@@ -647,7 +651,7 @@ $commands = new CommandRegistry();
 // Register a custom element
 $elements = new ElementRegistry();
 $elements->registerElement(
-    new Element('foo', new Style(Colors::BLACK, Colors::YELLOW, [TextStyles::BOLD])
+    new Element('foo', new Style(Color::Black, Color::Yellow, [TextStyles::Bold])
 );
 $outputCompiler = new OutputCompiler($elements);
 $output = new ConsoleOutput($outputCompiler);

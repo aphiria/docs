@@ -108,7 +108,7 @@ Here's how we'd negotiate and deserialize the request body:
 
 ```php
 use Aphiria\ContentNegotiation\NegotiatedBodyDeserializer;
-use App\Users\User;
+use App\User;
 
 $bodyDeserializer = new NegotiatedBodyDeserializer($contentNegotiator);
 // Assume the request was already instantiated

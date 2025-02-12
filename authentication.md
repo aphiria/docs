@@ -54,6 +54,7 @@ use Aphiria\Api\Controllers\Controller;
 use Aphiria\Authentication\IAuthenticator;
 use Aphiria\Net\Http\IResponse;
 use Aphiria\Routing\Attributes\Get;
+use App\User;
 
 final class UserController extends Controller
 {
@@ -277,6 +278,7 @@ You can use a [component](application-builders.md#component-authenticators) to r
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Authentication\AuthenticationScheme;
 use Aphiria\Framework\Application\AphiriaModule;
+use App\MyCookieHandler;
 
 final class GlobalModule extends AphiriaModule
 {
@@ -299,6 +301,7 @@ You can use `AuthenticationBuilder::withScheme()` to register a default scheme:
 ```php
 use Aphiria\Authentication\AuthenticationScheme;
 use Aphiria\Authentication\AuthenticatorBuilder;
+use App\MyCookieHandler;
 
 $authenticator = new AuthenticatorBuilder()
     // ...
