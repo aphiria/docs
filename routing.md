@@ -145,7 +145,7 @@ $routes = new RouteCollectionBuilder();
 $routes
     ->get('/books/:bookId')
     ->mapsToMethod(BookController::class, 'getBookById')
-    ->withMiddleware(Authorization::class);
+    ->withMiddleware(Authorize::class);
 
 // Set up the route matcher
 $routeMatcher = new TrieRouteMatcher(new TrieFactory($routes->build())->createTrie());
