@@ -346,7 +346,7 @@ You can apply route groups, constraints, and middleware to all endpoints in a co
 use Aphiria\Api\Controllers\Controller as BaseController;
 use Aphiria\Authentication\Attributes\Authenticate;
 use Aphiria\Routing\Attributes\{Controller, Get, RouteConstraint};
-use App\Course;
+use App\{Course, MyConstraint};
 
 #[Controller(
     path: '/courses/:courseId',

@@ -110,10 +110,8 @@ $this->delete("/users/{$createdUser->id}");
 Mocking authentication calls in integration tests is easy.  Just call `actingAs()` in your test and pass in a callback for the call(s) you want to make while authenticating as the desired principal:
 
 ```php
-use Aphiria\Net\Http\HttpStatusCode;
-use Aphiria\Net\Http\StringBody;
-use Aphiria\Security\Identity;
-use Aphiria\Security\User;
+use Aphiria\Net\Http\{HttpStatusCode, StringBody};
+use Aphiria\Security\{Identity, User};
 use App\Tests\Integration\IntegrationTestCase;
 
 final class UserIntegrationTest extends IntegrationTestCase

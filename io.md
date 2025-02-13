@@ -114,8 +114,7 @@ $stream->close();
 In some cases, such as [multi-part requests](http-requests.md#multipart-requests), you may need to append multiple streams together, yet treat them like a single stream.  This is where `MultiStream` comes in handy:
 
 ```php
-use Aphiria\IO\Streams\MultiStream;
-use Aphiria\IO\Streams\Stream;
+use Aphiria\IO\Streams\{MultiStream, Stream};
 
 $stream1 = new Stream('php://temp', 'r+b');
 $stream1->write('foo');

@@ -159,6 +159,8 @@ Content-Length: 36
 By default, `ContentNegotiator` uses `AcceptLanguageMatcher` to find the best language to respond in from the `Accept-Language` header.  However, if your locale is, for example, set as a query string parameter, you can use a custom language matcher and inject it into your `ContentNegotiator`.
 
 ```php
+namespace App;
+
 use Aphiria\ContentNegotiation\ILanguageMatcher;
 use Aphiria\Net\Http\Formatting\RequestParser;
 use Aphiria\Net\Http\IRequest;
@@ -192,6 +194,8 @@ Pass your language matcher into `ContentNegotiator`.
 
 ```php
 use Aphiria\ContentNegotiation\ContentNegotiator;
+use Aphiria\Net\Http\Formatting\RequestParser;
+use App\QueryStringLanguageMatcher;
 
 $languageMatcher = new QueryStringLanguageMatcher(new RequestParser());
 $contentNegotiator = new ContentNegotiator(

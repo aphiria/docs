@@ -124,8 +124,7 @@ You can use a [component](application-builders.md#component-validator) to regist
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
-use Aphiria\Validation\Constraints\EmailConstraint;
-use Aphiria\Validation\Constraints\RequiredConstraint;
+use Aphiria\Validation\Constraints\{EmailConstraint, RequiredConstraint};
 use Aphiria\Validation\ObjectConstraintsRegistryBuilder;
 use App\User;
 
@@ -147,8 +146,7 @@ final class UserModule extends AphiriaModule
 <div class="context-library">
 
 ```php
-use Aphiria\Validation\Constraints\EmailConstraint;
-use Aphiria\Validation\Constraints\RequiredConstraint;
+use Aphiria\Validation\Constraints\{EmailConstraint, RequiredConstraint};
 use Aphiria\Validation\ObjectConstraintsRegistryBuilder;
 use Aphiria\Validation\Validator;
 use App\User;

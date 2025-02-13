@@ -408,6 +408,8 @@ If the `$choices` array is associative, then the keys will map to values rather 
 For security reasons, such as when entering a password, you might want to hide a user's input as they're typing it.  To do so, just mark a question as hidden:
 
 ```php
+use Aphiria\Console\Output\Prompts\Question;
+
 $question = new Question('Password', isHidden: true);
 $prompt->ask($question, $output);
 ```
@@ -554,7 +556,7 @@ To explicitly complete the progress bar, call
 $progressBar->complete();
 ```
 
-Each time progress is made, the formatter will be update.
+Each time progress is made, the formatter will be updated.
 
 <h4 id="customizing-progress-bars">Customizing Progress Bars</h4>
 
@@ -638,7 +640,7 @@ final class GlobalModule extends AphiriaModule
 
 ```php
 use Aphiria\Console\Commands\CommandRegistry;
-use Aphiria\Console\Output\Compilers\Elements\{Colors, Element, ElementRegistry, Style, TextStyles};
+use Aphiria\Console\Output\Compilers\Elements\{Color, Element, ElementRegistry, Style, TextStyle};
 use Aphiria\Console\Output\Compilers\OutputCompiler;
 use Aphiria\Console\Output\ConsoleOutput;
 use Aphiria\DependencyInjection\Container;
@@ -651,7 +653,7 @@ $commands = new CommandRegistry();
 // Register a custom element
 $elements = new ElementRegistry();
 $elements->registerElement(
-    new Element('foo', new Style(Color::Black, Color::Yellow, [TextStyles::Bold])
+    new Element('foo', new Style(Color::Black, Color::Yellow, [TextStyle::Bold])
 );
 $outputCompiler = new OutputCompiler($elements);
 $output = new ConsoleOutput($outputCompiler);

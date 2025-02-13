@@ -47,8 +47,7 @@ Requests are HTTP messages sent by clients to servers.  They contain data like t
 Let's create a request:
 
 ```php
-use Aphiria\Net\Http\Request;
-use Aphiria\Net\Http\StringBody;
+use Aphiria\Net\Http\{Request, StringBody};
 use Aphiria\Net\Uri;
 
 $request = new Request('GET', new Uri('https://example.com'));
@@ -83,9 +82,7 @@ $properties = $request->properties;
 Manually creating a request is easy:
 
 ```php
-use Aphiria\Net\Http\Headers;
-use Aphiria\Net\Http\Request;
-use Aphiria\Net\Http\StringBody;
+use Aphiria\Net\Http\{Headers, Request, StringBody};
 use Aphiria\Net\Uri;
 
 $request = new Request(

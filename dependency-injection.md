@@ -151,7 +151,7 @@ A binder is a simple class that registers bindings to the container for a partic
 ```php
 use Aphiria\DependencyInjection\Binders\Binder;
 use Aphiria\DependencyInjection\IContainer;
-use App\{IUserRepository, IUserService, UserRepository, IUserRepository};
+use App\{IUserRepository, IUserService, UserRepository, UserService};
 
 final class UserBinder extends Binder
 {

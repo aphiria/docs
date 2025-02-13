@@ -95,8 +95,7 @@ Cookies are headers that are automatically appended to each request from the cli
 
 ```php
 use Aphiria\Net\Http\Formatting\ResponseFormatter;
-use Aphiria\Net\Http\Headers\Cookie;
-use Aphiria\Net\Http\Headers\SameSiteMode;
+use Aphiria\Net\Http\Headers\{Cookie, SameSiteMode};
 
 new ResponseFormatter()->setCookie(
     $response,

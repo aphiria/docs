@@ -38,8 +38,7 @@ Let's look at an example of a module:
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
-use Aphiria\Console\Commands\Command;
-use Aphiria\Console\Commands\CommandRegistry;
+use Aphiria\Console\Commands\{Command, CommandRegistry};
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Routing\RouteCollectionBuilder;
 use App\{GenerateUserReportCommandHandler, UserController, UserServiceBinder};
@@ -170,6 +169,7 @@ Some modules might need to add global [middleware](middleware.md) to your applic
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Middleware\MiddlewareBinding;
+use App\Cors;
 
 final class UserModule extends AphiriaModule
 {
@@ -193,8 +193,7 @@ You can manually register [console commands](console.md#creating-commands), and 
 
 ```php
 use Aphiria\Application\IApplicationBuilder;
-use Aphiria\Console\Commands\Command;
-use Aphiria\Console\Commands\CommandRegistry;
+use Aphiria\Console\Commands\{Command, CommandRegistry};
 use Aphiria\Console\Output\Compilers\Elements\{Color, Element, Style};
 use Aphiria\Framework\Application\AphiriaModule;
 use App\GenerateUserReportCommandHandler;
@@ -227,7 +226,9 @@ Aphiria provides methods for configuring your [authenticator](authentication.md)
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Authentication\AuthenticationScheme;
+use Aphiria\Authentication\Schemes\BasicAuthenticationHandler;
 use Aphiria\Authentication\Schemes\BasicAuthenticationOptions;
+use Aphiria\Authentication\Schemes\CookieAuthenticationHandler;
 use Aphiria\Authentication\Schemes\CookieAuthenticationOptions;
 use Aphiria\Framework\Application\AphiriaModule;
 
@@ -313,7 +314,7 @@ Exceptions may be mapped to [custom problem details](exception-handling.md#custo
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Console\Output\IOutput;
-use Aphiria\Console\StatusCodes;
+use Aphiria\Console\StatusCode;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Net\Http\HttpStatusCode;
 use App\{OverdrawnException, UserCorruptedException, UserNotFoundException};
@@ -345,7 +346,7 @@ final class UserModule extends AphiriaModule
                 function (UserNotFoundException $ex, IOutput $output) {
                     $output->writeln('Missing user');
     
-                    return StatusCodes::FATAL;
+                    return StatusCode::Fatal;
                 }
             )
             ->withLogLevelFactory(
@@ -377,10 +378,8 @@ namespace App;
 
 use Aphiria\DependencyInjection\Binders\Binder;
 use Aphiria\DependencyInjection\IContainer;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Matcher\{UrlMatcher, UrlMatcherInterface};
+use Symfony\Component\Routing\{RequestContext, RouteCollection};
 
 final class SymfonyRouterBinder extends Binder
 {
@@ -405,8 +404,7 @@ use Aphiria\Api\Application;
 use Aphiria\Application\IComponent;
 use Aphiria\DependencyInjection\IContainer;
 use Aphiria\Net\Http\IRequestHandler;
-use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\{Route, RouteCollection};
 
 final class SymfonyRouterComponent implements IComponent
 {
@@ -510,8 +508,7 @@ trait SymfonyComponents
 Then, use that trait inside your module:
 
 ```php
-use Aphiria\Application\IApplicationBuilder;
-use Aphiria\Application\IModule;
+use Aphiria\Application\{IApplicationBuilder, IModule};
 use App\SymfonyComponents;
 use Symfony\Component\Routing\Route;
 
@@ -547,12 +544,8 @@ The simplest way to change the `IApplication` you're running is to create your o
 namespace App;
 
 use Aphiria\Application\IApplication;
-use Aphiria\Net\Http\IRequest;
-use Aphiria\Net\Http\IRequestHandler;
-use Aphiria\Net\Http\IResponse;
-use Swoole\Http\Request;
-use Swoole\Http\Response;
-use Swoole\Http\Server;
+use Aphiria\Net\Http\{IRequest, IRequestHandler, IResponse};
+use Swoole\Http\{Request, Response, Server};
 
 final class SwooleApplication implements IApplication
 {
@@ -587,7 +580,6 @@ Next, create an `IApplicationBuilder` that builds an instance of our `SwooleAppl
 ```php
 namespace App;
 
-use Aphiria\Application\IApplication;
 use Aphiria\Application\ApplicationBuilder;
 use Aphiria\DependencyInjection\IServiceResolver;
 use Aphiria\Net\Http\IRequestHandler;
