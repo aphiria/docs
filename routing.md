@@ -109,10 +109,12 @@ Now, whenever your app receives a request like `GET /books/123`, Aphiria will au
 You can use a fluent syntax or [attributes](#route-attributes-example) to configure your routes.  We'll look at a complete example that routes a request.  First, let's define a controller that this path routes to using PSR-7 responses and PSR-11 containers:
 
 ```php
+use Aphiria\Routing\Attributes\Controller;
 use App\{Book, IBookService};
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseInterface;
 
+#[Controller]
 final class BookController
 {
     // Assume we have a book service to retrieve books from
@@ -412,9 +414,10 @@ When our routes get compiled, the route group path will be prefixed to the path 
 Middleware are a separate attribute and can be applied to an entire controller class or to a specific controller method:
 
 ```php
-use Aphiria\Routing\Attributes\Middleware;
+use Aphiria\Routing\Attributes\{Controller, Middleware};
 use App\Authorize;
 
+#[Controller]
 #[Middleware(Authorize::class, parameters: ['role' => 'admin'])]
 final class BookController
 {
@@ -455,9 +458,10 @@ final class UserController extends Controller
 
 ```php
 use Aphiria\Net\Http\IResponse;
-use Aphiria\Routing\Attributes\{Get, RouteConstraint};
+use Aphiria\Routing\Attributes\{Controller, Get, RouteConstraint};
 use App\{MyConstraint, User};
 
+#[Controller]
 final class UserController
 {
     #[Get('/users/:userId')]
