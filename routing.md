@@ -292,6 +292,8 @@ $result = $routeMatcher->matchRoute(
 
 Let's actually define a route with attributes:
 
+<div class="context-framework">
+
 ```php
 use Aphiria\Api\Controllers\Controller;
 use Aphiria\Authentication\Attributes\Authenticate;
@@ -307,6 +309,26 @@ final class BookController extends Controller
     }
 }
 ```
+
+</div>
+<div class="context-library">
+
+```php
+use Aphiria\Routing\Attributes\{Controller, Get};
+use App\{Authenticate, Book};
+
+#[Controller]
+final class BookController
+{
+    #[Get('/books/:bookId'), Authenticate]
+    public function getBookById(int $bookId): Book
+    {
+        // ...
+    }
+}
+```
+
+</div>
 
 > **Note:** Controllers must either extend `Aphiria\Api\Controllers\Controller` or use the `#[Controller]` attribute.
 
@@ -377,10 +399,9 @@ final class CourseController extends BaseController
 <div class="context-library">
 
 ```php
-use Aphiria\Authentication\Attributes\Authenticate;
 use Aphiria\Net\Http\IResponse;
 use Aphiria\Routing\Attributes\{Controller, Get, RouteConstraint};
-use App\{Course, MyConstraint};
+use App\{Authenticate, Course, MyConstraint};
 
 #[Controller(
     path: '/courses/:courseId',
@@ -413,21 +434,37 @@ When our routes get compiled, the route group path will be prefixed to the path 
 
 Middleware are a separate attribute and can be applied to an entire controller class or to a specific controller method:
 
-```php
-use Aphiria\Routing\Attributes\{Controller, Middleware};
-use App\Authorize;
 
-#[Controller]
-#[Middleware(Authorize::class, parameters: ['role' => 'admin'])]
-final class BookController
+<div class="context-framework">
+
+```php
+use Aphiria\Api\Controllers\Controller;
+use Aphiria\Routing\Attributes\Middleware;
+use App\MyMiddleware;
+
+#[Middleware(MyMiddleware::class, parameters: ['foo' => 'bar'])]
+final class BookController extends Controller
 {
     // ...
 }
 ```
 
-<div class="context-framework">
-
 > **Note:** You can also use the nearly identical `Aphiria\Middleware\Attributes\Middleware` attribute instead of the routing library's.  The two are interchangeable.
+
+</div>
+<div class="context-library">
+
+```php
+use Aphiria\Routing\Attributes\{Controller, Middleware};
+use App\MyMiddleware;
+
+#[Controller]
+#[Middleware(MyMiddleware::class, parameters: ['foo' => 'bar'])]
+final class BookController
+{
+    // ...
+}
+```
 
 </div>
 
