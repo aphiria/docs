@@ -229,8 +229,7 @@ This will build a primary identity with the specified claims.  The following flu
 If you want to build multiple identities for your principal, you can.
 
 ```php
-use Aphiria\Security\IdentityBuilder;
-use Aphiria\Security\PrincipalBuilder;
+use Aphiria\Security\{IdentityBuilder, PrincipalBuilder};
 
 $user = new PrincipalBuilder('example.com')
     ->withIdentity(function (IdentityBuilder $identity) {
@@ -299,8 +298,7 @@ final class GlobalModule extends AphiriaModule
 You can use `AuthenticationBuilder::withScheme()` to register a default scheme:
 
 ```php
-use Aphiria\Authentication\AuthenticationScheme;
-use Aphiria\Authentication\AuthenticatorBuilder;
+use Aphiria\Authentication\{AuthenticationScheme, AuthenticatorBuilder};
 use App\MyCookieHandler;
 
 $authenticator = new AuthenticatorBuilder()
@@ -401,8 +399,7 @@ final class GlobalModule extends AphiriaModule
 Let's register this scheme with `AuthenticationBuilder`:
 
 ```php
-use Aphiria\Authentication\AuthenticationScheme;
-use Aphiria\Authentication\AuthenticatorBuilder;
+use Aphiria\Authentication\{AuthenticationScheme, AuthenticatorBuilder};
 use Aphiria\Authentication\Schemes\BasicAuthenticationOptions;
 
 $authenticator = new AuthenticatorBuilder()
@@ -462,8 +459,7 @@ final class GlobalModule extends AphiriaModule
 <div class="context-library">
 
 ```php
-use Aphiria\Authentication\AuthenticationScheme;
-use Aphiria\Authentication\AuthenticatorBuilder;
+use Aphiria\Authentication\{AuthenticationScheme, AuthenticatorBuilder};
 use Aphiria\Authentication\Schemes\CookieAuthenticationOptions;
 use Aphiria\Net\Http\Headers\SameSiteMode;
 
@@ -522,9 +518,33 @@ if (!$result->passed) {
 $user = $result->user;
 ```
 
+> **Note:** If you pass in a string failure message, `$result->failure` will return an instance of `Exception` with that message.
+
 <h2 id="customizing-authentication-failure-responses">Customizing Authentication Failure Responses</h2>
 
-By default, when authentication in the `Authenticate` middleware fails, `challenge()` will be called on the same scheme handler that we attempted to authenticate with.  Most handlers' `challenge()` methods will set the status code to 401 or redirect you to the login page, depending on the implementation.  If you'd like to customize this, you can extend `Authenticate` and override `handleFailedAuthenticationResult()` to return a response.
+By default, when authentication in the `Authenticate` middleware fails, `challenge()` will be called on the same scheme handler that we attempted to authenticate with.  Most handlers' `challenge()` methods will set the status code to 401 or redirect you to the login page, depending on the implementation.  If you'd like to customize this, you can extend `Authenticate` and override `handleFailedAuthenticationResult()` to return a response.  Let's look at an example:
+
+```php
+use Aphiria\Authentication\AuthenticationResult;
+use Aphiria\Authentication\Middleware\Authenticate as BaseAuthenticate;
+use Aphiria\Net\Http\{HttpStatusCode, IRequest, IResponse, Response, StringBody};
+
+final class Authenticate extends BaseAuthenticate
+{
+    protected function handleFailedAuthenticationResult(
+        IRequest $request,
+        AuthenticationResult $failedAuthenticationResult
+    ): IResponse {
+        // Let's return a response with body "You are not logged in"
+        $response = new Response(HttpStatusCode::Unauthorized);
+        $response->body = new StringBody('You are not logged in');
+        
+        return $response;
+    }
+}
+```
+
+Then, use your custom `Authenticate` middleware instead of the built-in one.
 
 <div class="context-framework">
 

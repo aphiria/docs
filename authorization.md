@@ -45,8 +45,7 @@ final class ArticleController extends Controller
 Here's the identical functionality, just using `IAuthority` instead of an attribute:
 
 ```php
-use Aphiria\Authorization\AuthorizationPolicy;
-use Aphiria\Authorization\IAuthority;
+use Aphiria\Authorization\{AuthorizationPolicy, IAuthority};
 use Aphiria\Authorization\RequirementHandlers\RolesRequirement;
 use Aphiria\Net\Http\IResponse;
 use App\Article;
@@ -96,10 +95,8 @@ Next, let's create a handler that checks this requirement:
 ```php
 namespace App;
 
-use Aphiria\Authorization\AuthorizationContext;
-use Aphiria\Authorization\IAuthorizationRequirementHandler;
-use Aphiria\Security\ClaimType;
-use Aphiria\Security\IPrincipal;
+use Aphiria\Authorization\{AuthorizationContext, IAuthorizationRequirementHandler};
+use Aphiria\Security\{ClaimType, IPrincipal};
 
 final class MinimumAgeRequirementHandler implements IAuthorizationRequirementHandler
 {
@@ -166,8 +163,7 @@ final class GlobalModule extends AphiriaModule
 <div class="context-library">
 
 ```php
-use Aphiria\Authorization\AuthorityBuilder;
-use Aphiria\Authorization\AuthorizationPolicy;
+use Aphiria\Authorization\{AuthorityBuilder, AuthorizationPolicy};
 use App\{MinimumAgeRequirement, MinimumAgeRequirementHandler};
 
 $authority = new AuthorityBuilder()
@@ -247,10 +243,8 @@ Next, let's define a handler for this requirement:
 ```php
 namespace App;
 
-use Aphiria\Authorization\AuthorizationContext;
-use Aphiria\Authorization\IAuthorizationRequirementHandler;
-use Aphiria\Security\ClaimType;
-use Aphiria\Security\IPrincipal;
+use Aphiria\Authorization\{AuthorizationContext, IAuthorizationRequirementHandler};
+use Aphiria\Security\{ClaimType, IPrincipal};
 use App\Comment;
 
 final class AuthorizedDeleterRequirementHandler implements IAuthorizationRequirementHandler
@@ -328,8 +322,7 @@ final class GlobalModule extends AphiriaModule
 <div class="context-library">
 
 ```php
-use Aphiria\Authorization\AuthorityBuilder;
-use Aphiria\Authorization\AuthorizationPolicy;
+use Aphiria\Authorization\{AuthorityBuilder, AuthorizationPolicy};
 use App\{AuthorizedDeleterRequirement, AuthorizedDeleterRequirementHandler};
 
 $authority = new AuthorityBuilder()
@@ -388,4 +381,36 @@ if (!$authorizationResult->passed) {
 
 <h2 id="customizing-failed-authorization-responses">Customizing Failed Authorization Responses</h2>
 
-By default, authorization done in the `Authorize` middleware invokes [`IAuthenticator::challenge()`](authentication.md) when a user is not authenticated, and `IAuthenticator::forbid()` when they are not authorized.  If you would like to customize these responses, simply override `Authorize::handleUnauthenticatedUser()` and `Authorize::handleFailedAuthorizationResult()`.
+By default, authorization done in the `Authorize` middleware invokes [`IAuthenticator::challenge()`](authentication.md) when a user is not authenticated, and `IAuthenticator::forbid()` when they are not authorized.  If you would like to customize these responses, simply override `Authorize::handleUnauthenticatedUser()` and `Authorize::handleFailedAuthorizationResult()`.  Let's look at an example:
+
+```php
+use Aphiria\Authorization\{AuthorizationPolicy, AuthorizationResult};
+use Aphiria\Authorization\Middleware\Authorize as BaseAuthorize;
+use Aphiria\Net\Http\{HttpStatusCode, IRequest, IResponse, Response, StringBody};
+
+final class Authorize extends BaseAuthorize
+{
+    protected function handleFailedAuthorizationResult(
+        IRequest $request,
+        AuthorizationPolicy $policy,
+        AuthorizationResult $authorizationResult
+    ): IResponse {
+        // Let's return a response with body "You are not authorized"
+        $response = new Response(HttpStatusCode::Forbidden);
+        $response->body = new StringBody('You are not authorized');
+        
+        return $response;
+    }
+
+    protected function handleUnauthenticatedUser(IRequest $request, AuthorizationPolicy $policy): IResponse
+    {
+        // Let's return a response with body "You are not logged in"
+        $response = new Response(HttpStatusCode::Unauthorized);
+        $response->body = new StringBody('You are not logged in');
+        
+        return $response;
+    }
+}
+```
+
+Then, use your custom `Authorize` middleware instead of the built-in one.

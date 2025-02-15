@@ -258,8 +258,7 @@ Customizing your [authority](authorization.md) is also simple.
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Authorization\AuthorizationPolicy;
-use Aphiria\Authorization\Requirements\RolesRequirement;
-use Aphiria\Authorization\Requirements\RolesRequirementHandler;
+use Aphiria\Authorization\Requirements\{RolesRequirement, RolesRequirementHandler};
 use Aphiria\Framework\Application\AphiriaModule;
 
 final class GlobalModule extends AphiriaModule
@@ -461,8 +460,7 @@ final class GlobalModule extends AphiriaModule
 All that's left is to start using the component from a module:
 
 ```php
-use Aphiria\Application\IApplicationBuilder;
-use Aphiria\Application\IModule;
+use Aphiria\Application\{IApplicationBuilder, IModule};
 use App\SymfonyRouterComponent;
 use Symfony\Component\Routing\Route;
 

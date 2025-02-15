@@ -632,8 +632,7 @@ use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Authentication\Attributes\Authenticate;
 use Aphiria\Framework\Application\AphiriaModule;
 use Aphiria\Routing\Middleware\MiddlewareBinding;
-use Aphiria\Routing\RouteCollectionBuilder;
-use Aphiria\Routing\RouteGroupOptions;
+use Aphiria\Routing\{RouteCollectionBuilder, RouteGroupOptions};
 use App\{CourseController, MyConstraint};
 
 final class CourseModule extends AphiriaModule
@@ -672,8 +671,7 @@ final class CourseModule extends AphiriaModule
 
 ```php
 use Aphiria\Routing\Middleware\MiddlewareBinding;
-use Aphiria\Routing\RouteCollectionBuilder;
-use Aphiria\Routing\RouteGroupOptions;
+use Aphiria\Routing\{RouteCollectionBuilder, RouteGroupOptions};
 use App\{Authenticate, CourseController, MyConstraint};
 
 $routes->group(
@@ -1362,8 +1360,7 @@ To enable caching, pass in an `IRouteCache` (`FileRouteCache` is provided) to th
 
 ```php
 use Aphiria\Routing\Caching\FileRouteCache;
-use Aphiria\Routing\RouteCollection;
-use Aphiria\Routing\RouteRegistrantCollection;
+use Aphiria\Routing\{RouteCollection, RouteRegistrantCollection};
 
 $routes = new RouteCollection();
 $routeRegistrant = new RouteRegistrantCollection(new FileRouteCache('/tmp/routeCache.txt'));

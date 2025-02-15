@@ -95,8 +95,7 @@ Setting headers is simple, too:
 
 ```php
 use Aphiria\Api\Controllers\Controller;
-use Aphiria\Net\Http\Headers;
-use Aphiria\Net\Http\IResponse;
+use Aphiria\Net\Http\{Headers, IResponse};
 use App\IUserService;
 
 final class UserController extends Controller

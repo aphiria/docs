@@ -147,8 +147,7 @@ final class UserModule extends AphiriaModule
 
 ```php
 use Aphiria\Validation\Constraints\{EmailConstraint, RequiredConstraint};
-use Aphiria\Validation\ObjectConstraintsRegistryBuilder;
-use Aphiria\Validation\Validator;
+use Aphiria\Validation\{ObjectConstraintsRegistryBuilder, Validator};
 use App\User;
 
 // Set up our validator
