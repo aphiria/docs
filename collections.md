@@ -88,8 +88,8 @@
 <li><a href="#immutable-array-lists">Immutable Array Lists</a><ol>
 <li><a href="#immutable-array-lists-contains-value">containsValue()</a></li>
 <li><a href="#immutable-array-lists-count">count()</a></li>
-<li><a href="#immutable-array-lists-get">get()</a></li>
 <li><a href="#immutable-array-lists-filter">filter()</a></li>
+<li><a href="#immutable-array-lists-get">get()</a></li>
 <li><a href="#immutable-array-lists-index-of">indexOf()</a></li>
 <li><a href="#immutable-array-lists-map">map()</a></li>
 <li><a href="#immutable-array-lists-to-array">toArray()</a></li>
