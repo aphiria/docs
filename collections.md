@@ -19,10 +19,12 @@
 <li><a href="#array-lists-clear">clear()</a></li>
 <li><a href="#array-lists-contains-value">containsValue()</a></li>
 <li><a href="#array-lists-count">count()</a></li>
+<li><a href="#array-lists-filter">filter()</a></li>
 <li><a href="#array-lists-get">get()</a></li>
 <li><a href="#array-lists-index-of">indexOf()</a></li>
 <li><a href="#array-lists-insert">insert()</a></li>
 <li><a href="#array-lists-intersect">intersect()</a></li>
+<li><a href="#array-lists-map">map()</a></li>
 <li><a href="#array-lists-remove-index">removeIndex()</a></li>
 <li><a href="#array-lists-reverse">reverse()</a></li>
 <li><a href="#array-lists-sort">sort()</a></li>
@@ -37,8 +39,10 @@
 <li><a href="#hash-tables-contains-key">containsKey()</a></li>
 <li><a href="#hash-tables-contains-value">containsValue()</a></li>
 <li><a href="#hash-tables-count">count()</a></li>
+<li><a href="#hash-tables-filter">filter()</a></li>
 <li><a href="#hash-tables-get">get()</a></li>
 <li><a href="#hash-tables-get-keys">keys</a></li>
+<li><a href="#hash-tables-map">map()</a></li>
 <li><a href="#hash-tables-remove-key">removeKey()</a></li>
 <li><a href="#hash-tables-remove-value">removeValue()</a></li>
 <li><a href="#hash-tables-to-array">toArray()</a></li>
@@ -52,7 +56,9 @@
 <li><a href="#hash-sets-clear">clear()</a></li>
 <li><a href="#hash-sets-contains-value">containsValue()</a></li>
 <li><a href="#hash-sets-count">count()</a></li>
+<li><a href="#hash-sets-filter">filter()</a></li>
 <li><a href="#hash-sets-intersect">intersect()</a></li>
+<li><a href="#hash-sets-map">map()</a></li>
 <li><a href="#hash-sets-remove-value">removeValue()</a></li>
 <li><a href="#hash-sets-sort">sort()</a></li>
 <li><a href="#hash-sets-to-array">toArray()</a></li>
@@ -83,7 +89,9 @@
 <li><a href="#immutable-array-lists-contains-value">containsValue()</a></li>
 <li><a href="#immutable-array-lists-count">count()</a></li>
 <li><a href="#immutable-array-lists-get">get()</a></li>
+<li><a href="#immutable-array-lists-filter">filter()</a></li>
 <li><a href="#immutable-array-lists-index-of">indexOf()</a></li>
+<li><a href="#immutable-array-lists-map">map()</a></li>
 <li><a href="#immutable-array-lists-to-array">toArray()</a></li>
 </ol>
 </li>
@@ -91,8 +99,10 @@
 <li><a href="#immutable-hash-tables-contains-key">containsKey()</a></li>
 <li><a href="#immutable-hash-tables-contains-value">containsValue()</a></li>
 <li><a href="#immutable-hash-tables-count">count()</a></li>
+<li><a href="#immutable-hash-tables-filter">filter()</a></li>
 <li><a href="#immutable-hash-tables-get">get()</a></li>
 <li><a href="#immutable-hash-tables-get-keys">keys</a></li>
+<li><a href="#immutable-hash-tables-map">map()</a></li>
 <li><a href="#immutable-hash-tables-to-array">toArray()</a></li>
 <li><a href="#immutable-hash-tables-try-get">tryGet()</a></li>
 <li><a href="#immutable-hash-tables-get-values">values</a></li>
@@ -101,6 +111,8 @@
 <li><a href="#immutable-hash-sets">Immutable Hash Sets</a><ol>
 <li><a href="#immutable-hash-sets-contains-value">containsValue()</a></li>
 <li><a href="#immutable-hash-sets-count">count()</a></li>
+<li><a href="#immutable-hash-sets-filter">filter()</a></li>
+<li><a href="#immutable-hash-sets-map">map()</a></li>
 <li><a href="#immutable-hash-sets-to-array">toArray()</a></li>
 </ol>
 </li>
@@ -208,6 +220,16 @@ To grab the number of values in the array list, call
 $count = $arrayList->count();
 ```
 
+<h3 id="array-lists-filter">filter()</h3>
+
+_Runtime: O(n)_
+
+To filter out values from the array list, call
+
+```php
+$filteredArrayList = $arrayList->filter(fn(string $value): bool => $value === 'foo');
+```
+
 <h3 id="array-lists-get">get()</h3>
 
 _Runtime: O(1)_
@@ -248,6 +270,16 @@ You can intersect an array list's values with an array by calling
 
 ```php
 $intersectedList = $arrayList->intersect(['foo', 'bar']);
+```
+
+<h3 id="array-lists-map">map()</h3>
+
+_Runtime: O(n)_
+
+To apply a mapping to each value in the array list, call
+
+```php
+$mappedArrayList = $arrayList->map(fn(string $value): string => $value . 'baz');
 ```
 
 <h3 id="array-lists-remove-index">removeIndex()</h3>
@@ -384,6 +416,16 @@ To get the number of values in the hash table, call
 $count = $hashTable->count();
 ```
 
+<h3 id="hash-tables-filter">filter()</h3>
+
+_Runtime: O(n)_
+
+To filter out key-value pairs from the hash table, call
+
+```php
+$filteredHashTable = $hashTable->filter(fn(KeyValuePair $kvp): bool => $kvp->value === 'foo');
+```
+
 <h3 id="hash-tables-get">get()</h3>
 
 _Runtime: O(1)_
@@ -404,6 +446,16 @@ You can grab all of the keys in the hash table:
 
 ```php
 $hashTable->keys;
+```
+
+<h3 id="hash-tables-map">map()</h3>
+
+_Runtime: O(n)_
+
+To apply a mapping to each key-value pair in the hash table, call
+
+```php
+$mappedHashTable = $hashTable->map(fn(KeyValuePair $kvp): KeyValuePair => new KeyValuePair($kvp->key, $kvp->value . 'baz'));
 ```
 
 <h3 id="hash-tables-remove-key">removeKey()</h3>
@@ -523,6 +575,16 @@ To grab the number of values in the hash set, call
 $count = $set->count();
 ```
 
+<h3 id="hash-sets-filter">filter()</h3>
+
+_Runtime: O(n)_
+
+To filter out values in the hash set, call
+
+```php
+$filteredSet = $set->filter(fn(string $value): bool => $value === 'foo');
+```
+
 <h3 id="hash-sets-intersect">intersect()</h3>
 
 _Runtime: O(nm)_
@@ -531,6 +593,16 @@ You can intersect a hash set with an array by calling
 
 ```php
 $intersectedSet = $set->intersect(['foo', 'bar']);
+```
+
+<h3 id="hash-sets-map">map()</h3>
+
+_Runtime: O(n)_
+
+To apply a mapping to each value in the hash set, call
+
+```php
+$mappedSet = $set->map(fn(string $value): string => $value . 'baz');
 ```
 
 <h3 id="hash-sets-remove-value">removeValue()</h3>
@@ -777,6 +849,16 @@ To grab the number of values in the array list, call
 $count = $arrayList->count();
 ```
 
+<h3 id="immutable-array-lists-filter">filter()</h3>
+
+_Runtime: O(n)_
+
+To filter out values from the array list, call
+
+```php
+$filteredArrayList = $arrayList->filter(fn(string $value): bool => $value === 'foo');
+```
+
 <h3 id="immutable-array-lists-get">get()</h3>
 
 _Runtime: O(1)_
@@ -797,6 +879,16 @@ To grab the index for a value, call
 
 ```php
 $index = $arrayList->indexOf('foo');
+```
+
+<h3 id="immutable-array-lists-map">map()</h3>
+
+_Runtime: O(n)_
+
+To apply a mapping to each value in the array list, call
+
+```php
+$mappedArrayList = $arrayList->map(fn(string $value): string => $value . 'baz');
 ```
 
 If the array list doesn't contain the value, `null` will be returned.
@@ -853,6 +945,16 @@ To get the number of values in the hash table, call
 $count = $hashTable->count();
 ```
 
+<h3 id="immutable-hash-tables-filter">filter()</h3>
+
+_Runtime: O(n)_
+
+To filter out key-value pairs from the hash table, call
+
+```php
+$filteredHashTable = $hashTable->filter(fn(KeyValuePair $kvp): bool => $kvp->value === 'foo');
+```
+
 <h3 id="immutable-hash-tables-get">get()</h3>
 
 _Runtime: O(1)_
@@ -873,6 +975,16 @@ You can grab all of the keys in the hash table:
 
 ```php
 $hashTable->keys;
+```
+
+<h3 id="immutable-hash-tables-map">map()</h3>
+
+_Runtime: O(n)_
+
+To apply a mapping to each key-value pair in the hash table, call
+
+```php
+$mappedHashTable = $hashTable->map(fn(KeyValuePair $kvp): KeyValuePair => new KeyValuePair($kvp->key, $kvp->value . 'baz'));
 ```
 
 <h3 id="immutable-hash-tables-to-array">toArray()</h3>
@@ -938,6 +1050,26 @@ To grab the number of values in the set, call
 
 ```php
 $count = $set->count();
+```
+
+<h3 id="immutable-hash-sets-filter">filter()</h3>
+
+_Runtime: O(n)_
+
+To filter out values in the hash set, call
+
+```php
+$filteredSet = $set->filter(fn(string $value): bool => $value === 'foo');
+```
+
+<h3 id="immutable-hash-sets-map">map()</h3>
+
+_Runtime: O(n)_
+
+To apply a mapping to each value in the hash set, call
+
+```php
+$mappedSet = $set->map(fn(string $value): string => $value . 'baz');
 ```
 
 <h3 id="immutable-hash-sets-to-array">toArray()</h3>
