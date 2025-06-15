@@ -162,10 +162,13 @@ Aphiria's `ArrayList` is probably the most similar to PHP's built-in indexed arr
 
 ```php
 use Aphiria\Collections\ArrayList;
+use function Aphiria\Collections\Functions\array_list;
 
 $arrayList = new ArrayList();
 // Or...
 $arrayList = new ArrayList(['foo', 'bar']);
+// Or...
+$arrayList = array_list(['foo', 'bar']);
 ```
 
 > **Note:** `ArrayList` implements `ArrayAccess` and `IteratorAggregate`, so you can use array-like accessors and iterate over it.
@@ -344,10 +347,13 @@ Hash tables are most similar to PHP's built-in associative array functionality -
 
 ```php
 use Aphiria\Collections\HashTable;
+use function Aphiria\Collections\Functions\hash_table;
 
 $hashTable = new HashTable();
 // Or...
 $hashTable = new HashTable([new KeyValuePair('foo', 'bar')]);
+// Or...
+$hashTable = hash_table([new KeyValuePair('foo', 'bar')]);
 ```
 
 > **Note:** `HashTable` implements `ArrayAccess` and `IteratorAggregate`, so you can use array-like accessors and iterate over it. The keys will be numeric, and the values will be [key-value pairs](#key-value-pairs).
@@ -517,10 +523,13 @@ Hash sets are lists with unique values.  They accept objects, scalars, arrays, a
 
 ```php
 use Aphiria\Collections\HashSet;
+use function Aphiria\Collections\Functions\hash_set;
 
 $set = new HashSet();
 // Or...
 $set = new HashSet(['foo', 'bar']);
+// Or...
+$set = hash_set(['foo', 'bar']);
 ```
 
 > **Note:** `HashSet` implements `IteratorAggregate`, so you can iterate over it.
@@ -651,8 +660,11 @@ Stacks are first-in, last-out (FILO) data structures.  To create one, call
 
 ```php
 use Aphiria\Collections\Stack;
+use function Aphiria\Collections\Functions\stack;
 
 $stack = new Stack();
+// Or...
+$stack = stack();
 ```
 
 > **Note:** `Stack` implements `IteratorAggregate`, so you can iterate over it.
@@ -737,8 +749,11 @@ Queues are first-in, first-out (FIFO) data structures.  To create one, call
 
 ```php
 use Aphiria\Collections\Queue;
+use function Aphiria\Collections\Functions\queue;
 
 $queue = new Queue();
+// Or...
+$queue = queue();
 ```
 
 > **Note:** `Queue` implements `IteratorAggregate`, so you can iterate over it.
@@ -823,8 +838,11 @@ $array = $queue->toArray();
 
 ```php
 use Aphiria\Collections\ImmutableArrayList;
+use function Aphiria\Collections\Functions\immutable_array_list;
 
 $arrayList = new ImmutableArrayList(['foo', 'bar']);
+// Or...
+$arrayList = immutable_array_list(['foo', 'bar']);
 ```
 
 > **Note:** `ImmutableArrayList` implements `ArrayAccess` and `IteratorAggregate`, so you can use array-like accessors and iterate over it.
@@ -909,8 +927,11 @@ Sometimes, your business logic might dictate that a [hash table](#hash-tables) i
 
 ```php
 use Aphiria\Collections\ImmutableHashTable;
+use function Aphiria\Collections\Functions\immutable_hash_table;
 
 $hashTable = new ImmutableHashTable([new KeyValuePair('foo', 'bar')]);
+// Or...
+$hashTable = immutable_hash_table([new KeyValuePair('foo', 'bar')]);
 ```
 
 > **Note:** `ImmutableHashTable` implements `ArrayAccess` and `IteratorAggregate`, so you can use array-like accessors and iterate over it. When iterating, the keys will be numeric, and the values will be [key-value pairs](#key-value-pairs).
@@ -1026,8 +1047,11 @@ Immutable hash sets are read-only [hash sets](#hash-sets).  They accept objects,
 
 ```php
 use Aphiria\Collections\ImmutableHashSet;
+use function Aphiria\Collections\Functions\immutable_hash_set;
 
 $set = new ImmutableHashSet(['foo', 'bar']);
+// Or...
+$set = immutable_hash_set(['foo', 'bar']);
 ```
 
 > **Note:** `ImmutableHashSet` implements `IteratorAggregate`, so you can iterate over it.
