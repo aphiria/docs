@@ -343,7 +343,7 @@ $unionedList = $arrayList->union(['foo', 'bar']);
 
 <h2 id="hash-tables">Hash Tables</h2>
 
-Hash tables are most similar to PHP's built-in associative array functionality - they map keys to values.  Unlike PHP associative arrays (which only supports scalars as keys), Aphiria's `HashTables` support scalars, objects, arrays, and resources as keys.  You can instantiate one with or without an array of key-value pairs:
+Hash tables are most similar to PHP's built-in associative array functionality - they map keys to values.  Unlike PHP associative arrays (which only supports scalars as keys), Aphiria's `HashTables` support scalars, objects, arrays, and resources as keys.  You can instantiate one with an associative array or a list of key-value pairs:
 
 ```php
 use Aphiria\Collections\HashTable;
@@ -376,7 +376,7 @@ $hashTable->add('foo', 'bar');
 
 _Runtime: O(n), n = number of values added_
 
-To add multiple values at once, pass in an array of `KeyValuePair` objects:
+To add multiple values at once, pass in an associative array or a list of `KeyValuePair` objects:
 
 ```php
 $hashTable->addRange(['foo' => 'bar', 'baz' => 'blah']);
@@ -929,7 +929,7 @@ $array = $arrayList->toArray();
 
 <h2 id="immutable-hash-tables">Immutable Hash Tables</h2>
 
-Sometimes, your business logic might dictate that a [hash table](#hash-tables) is read-only.  Aphiria provides support via `ImmutableHashTable`.  It requires that you pass key-value pairs into its constructor:
+Sometimes, your business logic might dictate that a [hash table](#hash-tables) is read-only.  Aphiria provides support via `ImmutableHashTable`.  It requires that you pass an associative array or a list of key-value pairs into its constructor:
 
 ```php
 use Aphiria\Collections\ImmutableHashTable;
