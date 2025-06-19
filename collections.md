@@ -351,7 +351,11 @@ use function Aphiria\Collections\Functions\hash_table;
 
 $hashTable = new HashTable();
 // Or...
-$hashTable = new HashTable([new KeyValuePair('foo', 'bar')]);
+$hashTable = new HashTable(['foo' => 'bar']);
+// Or...
+$hashTable = new HashTable([new KeyValuePair('foo', 'bar')]); // Good for non-stringable keys
+// Or...
+$hashTable = hash_table(['foo' => 'bar']);
 // Or...
 $hashTable = hash_table([new KeyValuePair('foo', 'bar')]);
 ```
@@ -375,6 +379,8 @@ _Runtime: O(n), n = number of values added_
 To add multiple values at once, pass in an array of `KeyValuePair` objects:
 
 ```php
+$hashTable->addRange(['foo' => 'bar', 'baz' => 'blah']);
+// Or...
 $kvps = [
     new KeyValuePair('foo', 'bar'),
     new KeyValuePair('baz', 'blah')
@@ -929,7 +935,11 @@ Sometimes, your business logic might dictate that a [hash table](#hash-tables) i
 use Aphiria\Collections\ImmutableHashTable;
 use function Aphiria\Collections\Functions\immutable_hash_table;
 
-$hashTable = new ImmutableHashTable([new KeyValuePair('foo', 'bar')]);
+$hashTable = new ImmutableHashTable(['foo' => 'bar']);
+// Or...
+$hashTable = new ImmutableHashTable([new KeyValuePair('foo', 'bar')]); // Good for non-stringable keys
+// Or...
+$hashTable = immutable_hash_table(['foo' => 'bar']);
 // Or...
 $hashTable = immutable_hash_table([new KeyValuePair('foo', 'bar')]);
 ```
