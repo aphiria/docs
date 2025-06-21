@@ -267,9 +267,9 @@ $arrayList->insert(23, 'foo');
 
 <h3 id="array-lists-intersect">intersect()</h3>
 
-_Runtime: O(nm)_, n = number of values in the array list, and m = number of values in the parameter array
+_Runtime: O(nm)_, n = number of values in the array list, and m = number of values in the parameter `iterable`
 
-You can intersect an array list's values with an array by calling
+You can intersect an array list's values with any `iterable` (eg an array or even another `ArrayList`) by calling
 
 ```php
 $intersectedList = $arrayList->intersect(['foo', 'bar']);
@@ -333,9 +333,9 @@ $array = $arrayList->toArray();
 
 <h3 id="array-lists-union">union()</h3>
 
-_Runtime: O(nm)_, n = number of values in the array list, and m = number of values in the parameter array
+_Runtime: O(nm)_, n = number of values in the array list, and m = number of values in the parameter `iterable`
 
-You can union an array list's values with an array via
+You can union an array list's values with any `iterable` (eg an array or even another `ArrayList`) via
 
 ```php
 $unionedList = $arrayList->union(['foo', 'bar']);
@@ -602,9 +602,9 @@ $filteredSet = $set->filter(fn(string $value): bool => $value === 'foo');
 
 <h3 id="hash-sets-intersect">intersect()</h3>
 
-_Runtime: O(nm)_
+_Runtime: O(nm), n = number of values in the hash set, and m = number of values in the parameter `iterable`_
 
-You can intersect a hash set with an array by calling
+You can intersect a hash set with any `iterable` (eg an array or even another `HashSet`) by calling
 
 ```php
 $intersectedSet = $set->intersect(['foo', 'bar']);
@@ -652,9 +652,9 @@ $array = $set->toArray();
 
 <h3 id="hash-sets-union">union()</h3>
 
-_Runtime: O(nm)_
+_Runtime: O(nm), n = number of values in the hash set, and m = number of values in the parameter `iterable`_
 
-You can union a hash set with an array via
+You can union a hash set with any `iterable` (eg an array or even another `HashSet`) via
 
 ```php
 $unionedSet = $set->union(['foo', 'bar']);
