@@ -525,7 +525,7 @@ $hashTable->values;
 
 <h2 id="hash-sets">Hash Sets</h2>
 
-Hash sets are lists with unique values.  They accept objects, scalars, arrays, and resources as values.  You can instantiate one with or without an array of key => value pairs:
+Hash sets are lists with unique values.  They accept objects, scalars, arrays, and resources as values.  You can instantiate one with or without a list of values:
 
 ```php
 use Aphiria\Collections\HashSet;
