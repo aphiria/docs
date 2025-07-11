@@ -95,7 +95,7 @@ final class BookModule extends AphiriaModule
             $routes
                 ->get('/books/:bookId')
                 ->mapsToMethod(BookController::class, 'getBookById')
-                ->withMiddleware(Authorize::class)
+                ->withMiddleware(Authorize::class);
         });
     }
 }
@@ -362,7 +362,7 @@ You can read more about how request parameters are resolved in your controller m
 
 <h3 id="route-attributes-groups">Route Groups</h3>
 
-You can apply route groups, constraints, and middleware to all endpoints in a controller using the `#[Controller]` attribute.
+You can apply route groups, constraints, and middleware to all endpoints in a controller using attributes.
 
 <div class="context-framework">
 
