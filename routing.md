@@ -156,7 +156,7 @@ $routeMatcher = new TrieRouteMatcher(new TrieFactory($routes->build())->createTr
 $result = $routeMatcher->matchRoute(
     $_SERVER['REQUEST_METHOD'],
     $_SERVER['HTTP_HOST'],
-    $_SERVER['REQUEST_URI']
+    $_SERVER['REQUEST_URI'],
 );
 ```
 
@@ -282,7 +282,7 @@ $routeMatcher = new TrieRouteMatcher(new TrieFactory($routes)->createTrie());
 $result = $routeMatcher->matchRoute(
     $_SERVER['REQUEST_METHOD'],
     $_SERVER['HTTP_HOST'],
-    $_SERVER['REQUEST_URI']
+    $_SERVER['REQUEST_URI'],
 );
 ```
 
@@ -354,7 +354,7 @@ use Aphiria\Routing\Attributes\Get;
     host: 'api.example.com',
     name: 'getCourse',
     isHttpsOnly: true,
-    parameters: ['role' => 'admin']
+    parameters: ['role' => 'admin'],
 )]
 ```
 
@@ -375,7 +375,7 @@ use App\{Course, MyConstraint};
 #[Controller(
     path: '/courses/:courseId',
     host: 'api.example.com',
-    isHttpsOnly: true
+    isHttpsOnly: true,
 )]
 #[RouteConstraint(MyConstraint::class)]
 #[Authenticate]
@@ -406,7 +406,7 @@ use App\{Authenticate, Course, MyConstraint};
 #[Controller(
     path: '/courses/:courseId',
     host: 'api.example.com',
-    isHttpsOnly: true
+    isHttpsOnly: true,
 )]
 #[RouteConstraint(MyConstraint::class)]
 #[Authenticate]
@@ -647,7 +647,7 @@ final class CourseModule extends AphiriaModule
                     isHttpsOnly: true,
                     constraints: [new MyConstraint()],
                     middlewareBindings: [new MiddlewareBinding(Authenticate::class)],
-                    parameters: ['role' => 'admin']
+                    parameters: ['role' => 'admin'],
                 ),
                 function (RouteCollectionBuilder $routes) {
                     // This route's path will be "courses/:courseId"
@@ -659,7 +659,7 @@ final class CourseModule extends AphiriaModule
                     $routes
                         ->get('/professors')
                         ->mapsToMethod(CourseController::class, 'getCourseProfessors');
-                }
+                },
             );
         });
     }
@@ -681,7 +681,7 @@ $routes->group(
         isHttpsOnly: true,
         constraints: [new MyConstraint()],
         middlewareBindings: [new MiddlewareBinding(Authenticate::class)],
-        parameters: ['role' => 'admin']
+        parameters: ['role' => 'admin'],
     ),
     function (RouteCollectionBuilder $routes) {
         // This route's path will be "courses/:courseId"
@@ -693,7 +693,7 @@ $routes->group(
         $routes
             ->get('/professors')
             ->mapsToMethod(CourseController::class, 'getCourseProfessors');
-    }
+    },
 );
 ```
 
@@ -759,7 +759,7 @@ final class FooModule extends AphiriaModule
                 ->mapsToMethod(MyController::class, 'myMethod')
                 ->withManyMiddleware([
                     FooMiddleware::class,
-                    BarMiddleware::class
+                    BarMiddleware::class,
                 ]);
         });
     }
@@ -777,7 +777,7 @@ $routes
     ->mapsToMethod(MyController::class, 'myMethod')
     ->withManyMiddleware([
         FooMiddleware::class,
-        BarMiddleware::class
+        BarMiddleware::class,
     ]);
 ```
 
@@ -995,7 +995,7 @@ final class ApiVersionConstraint implements IRouteConstraint
         string $httpMethod,
         string $host,
         string $path,
-        array $headers
+        array $headers,
     ): bool {
         $parameters = $matchedRouteCandidate->route->parameters;
 
@@ -1093,7 +1093,7 @@ final class GlobalModule extends AphiriaModule
         $this->withRouteVariableConstraint(
             $appBuilder,
             MinLengthConstraint::getSlug(),
-            fn(int $minLength) => new MinLengthConstraint($minLength)
+            fn(int $minLength) => new MinLengthConstraint($minLength),
         );
     }
 }
@@ -1116,7 +1116,7 @@ $constraintFactory = new RouteVariableConstraintFactoryRegistrant()
 // Register our custom constraint
 $constraintFactory->registerConstraintFactory(
     MinLengthConstraint::getSlug(),
-    fn(int $minLength) => new MinLengthConstraint($minLength)
+    fn(int $minLength) => new MinLengthConstraint($minLength),
 );
 ```
 
@@ -1306,7 +1306,7 @@ final class BookController extends Controller
         // For demonstration's sake, we'll just dump the raw HTTP request
         return (string)$this->routeRequestFactory->createRouteRequest(
             'GetBooksFromArchive',
-            ['year' => 2019]
+            ['year' => 2019],
         );
     }
 }
@@ -1331,7 +1331,7 @@ final class BookController
         // For demonstration's sake, we'll just dump the raw HTTP request
         $body = (string)$this->routeRequestFactory->createRouteRequest(
             'GetBooksFromArchive',
-            ['year' => 2019]
+            ['year' => 2019],
         );
         
         return new Response(body: $body);
@@ -1401,7 +1401,7 @@ $request = new RequestFactory()->createRequestFromSuperglobals($_SERVER);
 $result = $routeMatcher->matchRoute(
     $request->method,
     $request->ur->host,
-    $request->uri->path
+    $request->uri->path,
 );
 ```
 

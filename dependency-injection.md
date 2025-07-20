@@ -138,7 +138,7 @@ use App\{IUserRepository, UserRepository, UserService};
 
 $container->for(
     UserService::class,
-    fn($container) => $container->bindInstance(IUserRepository::class, new UserRepository())
+    fn($container) => $container->bindInstance(IUserRepository::class, new UserRepository()),
 );
 ```
 

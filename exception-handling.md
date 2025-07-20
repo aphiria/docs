@@ -83,7 +83,7 @@ final class GlobalModule extends AphiriaModule
             ->withProblemDetails(
                 $appBuilder,
                 UserNotFoundException::class,
-                status: HttpStatusCode::NotFound
+                status: HttpStatusCode::NotFound,
             )
             // Add another more complicated one:
             ->withProblemDetails(
@@ -94,7 +94,7 @@ final class GlobalModule extends AphiriaModule
                 detail: fn($ex) => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
                 status: HttpStatusCode::BadRequest,
                 instance: fn($ex) => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
-                extensions: fn($ex) => ['overdrawnAmount' => $ex->overdrawnAmount]
+                extensions: fn($ex) => ['overdrawnAmount' => $ex->overdrawnAmount],
             );
     }
 }
@@ -127,7 +127,7 @@ $exceptionRenderer->mapExceptionToProblemDetails(
     detail: fn($ex) => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
     status: HttpStatusCode::BadRequest,
     instance: fn($ex) => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
-    extensions: fn($ex) => ['overdrawnAmount' => $ex->overdrawnAmount]
+    extensions: fn($ex) => ['overdrawnAmount' => $ex->overdrawnAmount],
 );
 ```
 
@@ -168,7 +168,7 @@ final class CustomApiExceptionRenderer implements IApiExceptionRenderer
     public function __construct(
         private ?IRequest $request = null,
         private IResponseFactory $responseFactory = new NegotiatedResponseFactory(),
-        private IResponseWriter $responseWriter = new StreamResponseWriter()
+        private IResponseWriter $responseWriter = new StreamResponseWriter(),
     ) {}
 
     public function createResponse(Exception $ex): IResponse
@@ -181,7 +181,7 @@ final class CustomApiExceptionRenderer implements IApiExceptionRenderer
             return new Response(
                 HttpStatusCode::InternalServerError,
                 $headers
-                new StringBody(\json_encode(['error' => $ex->getMessage()]))
+                new StringBody(\json_encode(['error' => $ex->getMessage()])),
             );
         }
         
@@ -189,7 +189,7 @@ final class CustomApiExceptionRenderer implements IApiExceptionRenderer
         return $this->responseFactory->createResponse(
             $this->request,
             HttpStatusCode::InternalServerError,
-            rawBody: ['error' => $ex->getMessage()]
+            rawBody: ['error' => $ex->getMessage()],
         );
     }
     
@@ -221,7 +221,7 @@ final class CustomApiExceptionRenderer implements IExceptionRenderer
     public function __construct(
         private ?IRequest $request = null,
         private IResponseFactory $responseFactory = new NegotiatedResponseFactory(),
-        private IResponseWriter $responseWriter = new StreamResponseWriter()
+        private IResponseWriter $responseWriter = new StreamResponseWriter(),
     ) {}
     
     public function render(Exception $ex): void
@@ -232,15 +232,15 @@ final class CustomApiExceptionRenderer implements IExceptionRenderer
             $headers->add('Content-Type', 'application/json');
             $response = new Response(
                 HttpStatusCode::InternalServerError,
-                $headers
-                new StringBody(\json_encode(['error' => $ex->getMessage()]))
+                $headers,
+                new StringBody(\json_encode(['error' => $ex->getMessage()])),
             );
         } else {
             // We can negotiate the response
             $response = $this->responseFactory->createResponse(
                 $this->request,
                 HttpStatusCode::InternalServerError,
-                rawBody: ['error' => $ex->getMessage()]
+                rawBody: ['error' => $ex->getMessage()],
             );
         }
         
@@ -299,7 +299,7 @@ final class GlobalModule extends AphiriaModule
                 $output->writeln('<fatal>Contact a sysadmin</fatal>');
         
                 return StatusCode::Fatal;
-            }
+            },
         );
     }
 }
@@ -322,7 +322,7 @@ $exceptionRenderer->registerOutputWriter(
         $output->writeln('<fatal>Contact a sysadmin</fatal>');
 
         return StatusCode::Fatal;
-    }
+    },
 );
 
 // You can also register many exceptions-to-output writers
@@ -387,7 +387,7 @@ final class GlobalModule extends AphiriaModule
         $this->withLogLevelFactory(
             $appBuilder,
             DatabaseNotFoundException::class,
-            fn(DatabaseNotFoundException $ex) => LogLevel::EMERGENCY
+            fn(DatabaseNotFoundException $ex) => LogLevel::EMERGENCY,
         );
     }
 }
@@ -406,7 +406,7 @@ use Psr\Log\LogLevel;
 $globalExceptionHandler = new GlobalExceptionHandler(new ApiExceptionRenderer());
 $globalExceptionHandler->registerLogLevelFactory(
     DatabaseNotFoundException::class,
-    fn(DatabaseNotFoundException $ex) => LogLevel::EMERGENCY
+    fn(DatabaseNotFoundException $ex) => LogLevel::EMERGENCY,
 );
 
 // You can also register multiple exceptions-to-log-level factories

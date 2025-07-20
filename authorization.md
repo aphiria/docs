@@ -59,7 +59,7 @@ final class ArticleController extends Controller
     {
         $policy = new AuthorizationPolicy(
             'create-article',
-            new RolesRequirement(['admin', 'contributor', 'editor'])
+            new RolesRequirement(['admin', 'contributor', 'editor']),
         );
     
         if (!$this->authority->authorize($this->user, $policy)->passed) {
@@ -103,7 +103,7 @@ final class MinimumAgeRequirementHandler implements IAuthorizationRequirementHan
     public function function handle(
         IPrincipal $user,
         object $requirement,
-        AuthorizationContext $authorizationContext
+        AuthorizationContext $authorizationContext,
     ): void {
         if (!$requirement instanceof MinimumAgeRequirement) {
             throw new \InvalidArgumentException('Requirement must be of type ' . MinimumAgeRequirement::class);
@@ -149,11 +149,11 @@ final class GlobalModule extends AphiriaModule
             ->withAuthorizationRequirementHandler(
                 $appBuilder,
                 MinimumAgeRequirement::class,
-                new MinimumAgeRequirementHandler()
+                new MinimumAgeRequirementHandler(),
             )
             ->withAuthorizationPolicy(
                 $appBuilder,
-                new AuthorizationPolicy('age-check', new MinimumAgeRequirement(13))
+                new AuthorizationPolicy('age-check', new MinimumAgeRequirement(13)),
             );
     }
 }
@@ -252,7 +252,7 @@ final class AuthorizedDeleterRequirementHandler implements IAuthorizationRequire
     public function function handle(
         IPrincipal $user,
         object $requirement,
-        AuthorizationContext $authorizationContext
+        AuthorizationContext $authorizationContext,
     ): void {
         if (!$requirement instanceof AuthorizedDeleterRequirement) {
             throw new \InvalidArgumentException('Requirement must be of type ' . AuthorizedDeleterRequirement::class);
@@ -305,14 +305,14 @@ final class GlobalModule extends AphiriaModule
             ->withAuthorizationRequirementHandler(
                 $appBuilder,
                 AuthorizedDeleterRequirement::class,
-                new AuthorizedDeleterRequirementHandler()
+                new AuthorizedDeleterRequirementHandler(),
             )
             ->withAuthorizationPolicy(
                 $appBuilder,
                 new AuthorizationPolicy(
                     'authorized-deleter',
                     new AuthorizedDeleterRequirement(['admin'])
-                )
+                ),
             );
     }
 }
@@ -348,7 +348,7 @@ final class CommentController extends Controller
 {
     public function __construct(
         private ICommentRepository $comments,
-        private IAuthority $authority
+        private IAuthority $authority,
     ) {}
 
     #[Delete('/comments/:id')]
@@ -393,7 +393,7 @@ final class Authorize extends BaseAuthorize
     protected function handleFailedAuthorizationResult(
         IRequest $request,
         AuthorizationPolicy $policy,
-        AuthorizationResult $authorizationResult
+        AuthorizationResult $authorizationResult,
     ): IResponse {
         // Let's return a response with body "You are not authorized"
         $response = new Response(HttpStatusCode::Forbidden);

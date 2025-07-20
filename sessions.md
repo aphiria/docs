@@ -160,7 +160,7 @@ $sessionMiddleware = new SessionMiddleware(
     sessionCookieDomain: 'example.com', // Defaults to null
     sessionCookieIsSecure: true, // Defaults to false
     sessionCookieIsHttpOnly: true, // Defaults to true
-    gcChance: 0.01 // Defaults to 0.01
+    gcChance: 0.01, // Defaults to 0.01
 );
 ```
 

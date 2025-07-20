@@ -89,7 +89,7 @@ $request = new Request(
     'GET',
     new Uri('https://example.com'),
     new Headers(),
-    new StringBody('foo')
+    new StringBody('foo'),
 );
 ```
 
@@ -359,7 +359,7 @@ use Aphiria\Net\Uri;
 $request = new Request(
     'GET',
     new Uri('https://example.com/foo?bar'),
-    requestTargetType: RequestTargetType::AuthorityForm
+    requestTargetType: RequestTargetType::AuthorityForm,
 );
 ```
 
@@ -455,7 +455,7 @@ $image2Body = new StreamBody(fopen('path/to/bar.png', 'rb'));
 // Build the request's headers and body
 $body = new MultipartBody([
     new MultipartBodyPart($image1Headers, $image1Body),
-    new MultipartBodyPart($image2Headers, $image2Body)
+    new MultipartBodyPart($image2Headers, $image2Body),
 ]);
 $headers = new Headers();
 $headers->add('Content-Type', "multipart/form-data; boundary={$body->boundary}");
@@ -465,7 +465,7 @@ $request = new Request(
     'POST',
     new Uri('https://example.com'),
     $headers,
-    $body
+    $body,
 );
 ```
 

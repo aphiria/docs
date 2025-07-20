@@ -182,7 +182,7 @@ final class CustomControllerBinder extends ControllerBinder
         $deserializer = new RequestParameterDeserializer();
         $deserializer->registerDeserializer(
             YourType::class,
-            fn(mixed $value): YourType => /* ... */
+            fn(mixed $value): YourType => /* ... */,
         );
         
         return $deserializer;
@@ -227,7 +227,7 @@ final class UserController extends Controller
     #[Get('/users/:userId')]
     public function getUser(
         #[RouteVariable('userId')] int $id,
-        #[QueryString('includeAvatar')] bool $showAvatar
+        #[QueryString('includeAvatar')] bool $showAvatar,
     ): User {
         // $id will map to the "userId" route variable
         // $showAvatar will map to the "includeAvatar" query string parameter

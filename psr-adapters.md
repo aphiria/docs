@@ -65,7 +65,7 @@ $psr7Factory = new Psr7Factory(
     psr7ResponseFactory: $psr17Factory,
     psr7StreamFactory: $psr17Factory,
     psr7UploadedFileFactory: $psr17Factory,
-    psr7UriFactory: $psr17Factory
+    psr7UriFactory: $psr17Factory,
 );
 ```
 

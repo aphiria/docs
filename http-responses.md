@@ -35,7 +35,7 @@ use Aphiria\Net\Http\StringBody;
 $response = new Response(
     HttpStatusCode::Ok, // Can also use an int
     new Headers(),
-    new StringBody('foo')
+    new StringBody('foo'),
 );
 
 // Get the status code as an HttpStatusCode enum
@@ -107,8 +107,8 @@ new ResponseFormatter()->setCookie(
         domain: 'example.com',
         isSecure: true, // Defaults to false
         isHttpOnly: true, // Defaults to true
-        sameSite: SameSiteMode::Lax // Defaults to lax
-    )
+        sameSite: SameSiteMode::Lax, // Defaults to lax
+    ),
 );
 ```
 

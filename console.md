@@ -124,7 +124,7 @@ use Aphiria\Console\Output\IOutput;
 #[
     Command('greet', description: 'Greets a person'),
     Argument('name', type: ArgumentType::Required, description: 'The name to greet'),
-    Option('yell', type: OptionType::OptionalValue, shortName: 'y', description: 'Yell the greeting?', defaultValue: 'yes')
+    Option('yell', type: OptionType::OptionalValue, shortName: 'y', description: 'Yell the greeting?', defaultValue: 'yes'),
 ]
 final class GreetingCommandHandler implements ICommandHandler
 {
@@ -239,7 +239,7 @@ final class UserModule extends AphiriaModule
             ->withCommands($appBuilder, function (CommandRegistry $commands) {
                 $commands->registerCommand(
                     new Command('greet'),
-                    GreetingCommandHandler::class
+                    GreetingCommandHandler::class,
                 );
             });
     }
@@ -318,7 +318,7 @@ use Aphiria\Console\Output\IOutput;
  #[
     Command('greet', 'Greets a person'),
     Argument('name', ArgumentType::Required, 'The name to greet'),
-    Option('yell', OptionType::OptionalValue, 'y', 'Yell the greeting', 'yes')
+    Option('yell', OptionType::OptionalValue, 'y', 'Yell the greeting', 'yes'),
  ]
 final class GreetingCommandHandler implements ICommandHandler
 {
@@ -429,7 +429,7 @@ $paddingFormatter = new PaddingFormatter();
 $rows = [
     ['George', 'Carlin', 'great'],
     ['Chris', 'Rock', 'good'],
-    ['Jim', 'Gaffigan', 'pale']
+    ['Jim', 'Gaffigan', 'pale'],
 ];
 $paddingFormatter->format($rows, fn($row) => $row[0] . ' - ' . $row[1] . ' - ' . $row[2]);
 ```
@@ -449,7 +449,7 @@ use Aphiria\Console\Output\Formatters\PaddingFormatterOptions;
 $options = new PaddingFormatterOptions(
     paddingString: ' ',
     padAfter: true,
-    eolChar: "\n"
+    eolChar: "\n",
 );
 $paddingFormatter->format($rows, fn($row) => $row[0] . ' - ' . $row[1] . ' - ' . $row[2], $options);
 ```
@@ -466,7 +466,7 @@ use Aphiria\Console\Output\Formatters\TableFormatter;
 $table = new TableFormatter();
 $rows = [
     ['Sean', 'Connery'],
-    ['Pierce', 'Brosnan']
+    ['Pierce', 'Brosnan'],
 ];
 $table->format($rows);
 ```
@@ -509,7 +509,7 @@ $options = new TableFormatterOptions(
     verticalBorderChar: '|',
     intersectionChar: '+',
     padAfter: true,
-    eolChar: "\n"
+    eolChar: "\n",
 );
 $table->format($rows, $headers, $options);
 ```
@@ -570,7 +570,7 @@ $options = new ProgressBarFormatterOptions(
     outputFormat: '%bar% - Time remaining: %timeRemaining%',
     completedProgressChar: '=',
     remainingProgressChar: '-',
-    redrawFrequency: 1
+    redrawFrequency: 1,
 );
 $progressBar = new ProgressBar(100, $formatter, $options);
 ```
@@ -629,7 +629,7 @@ final class GlobalModule extends AphiriaModule
     {
         $this->withConsoleElement(
             $appBuilder,
-            new Element('foo', new Style(Color::Black, Color::Yellow, [TextStyle::Bold])
+            new Element('foo', new Style(Color::Black, Color::Yellow, [TextStyle::Bold]),
         );
     }
 }

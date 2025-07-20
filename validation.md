@@ -51,7 +51,7 @@ final class User
         #[Email]
         public readonly string $email,
         #[Required]
-        public readonly string $name
+        public readonly string $name,
     ) {}
 }
 ```
@@ -414,7 +414,7 @@ return [
     ],
     'es' => [
         'tooLong' => 'El valor no puede superar {maxLength, plural, one {un # caracter}, other {los # caracteres}}'
-    ]
+    ],
 ];
 ```
 

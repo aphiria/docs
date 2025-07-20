@@ -383,7 +383,7 @@ $hashTable->addRange(['foo' => 'bar', 'baz' => 'blah']);
 // Or...
 $kvps = [
     new KeyValuePair('foo', 'bar'),
-    new KeyValuePair('baz', 'blah')
+    new KeyValuePair('baz', 'blah'),
 ];
 $hashTable->addRange($kvps);
 ```

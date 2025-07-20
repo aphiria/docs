@@ -120,7 +120,7 @@ $claims = [
     // This claim stores the user's name
     new Claim(ClaimType::Name, 'Dave', $claimsIssuer),
     // This claim stores the user's roles
-    new Claim(ClaimType::Role, 'admin', $claimsIssuer)
+    new Claim(ClaimType::Role, 'admin', $claimsIssuer),
 ];
 // You can also pass in an array of identities
 $user = new User(new Identity($claims));
@@ -286,7 +286,7 @@ final class GlobalModule extends AphiriaModule
         $this->withAuthenticationScheme(
             $appBuilder,
             new AuthenticationScheme('cookie', MyCookieHandler::class),
-            isDefault: true
+            isDefault: true,
         );
     }
 }
@@ -334,7 +334,7 @@ final class SqlBasicAuthenticationHandler extends BasicAuthenticationHandler
         string $username,
         string $password,
         IRequest $request,
-        AuthenticationScheme $scheme
+        AuthenticationScheme $scheme,
     ): AuthenticationResult {
         $sql = <<<SQL
 SELECT id, email, hashed_password, array_to_json(roles) AS roles FROM users
@@ -354,7 +354,7 @@ SQL;
         $claimsIssuer = $scheme->options->claimsIssuer ?? $scheme->name;
         $claims = [
             new Claim(ClaimType::NameIdentifier, $row['id'], $claimsIssuer),
-            new Claim(ClaimType::Name, $row['email'], $claimsIssuer)
+            new Claim(ClaimType::Name, $row['email'], $claimsIssuer),
         ];
         
         foreach (\json_decode($row['roles']) as $role) {
@@ -387,7 +387,7 @@ final class GlobalModule extends AphiriaModule
                 'basic',
                 SqlBasicAuthenticationHandler::class,
                 new BasicAuthenticationOptions(realm: 'example.com', claimsIssuer: 'https://example.com')
-            )
+            ),
         );
     }
 }
@@ -407,7 +407,7 @@ $authenticator = new AuthenticatorBuilder()
     ->withScheme(new AuthenticationScheme(
         'basic',
          SqlBasicAuthenticationHandler::class,
-         new BasicAuthenticationOptions(realm: 'example.com', claimsIssuer: 'https://example.com')
+         new BasicAuthenticationOptions(realm: 'example.com', claimsIssuer: 'https://example.com'),
      ))
     ->build();
 ```
@@ -447,9 +447,9 @@ final class GlobalModule extends AphiriaModule
                     cookieSameSite: SameSiteMode::Strict,
                     loginPagePath: '/login',
                     forbiddenPagePath: '/access-denied',
-                    claimsIssuer: 'https://example.com'
+                    claimsIssuer: 'https://example.com',
                  )
-            )
+            ),
         );
     }
 }
@@ -478,8 +478,8 @@ $authenticator = new AuthenticatorBuilder()
             cookieSameSite: SameSiteMode::Strict,
             loginPagePath: '/login',
             forbiddenPagePath: '/access-denied',
-            claimsIssuer: 'https://example.com'
-         )
+            claimsIssuer: 'https://example.com',
+         ),
      ))
     ->build();
 ```
@@ -533,7 +533,7 @@ final class Authenticate extends BaseAuthenticate
 {
     protected function handleFailedAuthenticationResult(
         IRequest $request,
-        AuthenticationResult $failedAuthenticationResult
+        AuthenticationResult $failedAuthenticationResult,
     ): IResponse {
         // Let's return a response with body "You are not logged in"
         $response = new Response(HttpStatusCode::Unauthorized);

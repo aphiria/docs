@@ -57,7 +57,7 @@ final class UserModule extends AphiriaModule
             ->withCommands($appBuilder, function (CommandRegistry $commands) {
                 $commands->registerCommand(
                     new Command('report:generate'),
-                    GenerateUserReportCommandHandler::class
+                    GenerateUserReportCommandHandler::class,
                 );
             });
     }
@@ -155,7 +155,7 @@ final class UserModule extends AphiriaModule
         $this->withRouteVariableConstraint(
             $appBuilder,
             MinLengthConstraint::getSlug(),
-            fn(int $minLength) => new MinLengthConstraint($minLength)
+            fn(int $minLength) => new MinLengthConstraint($minLength),
         );
     }
 }
@@ -206,7 +206,7 @@ final class UserModule extends AphiriaModule
             ->withCommands($appBuilder, function (CommandRegistry $commands) {
                 $commands->registerCommand(
                     new Command('report:generate'),
-                    GenerateUserReportCommandHandler::class
+                    GenerateUserReportCommandHandler::class,
                 );
             })
             ->withCommandAttributes($appBuilder)
@@ -240,12 +240,12 @@ final class GlobalModule extends AphiriaModule
             ->withAuthenticationScheme($appBuilder, new AuthenticationScheme(
                 'basic',
                 BasicAuthenticationHandler::class,
-                new BasicAuthenticationOptions(realm: 'example.com', claimsIssuer: 'https://example.com')
+                new BasicAuthenticationOptions(realm: 'example.com', claimsIssuer: 'https://example.com'),
             ))
             ->withAuthenticationScheme($appBuilder, new AuthenticationScheme(
                 'cookie',
                 CookieAuthenticationHandler::class,
-                new CookieAuthenticationOptions(cookieName: 'authToken', claimsIssuer: 'https://example.com')
+                new CookieAuthenticationOptions(cookieName: 'authToken', claimsIssuer: 'https://example.com'),
             ), isDefault: true);
     }
 }
@@ -269,12 +269,12 @@ final class GlobalModule extends AphiriaModule
             ->withAuthorizationPolicy($appBuilder, new AuthorizationPolicy(
                 'requires-admin',
                 new RolesRequirement('admin'),
-                'cookie'
+                'cookie',
             ))
             ->withAuthorizationRequirementHandler(
                 $appBuilder,
                 RolesRequirement::class,
-                new RolesRequirementHandler()
+                new RolesRequirementHandler(),
             );
     }
 }
@@ -327,7 +327,7 @@ final class UserModule extends AphiriaModule
             ->withProblemDetails(
                 $appBuilder,
                 UserNotFoundException::class,
-                status: HttpStatusCode::NotFound
+                status: HttpStatusCode::NotFound,
             )
             ->withProblemDetails(
                 $appBuilder,
@@ -337,7 +337,7 @@ final class UserModule extends AphiriaModule
                 detail: fn($ex) => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
                 status: HttpStatusCode::BadRequest,
                 instance: fn($ex) => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
-                extensions: fn($ex) => ['overdrawnAmount' => $ex->overdrawnAmount]
+                extensions: fn($ex) => ['overdrawnAmount' => $ex->overdrawnAmount],
             )
             ->withConsoleExceptionOutputWriter(
                 $appBuilder,
@@ -346,12 +346,12 @@ final class UserModule extends AphiriaModule
                     $output->writeln('Missing user');
     
                     return StatusCode::Fatal;
-                }
+                },
             )
             ->withLogLevelFactory(
                 $appBuilder,
                 UserCorruptedException::class,
-                fn(UserCorruptedException $ex) => LogLevel::CRITICAL
+                fn(UserCorruptedException $ex) => LogLevel::CRITICAL,
             );
     }
 }

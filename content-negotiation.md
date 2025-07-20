@@ -65,13 +65,13 @@ use Aphiria\ContentNegotiation\MediaTypeFormatters\XmlMediaTypeFormatter;
 // Register whatever media type formatters you support
 $mediaTypeFormatters = [
     new JsonMediaTypeFormatter(),
-    new XmlMediaTypeFormatter()
+    new XmlMediaTypeFormatter(),
 ];
 $contentNegotiator = new ContentNegotiator(
     $mediaTypeFormatters, 
     new MediaTypeFormatterMatcher($mediaTypeFormatters),
     new AcceptCharsetEncodingMatcher(),
-    new AcceptLanguageMatcher(['en'])
+    new AcceptLanguageMatcher(['en']),
 );
 ```
 

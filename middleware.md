@@ -163,7 +163,7 @@ $controllerHandler = new ControllerRequestHandler();
 
 $pipeline = new MiddlewarePipelineFactory()->createPipeline(
     [$loggingMiddleware, $authMiddleware],
-    $controllerHandler
+    $controllerHandler,
 );
 ``` 
 
