@@ -431,7 +431,7 @@ $rows = [
     ['Chris', 'Rock', 'good'],
     ['Jim', 'Gaffigan', 'pale'],
 ];
-$paddingFormatter->format($rows, fn($row) => $row[0] . ' - ' . $row[1] . ' - ' . $row[2]);
+$paddingFormatter->format($rows, fn($row): string => $row[0] . ' - ' . $row[1] . ' - ' . $row[2]);
 ```
 
 This will return:
@@ -451,7 +451,7 @@ $options = new PaddingFormatterOptions(
     padAfter: true,
     eolChar: "\n",
 );
-$paddingFormatter->format($rows, fn($row) => $row[0] . ' - ' . $row[1] . ' - ' . $row[2], $options);
+$paddingFormatter->format($rows, fn($row): string => $row[0] . ' - ' . $row[1] . ' - ' . $row[2], $options);
 ```
 
 > **Note:** You can set a default set of options for `PaddingFormatter` and `TableFormatter` in their constructors if you do not want to pass in options on every call to `format()`.

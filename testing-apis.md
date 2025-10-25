@@ -110,7 +110,7 @@ $this->delete("/users/{$createdUser->id}");
 Mocking authentication calls in integration tests is easy.  Just call `actingAs()` in your test and pass in a callback for the call(s) you want to make while authenticating as the desired principal:
 
 ```php
-use Aphiria\Net\Http\{HttpStatusCode, StringBody};
+use Aphiria\Net\Http\{HttpStatusCode, IResponse, StringBody};
 use Aphiria\Security\{Identity, User};
 use App\Tests\Integration\IntegrationTestCase;
 
@@ -121,7 +121,7 @@ final class UserIntegrationTest extends IntegrationTestCase
         // For the scoped call in actingAs(), we'll authenticate as the input user
         $user = new User([new Identity([])]);
         $body = new StringBody('foo@bar.com');
-        $response = $this->actingAs($user, fn() => $this->put('/email', body: $body));
+        $response = $this->actingAs($user, fn(): IResponse => $this->put('/email', body: $body));
         $this->assertStatusCodeEquals(HttpStatusCode::Ok, $response);
     }
 }
@@ -193,7 +193,7 @@ $this->assertParsedBodyEquals(new User('Dave'), $response);
 use App\User;
 
 // Assert that the response body, after content negotiation, passes a callback
-$this->assertParsedBodyPassesCallback($response, User::class, fn($user) => $user->name === 'Dave');
+$this->assertParsedBodyPassesCallback($response, User::class, fn($user): bool => $user->name === 'Dave');
 ```
 
 <h3 id="assert-status-code-equals">assertStatusCodeEquals</h3>

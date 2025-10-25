@@ -55,10 +55,10 @@ use App\{IUserService, UserService};
 $container->bindInstance(IUserService::class, new UserService());
 
 // Whenever you need IUserService, run the factory to get a new instance
-$container->bindFactory(IUserService::class, fn() => new UserService());
+$container->bindFactory(IUserService::class, fn(): IUserService => new UserService());
 
 // Whenever you need IUserService, run the factory and use that instance every time after
-$container->bindFactory(IUserService::class, fn() => new UserService(), resolveAsSingleton: true);
+$container->bindFactory(IUserService::class, fn(): IUserService => new UserService(), resolveAsSingleton: true);
 
 // Whenever you need IUserService, use auto-wiring to return a new instance of UserService
 $container->bindClass(IUserService::class, UserService::class);
@@ -138,7 +138,7 @@ use App\{IUserRepository, UserRepository, UserService};
 
 $container->for(
     UserService::class,
-    fn($container) => $container->bindInstance(IUserRepository::class, new UserRepository()),
+    fn($container): void => $container->bindInstance(IUserRepository::class, new UserRepository()),
 );
 ```
 

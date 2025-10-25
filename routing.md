@@ -1084,6 +1084,7 @@ Let's register our constraint with the constraint factory.  You can use a [compo
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Routing\UriTemplates\Constraints\IRouteVariableConstraint;
 use App\MinLengthConstraint;
 
 final class GlobalModule extends AphiriaModule
@@ -1093,7 +1094,7 @@ final class GlobalModule extends AphiriaModule
         $this->withRouteVariableConstraint(
             $appBuilder,
             MinLengthConstraint::getSlug(),
-            fn(int $minLength) => new MinLengthConstraint($minLength),
+            fn(int $minLength): IRouteVariableConstraint => new MinLengthConstraint($minLength),
         );
     }
 }
@@ -1105,6 +1106,7 @@ final class GlobalModule extends AphiriaModule
 Let's register our constraint with the constraint factory.  You can register the constraint manually:
 
 ```php
+use Aphiria\Routing\UriTemplates\Constraints\IRouteVariableConstraint;
 use Aphiria\Routing\UriTemplates\Constraints\RouteVariableConstraintFactory;
 use Aphiria\Routing\UriTemplates\Constraints\RouteVariableConstraintFactoryRegistrant;
 use App\MinLengthConstraint;
@@ -1116,7 +1118,7 @@ $constraintFactory = new RouteVariableConstraintFactoryRegistrant()
 // Register our custom constraint
 $constraintFactory->registerConstraintFactory(
     MinLengthConstraint::getSlug(),
-    fn(int $minLength) => new MinLengthConstraint($minLength),
+    fn(int $minLength): IRouteVariableConstraint => new MinLengthConstraint($minLength),
 );
 ```
 

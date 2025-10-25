@@ -91,10 +91,10 @@ final class GlobalModule extends AphiriaModule
                 OverdrawnException::class,
                 type: 'https://example.com/errors/overdrawn',
                 title: 'This account is overdrawn',
-                detail: fn($ex) => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
+                detail: fn($ex): string => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
                 status: HttpStatusCode::BadRequest,
-                instance: fn($ex) => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
-                extensions: fn($ex) => ['overdrawnAmount' => $ex->overdrawnAmount],
+                instance: fn($ex): string => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
+                extensions: fn($ex): array => ['overdrawnAmount' => $ex->overdrawnAmount],
             );
     }
 }
@@ -124,10 +124,10 @@ $exceptionRenderer->mapExceptionToProblemDetails(
     OverdrawnException::class,
     type: 'https://example.com/errors/overdrawn',
     title: 'This account is overdrawn',
-    detail: fn($ex) => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
+    detail: fn($ex): string => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
     status: HttpStatusCode::BadRequest,
-    instance: fn($ex) => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
-    extensions: fn($ex) => ['overdrawnAmount' => $ex->overdrawnAmount],
+    instance: fn($ex): string => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
+    extensions: fn($ex): array => ['overdrawnAmount' => $ex->overdrawnAmount],
 );
 ```
 
@@ -387,7 +387,7 @@ final class GlobalModule extends AphiriaModule
         $this->withLogLevelFactory(
             $appBuilder,
             DatabaseNotFoundException::class,
-            fn(DatabaseNotFoundException $ex) => LogLevel::EMERGENCY,
+            fn(DatabaseNotFoundException $ex): LogLevel => LogLevel::EMERGENCY,
         );
     }
 }
@@ -406,12 +406,12 @@ use Psr\Log\LogLevel;
 $globalExceptionHandler = new GlobalExceptionHandler(new ApiExceptionRenderer());
 $globalExceptionHandler->registerLogLevelFactory(
     DatabaseNotFoundException::class,
-    fn(DatabaseNotFoundException $ex) => LogLevel::EMERGENCY,
+    fn(DatabaseNotFoundException $ex): LogLevel => LogLevel::EMERGENCY,
 );
 
 // You can also register multiple exceptions-to-log-level factories
 $globalExceptionHandler->registerManyLogLevelFactories([
-    DatabaseNotFoundException::class => fn(DatabaseNotFoundException $ex) => LogLevel::EMERGENCY,
+    DatabaseNotFoundException::class => fn(DatabaseNotFoundException $ex): LogLevel => LogLevel::EMERGENCY,
     // ...
 ]);
 ```

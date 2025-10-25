@@ -146,6 +146,7 @@ You can also register [custom route variable constraints](routing.md#making-your
 ```php
 use Aphiria\Application\IApplicationBuilder;
 use Aphiria\Framework\Application\AphiriaModule;
+use Aphiria\Routing\UriTemplates\Constraints\IRouteVariableConstraint;
 use App\MinLengthConstraint;
 
 final class UserModule extends AphiriaModule
@@ -155,7 +156,7 @@ final class UserModule extends AphiriaModule
         $this->withRouteVariableConstraint(
             $appBuilder,
             MinLengthConstraint::getSlug(),
-            fn(int $minLength) => new MinLengthConstraint($minLength),
+            fn(int $minLength): IRouteVariableConstraint => new MinLengthConstraint($minLength),
         );
     }
 }
@@ -334,10 +335,10 @@ final class UserModule extends AphiriaModule
                 OverdrawnException::class,
                 type: 'https://example.com/errors/overdrawn',
                 title: 'This account is overdrawn',
-                detail: fn($ex) => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
+                detail: fn($ex): string => "Account {$ex->accountId} is overdrawn by {$ex->overdrawnAmount}",
                 status: HttpStatusCode::BadRequest,
-                instance: fn($ex) => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
-                extensions: fn($ex) => ['overdrawnAmount' => $ex->overdrawnAmount],
+                instance: fn($ex): string => "https://example.com/accounts/{$ex->accountId}/errors/{$ex->id}",
+                extensions: fn($ex): array => ['overdrawnAmount' => $ex->overdrawnAmount],
             )
             ->withConsoleExceptionOutputWriter(
                 $appBuilder,
@@ -351,7 +352,7 @@ final class UserModule extends AphiriaModule
             ->withLogLevelFactory(
                 $appBuilder,
                 UserCorruptedException::class,
-                fn(UserCorruptedException $ex) => LogLevel::CRITICAL,
+                fn(UserCorruptedException $ex): LogLevel => LogLevel::CRITICAL,
             );
     }
 }
