@@ -12,7 +12,6 @@
 <li><a href="#custom-problem-details-mappings">Custom Problem Details Mappings</a></li>
 </ol>
 <li><a href="#custom-api-exception-renderer">Custom API Exception Renderer</a></li>
-</li>
 <li><a href="#console-exception-renderer">Console Exception Renderer</a><ol>
 <li><a href="#output-writers">Output Writers</a></li>
 </ol>
