@@ -321,7 +321,7 @@ echo $cookies->get('userid'); // "123"
 
 <h2 id="getting-client-ip-address">Getting Client IP Address</h2>
 
-If you use the [`RequestFactory`](#creating-request-from-superglobals) to create your request, the client IP address will be added to the request property `CLIENT_IP_ADDRESS`.  To make it easier to grab this value, you can use `RequestParser` to retrieve it:
+If you use the [`RequestFactory`](#creating-requests-from-superglobals) to create your request, the client IP address will be added to the request property `CLIENT_IP_ADDRESS`.  To make it easier to grab this value, you can use `RequestParser` to retrieve it:
 
 ```php
 use Aphiria\Net\Http\Formatting\RequestParser;

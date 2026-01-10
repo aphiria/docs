@@ -308,7 +308,7 @@ It's convenient to define your command alongside your command handler so you don
 
 <h3 id="command-attribute-example">Command Attribute Example</h3>
 
-Let's look at an example that duplicates the [greeting example from above](#registering-commands):
+Let's look at an example that duplicates the [greeting example from above](#manually-registering-commands):
 
 ```php
 use Aphiria\Console\Commands\Attributes\{Argument, Command, Option};
